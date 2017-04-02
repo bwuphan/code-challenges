@@ -1,19 +1,3 @@
-function numberToEnglish (number) {
-  // Write your code here, and
-  // return your final answer.
-}
-
-function threeDigit (triple, numbersToWords) {
-  if(triple <= 20){
-    return numbersToWords[triple];
-  } else if (triple <= 100) {
-    return
-  }
-
-}
-
-
-
 var numbersToWords = {
   0: 'zero',
   1: 'one',
@@ -56,6 +40,50 @@ var numbersToPlace = {
   1000000000000000000: 'quintillion',
 };
 
+function numberToEnglish (number) {
+  // Write your code here, and
+  // return your final answer.
+  const numberString = number.toString();
+  let trey = '';
+  let array = [];
+  for (let i = numberString.length - 1; i >= 0; i--) {
+    if ((i + 1) % 3 === 0) {
+      array.unshift(',')
+    }
+    array.unshift(numberString[i])
+  }
+  return array;
+}
+
+function twoDigit (number) {
+  const twoString = number.toString();
+  if (twoString === '00') {
+    return null;
+  } else if (number <= 20) {
+    return numbersToWords[number];
+  }
+  return `${numbersToWords[twoString[0]+'0']}-${numbersToWords[twoString[1]]}`
+}
+
+function threeDigit (number) {
+  const numberString = number.toString();
+  const hundreds = numbersToWords[numberString[0]];
+  const tens = twoDigit(numberString.slice(1))
+  if (tens) {
+    return `${hundreds} hundred ${tens}`
+  }
+  return `${hundreds} hundred`;
+}
+
+console.log(twoDigit(15));
+console.log(threeDigit(300))
+
+// place = 1000;
+// while (place * 1000 <= n) {
+//   place *= 1000;
+// }
+// console.log(place)
+console.log(numberToEnglish(5671))
 /*
 // RECURSIVE SOLUTION
 Number.prototype.toEnglish = function() {
