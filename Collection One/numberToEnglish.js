@@ -43,47 +43,73 @@ var numbersToPlace = {
 function numberToEnglish (number) {
   // Write your code here, and
   // return your final answer.
-  const numberString = number.toString();
-  let trey = '';
-  let array = [];
-  for (let i = numberString.length - 1; i >= 0; i--) {
-    if ((i + 1) % 3 === 0) {
-      array.unshift(',')
+  console.log('number', number)
+  const numberString = number.toLocaleString('en-US');
+  const array = numberString.split(',');
+  console.log(array)
+  let place;
+  if (array[0] === '000') {
+    place = 1000;
+    const tempNumber = parseInt('1' + array.join(''));
+    console.log('temp',tempNumber)
+    while (place * 1000 <= number) {
+      place *= 1000;
     }
-    array.unshift(numberString[i])
+  } else if (number < 100) {
+    return twoDigit(number.toString());
+  } else if (number < 1000) {
+    return threeDigit(number.toString());
+  } else {
+    const newNumber = array.slice(1).join('');
+    console.log(newNumber)
+    place = 1000;
+    while (place * 1000 <= number) {
+      place *= 1000;
+    }
+    return `${threeDigit(array[0])} ${numbersToPlace[place]} ` + numberToEnglish(parseInt(newNumber))
   }
-  return array;
 }
 
 function twoDigit (number) {
-  const twoString = number.toString();
-  if (twoString === '00') {
+  console.log(number[1])
+  if (number === '00') {
     return null;
-  } else if (number <= 20) {
+  } else if (number[0] === '0' && number[1] !== '0') {
+    return numbersToWords[number[1]]
+  } else if (parseInt(number) <= 20 || number[1] === '0') {
     return numbersToWords[number];
+  } else if (number[1] === '0') {
+    return numbersToWords[number]
   }
-  return `${numbersToWords[twoString[0]+'0']}-${numbersToWords[twoString[1]]}`
+  return `${numbersToWords[number[0]+'0']}-${numbersToWords[number[1]]}`
 }
 
-function threeDigit (number) {
-  const numberString = number.toString();
-  const hundreds = numbersToWords[numberString[0]];
-  const tens = twoDigit(numberString.slice(1))
-  if (tens) {
-    return `${hundreds} hundred ${tens}`
+function threeDigit (numberString) {
+  if (numberString.length === 3) {
+    const hundreds = numbersToWords[numberString[0]];
+    const tens = twoDigit(numberString.slice(1));
+    if (numberString.length === 3 && numberString[0] === '0') {
+      return twoDigit(numberString.slice(1).toString())
+    } else if (numberString.length <= 2) {
+      return twoDigit(numberString.toString())
+    } else if (numberString.length === 3 && tens === null) {
+      return `${hundreds} hundred`;
+    } else if (numberString.length === 3 && tens !== '00') {
+      return `${hundreds} hundred ${tens}`
+    }
+  } else {
+    return twoDigit(numberString);
   }
-  return `${hundreds} hundred`;
 }
 
-console.log(twoDigit(15));
-console.log(threeDigit(300))
+// console.log(twoDigit(15));
 
 // place = 1000;
 // while (place * 1000 <= n) {
 //   place *= 1000;
 // }
 // console.log(place)
-console.log(numberToEnglish(5671))
+console.log(numberToEnglish(10000000000))
 /*
 // RECURSIVE SOLUTION
 Number.prototype.toEnglish = function() {
