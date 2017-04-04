@@ -43,7 +43,6 @@ var numbersToPlace = {
 function numberToEnglish (number) {
   // Write your code here, and
   // return your final answer.
-  console.log('number', number)
   const numberString = number.toLocaleString('en-US');
   const array = numberString.split(',');
   console.log(array)

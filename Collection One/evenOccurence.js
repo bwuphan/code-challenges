@@ -13,13 +13,6 @@ function evenOccurrence (arr) {
 const test = [ 1, 3, 3, 3, 2, 4, 4, 2, 5 ];
 console.log(evenOccurrence(test));
 
-function validateEmail(email) {
-   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-   return re.test(email);
-}
-
-console.log(validateEmail('bobby@sdf'))
-
 
 
 /*

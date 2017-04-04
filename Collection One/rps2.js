@@ -1,3 +1,21 @@
+const rockPaperPermutation = (rounds) => {
+  const results = [];
+  const choices = ['rock', 'paper', 'scissors'];
+  const recurse = (roundsToGo, permutation) => {
+    if (roundsToGo === 0) {
+      results.push(permutation);
+      return;
+    }
+    choices.forEach((choice) => {
+      const added = permutation.concat(choice);
+      recurse(roundsToGo-1, added);
+    });
+  };
+  recurse(rounds, []);
+  return results;
+};
+
+console.log(rockPaperPermutation(3))
 /*
 // Note: this first solution returns arrays of
 // possible outcomes, while the challenge app is
