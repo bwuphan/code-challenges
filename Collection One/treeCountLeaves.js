@@ -3,20 +3,49 @@ var Tree = function(value){
   this.children = [];
 };
 
+// Tree.prototype.countLeaves = function () {
+//   // TODO: implement me!
+//   let numLeaves = 0;
+
+//   let traverseTree = function(node) {
+//     if(node.children.length === 0){
+//       numLeaves++;
+//     }
+//     node.children.forEach(function(child){
+//       traverseTree(child);
+//     });
+//   }
+//   traverseTree(this)
+//   return numLeaves;
+// }
+var sum = function (array) {
+  console.log(array)
+  var total = 0;
+  for (var i = 0; i < array.length; i++) {
+    total = total + array[i];
+  }
+  return total;
+};
+
+var map = function (array, callback) {
+  var results = [];
+  for (var i = 0; i < array.length; i++) {
+    results.push(callback(array[i]));
+  }
+  return results;
+};
+
 Tree.prototype.countLeaves = function () {
   // TODO: implement me!
-  let numLeaves = 0;
+  if(this.children.length === 0) { return 1; }  
+  // sum of countLeaves of all the children
+  var numleaves = sum(
+    this.children.map(function(child) {
+      return child.countLeaves();
+    })
+  );
+  return numleaves;
 
-  let traverseTree = function(node) {
-    if(node.children.length === 0){
-      numLeaves++;
-    }
-    node.children.forEach(function(child){
-      traverseTree(child);
-    });
-  }
-  traverseTree(this)
-  return numLeaves;
 }
 
 /**
@@ -104,3 +133,4 @@ var root = new Tree();
 
     // if you're counting, that's four leaves
     console.log(root.countLeaves())
+

@@ -12,4 +12,5 @@ var fractionConverter = function(number){
   var str = number*a+'/'+a;
   return str;
 }
-console.log(fractionConverter(0.253213))
+
+console.log(fractionConverter(0.253213));

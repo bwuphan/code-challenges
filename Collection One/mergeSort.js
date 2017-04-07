@@ -32,14 +32,14 @@ function merge(left, right) {
 console.log(mergeSort([3,8,7,6,5,4,2,1]))
 
 var input = [];
-    var sorted;
-    var n = 100000;
-    for (var i = 0; i < n; i++) {
-      var number = Math.floor(Math.random() * n);
-      input.push(number);
-    }
-    sorted = input.sort(function (a,b) {return a - b;}); // sort numerically, not lexicographically
-    var result = mergeSort(input);
+    // var sorted;
+    // var n = 100000;
+    // for (var i = 0; i < n; i++) {
+    //   var number = Math.floor(Math.random() * n);
+    //   input.push(number);
+    // }
+    // sorted = input.sort(function (a,b) {return a - b;}); // sort numerically, not lexicographically
+    // var result = mergeSort(input);
 
     // using .eql can cause an n-line error message to print, so we do it by hand
 
