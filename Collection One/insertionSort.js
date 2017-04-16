@@ -21,13 +21,31 @@ function insertionSort (array) {
   return array;
 }
 
-function insertionSortSolution() {
-  for (var ix = 1; ix < array.length; ix++ ) {
-    var val = array[ix];
-    var hole = ix;
+
+
+// console.log(insertionSort(arr));
+
+
+var insertionSort = function(array, comparator) {
+  if (!comparator) // neglect error checking for brevity
+    comparator = function(a, b) {
+      // We only need to know if a is _less than_ b
+      return a < b ? -1 : 0;
+    };
+  
+  for (var i = 1; i < array.length; i++) {
+    var val = array[i];
+    var hole = i;
+
+    while ((hole > 0 && comparator(val, array[hole - 1])) === -1) {
+      array[hole] = array[hole - 1];
+      hole -= 1;
+    }
+
+    array[hole] = val;
   }
-}
 
-var arr = [ { "value": 5 }, { "value": 3 }, { "value": 2 } ];
+  return array;
+};
 
-console.log(insertionSort(arr));
+console.log(insertionSort([2,4,1,3]))
