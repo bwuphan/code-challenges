@@ -17,7 +17,7 @@ var makeHashTable = function(){
       bucket.forEach(function(tuple) {
         result.insert(tuple[0], tuple[1])
       })
-    }
+    })
     return result;
   }
 
@@ -146,4 +146,8 @@ for(var i = 0; i<10; i++){
     }
   }
   }
-console.log(sample)
+var hashTable = makeHashTable();
+      hashTable.insert('Spielberg\'s best movie', 'Jaws');
+      hashTable.remove('Spielberg\'s best movie');
+      var value = hashTable.retrieve('Spielberg\'s best movie');
+      console.log(value)
