@@ -6,6 +6,9 @@ const nextBigger = (number) => {
 	const newNumber = parseInt(numArr.join(''));
 	console.log(numArr)
 	return newNumber > number ? newNumber : -1
+	while (newNumber < number || i >= 0) {
+		
+	}
 }
 
 // Description:
@@ -22,3 +25,9 @@ const nextBigger = (number) => {
 // nextBigger(531)==-1
 
 console.log(nextBigger(5678));
+
+[1,2,-4,10]
+1 + 2 = 3 -1 = 2
+-1 + 10 = 9
+
+[-5, -2, -3, -4]
