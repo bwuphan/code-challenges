@@ -1,6 +1,5 @@
 function longestPalindrome (string) {
   var checkPalindrome = function(singleString){
-    console.log('singleString', singleString)
     var reversedString = singleString.split('').reverse().join('');
     return singleString === reversedString;
   }
