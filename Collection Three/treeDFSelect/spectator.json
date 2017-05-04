@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "treeDFSelect.js"
+  ],
+  "tests": [
+    "treeDFSelect.test.js"
+  ]
+}

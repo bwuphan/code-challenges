@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "hashTableResizing.js"
+  ],
+  "tests": [
+    "hashTableResizing.test.js"
+  ]
+}

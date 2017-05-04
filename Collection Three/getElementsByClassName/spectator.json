@@ -1,0 +1,11 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "lib/jquery.js",
+    "getElementsByClassName.js"
+  ],
+  "tests": [
+    "getElementsByClassName.test.js"
+  ]
+}

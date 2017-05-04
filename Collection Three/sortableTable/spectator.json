@@ -1,0 +1,12 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "index.html",
+    "lib/jquery-2.1.0.min.js",
+    "sortableTable.js"
+  ],
+  "tests": [
+    "sortableTable.test.js"
+  ]
+}

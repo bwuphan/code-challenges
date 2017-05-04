@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div class="container">
+            <div>
+                <div>
+                    <br>
+                    <form>
+                        <label for="search">Search:</label> <input type="search" id="search">
+                    </form>
+                </div>
+                <div class="col6">
+                    <h4>
+                        Results
+                    </h4>
+                    <ul id="results"></ul>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript">
+</script><script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js" type="text/javascript">
+</script><script type="text/javascript">
+
+        var entries = ['George Washington',
+                   'John Adams',
+                   'Thomas Jefferson',
+                   'James Madison',
+                   'John Quincy Adams',
+                   'Andrew Jackson',
+                   'Martin Van Buren',
+                   'William Henry Harrison',
+                   'John Tyler',
+                   'James Polk',
+                   'Zachary Taylor',
+                   'Millard Fillmore',
+                   'Franklin Pierce',
+                   'James Buchanan',
+                   'Abraham Lincoln'];
+
+        // Called when the search text changes
+        var updateFilter = function(searchTerms){
+        var entriesToShow = new Array();
+        if(searchTerms && (searchTerms.length > 0)){
+        // Calculate a score for each item in the list,
+        // show only positive scores, and sort by relevance
+          $.each(entries, function(index, entry){
+            var score = rankText(searchTerms, entry);
+            entry = new String(entry);
+            entry.score = score; // stash this here so we can sort on it
+            if(score > 0){
+              entriesToShow.push(entry);
+            }
+          });
+          entriesToShow.sort(function(a,b){return a.score - b.score;});
+        }
+        else{
+        entriesToShow = entries; // Show everything if there are no terms
+        }
+
+        // Display the list
+        $('#results').html('');
+        $.each(entriesToShow, function(index, entry){
+        $('#results').append('<li>'+entry+'<\/li>');
+        });
+        };
+
+        // Score how many of the space-delimited terms are
+        // substrings of the actual text.
+        var rankText = function(searchTerms, actualText){
+        // convert terms and text to lowercase to make the search
+        // case-insensitive
+        var terms = searchTerms.toLowerCase().split(' ');
+        var lowerCaseText = actualText.toLowerCase();
+        var matchingTerms = terms.filter(function(term){
+          return (lowerCaseText.indexOf(term) > -1);
+        });
+        return matchingTerms.length;
+        };
+
+        $(document).ready(function(){
+        updateFilter();
+        $('#search').keyup(function(){updateFilter($('#search').val());});
+        });
+
+        </script>
+    </body>
+</html>

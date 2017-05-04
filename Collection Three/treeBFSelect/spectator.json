@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "treeBFSelect.js"
+  ],
+  "tests": [
+    "treeBFSelect.test.js"
+  ]
+}

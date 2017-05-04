@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "treeMap.js"
+  ],
+  "tests": [
+    "treeMap.test.js"
+  ]
+}

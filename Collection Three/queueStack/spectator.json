@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "queueStack.js"
+  ],
+  "tests": [
+    "queueStack.test.js"
+  ]
+}

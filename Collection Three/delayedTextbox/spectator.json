@@ -1,0 +1,7 @@
+{
+  "src": [
+    "lib/jquery.js",
+    "delayedTextbox.js"
+  ],
+  "tests": []
+}

@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "nthFibonacci.js"
+  ],
+  "tests": [
+    "nthFibonacci.test.js"
+  ]
+}

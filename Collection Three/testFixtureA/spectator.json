@@ -1,0 +1,5 @@
+{
+  "type": "browser",
+  "src": [ "problem.js" ],
+  "tests": [ "problem.test.js" ]
+}

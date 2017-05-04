@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "linkedList.js"
+  ],
+  "tests": [
+    "linkedList.test.js"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "doublyLinkedList.js"
+  ],
+  "tests": [
+    "doublyLinkedList.test.js"
+  ]
+}

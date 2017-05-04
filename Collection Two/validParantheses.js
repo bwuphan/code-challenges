@@ -24,4 +24,7 @@ const validParantheses = (string) => {
 	return true;
 }
 
-console.log(validParantheses('[(])'))
+console.log(validParantheses('[()()]')) // true
+console.log(validParantheses('[()(]')) //false
+console.log(validParantheses('[]')) //true
+console.log(validParantheses('([)]')) // false

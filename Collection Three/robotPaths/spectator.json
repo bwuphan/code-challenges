@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "robotPaths.js"
+  ],
+  "tests": [
+    "robotPaths.test.js"
+  ]
+}

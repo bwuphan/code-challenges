@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
+    <style>
+      body {
+        padding: 10px;
+      }
+      .buttons {
+        width: 110px;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text">
+    <div class="buttons"></div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+    <script>
+      // make a simple calculator UI. Make sure it can handle addition, subtraction, multiplication, and division
+      // extra credit: support an 'back' feature that goes back to a previous state of the output
+
+      $.each('1234567890+-*/'.split(''), function(index, keySymbol){
+        $('<span class="btn">'+keySymbol+'</span>').click(function(){
+          $('input').val( $('input').val() + keySymbol );
+        }).appendTo('.buttons');
+      });
+      $('input').keyup(function(event){
+        if(event.keyCode == 13){
+          $(this).val( eval($(this).val()) );
+        }
+      });
+    </script>
+  </body>
+</html>

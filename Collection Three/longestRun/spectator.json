@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "longestRun.js"
+  ],
+  "tests": [
+    "longestRun.test.js"
+  ]
+}

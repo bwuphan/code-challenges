@@ -1,0 +1,12 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "index.test.html",
+    "lib/jquery.js",
+    "main.js"
+  ],
+  "tests": [
+    "htmljQueryColor.test.js"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "bubbleSort.js"
+  ],
+  "tests": [
+    "bubbleSort.test.js"
+  ]
+}

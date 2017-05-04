@@ -1,0 +1,10 @@
+{
+  "babel": true,
+  "type": "browser",
+  "src": [
+    "eventingLibrary.js"
+  ],
+  "tests": [
+    "eventingLibrary.test.js"
+  ]
+}
