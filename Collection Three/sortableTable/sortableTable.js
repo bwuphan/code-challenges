@@ -12,6 +12,12 @@ $(function () {
   // TODO: your code here!
   const table = document.getElementById('myTable');
   const topRow = table.querySelector('tr');
+  const tbody = table.querySelector('tbody');
+  const nodeArrayLike = tbody.querySelectorAll('tr');
+  let nodeArray = [];
+  for (let i = 0; i < nodeArrayLike.length; i++) {
+    nodeArray.push(nodeArrayLike[i]);
+  }
   const words = {
     'Item Name': 0,
     'Expiration Date': 3,
@@ -21,15 +27,8 @@ $(function () {
     'Price Per Pound': 2,
   };
   const getValue = (row, col, array) => {
-    console.log('here', row.children)
     return row.children[col].innerHTML;
   };
-  const tbody = table.querySelector('tbody');
-  const savedArr = tbody.querySelectorAll('tr');
-  let arr = [];
-  for (let i = 0; i < savedArr.length; i++) {
-    arr.push(savedArr[i]);
-  }
   topRow.querySelectorAll('th').forEach((element) => {
     element.addEventListener('click', () => {
       const columnName = element.innerHTML;
@@ -42,19 +41,17 @@ $(function () {
       while(tbody.firstChild) {
         tbody.removeChild(tbody.firstChild)
       };
-      const originalArray = [...arr];
-      arr = originalArray.sort((row1, row2) => {
-        const value1 = getValue(row1, columnIdx, originalArray);
-        const value2 = getValue(row2, columnIdx, originalArray);
+      nodeArray.sort((row1, row2) => {
+        const value1 = getValue(row1, columnIdx, nodeArray);
+        const value2 = getValue(row2, columnIdx, nodeArray);
         if (columnName in words) {
-          console.log('in here', value1, value2)
           return value1 > value2;
         } else {
           return value1 - value2;
         }
       });
-      for (let i = 0; i < arr.length; i++) {
-        tbody.appendChild(arr[i])
+      for (let i = 0; i < nodeArray.length; i++) {
+        tbody.appendChild(nodeArray[i])
       }
     });
   });
