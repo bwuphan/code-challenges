@@ -44,7 +44,7 @@ Tree.prototype.getClosestCommonAncestor = function(child1, child2) {
   if (!path2 || !path2) {
     return null;
   };
-  var closestAncestor = this;
+  var commonAncestor = this;
   for (var i = 0; path1[i] && path2[i]; i++) {
     if (path1[i] === path2[i]) {
       closestAncestor = path1[i]
@@ -80,6 +80,8 @@ Tree.prototype.getAncestorPath = function(target) {
     // console.log('hello', this.children[i])
     var pathFromChild = this.children[i].getAncestorPath(target);
     if ( pathFromChild ) {
+      console.log('pathFromChild', pathFromChild);
+      console.log('this', this)
       return [this].concat(pathFromChild);
     }
   }
@@ -128,28 +130,36 @@ Tree.prototype.removeChild = function(child) {
 //    var result = grandma.getAncestorPath(me); // => [grandma, mom, me]
 //    console.log(result)
 
-      var root = new Tree();
+      // var root = new Tree();
 
-      var left = new Tree();
-      root.addChild(left);
+      // var left = new Tree();
+      // root.addChild(left);
 
-      var right1 = new Tree();
-      root.addChild(right1);
+      // var right1 = new Tree();
+      // root.addChild(right1);
 
-      var right2 = new Tree();
-      right1.addChild(right2);
+      // var right2 = new Tree();
+      // right1.addChild(right2);
 
-      var right3 = new Tree();
-      right1.addChild(right3);
+      // var right3 = new Tree();
+      // right1.addChild(right3);
 
-      var closestAncestor = root.getClosestCommonAncestor(right2, right3);
+      // var closestAncestor = root.getClosestCommonAncestor(right2, right3);
 
-      var right4 = new Tree();
-      right3.addChild(right4);
+      // var right4 = new Tree();
+      // right3.addChild(right4);
 
-      var closestAncestor = root.getClosestCommonAncestor(right2, right4);
+      // var closestAncestor = root.getClosestCommonAncestor(right2, right4);
 
-      var closestAncestor = root.getClosestCommonAncestor(left, right4);
+      // var closestAncestor = root.getClosestCommonAncestor(left, right4);
+var grandma = new Tree();
+var mom = new Tree();
+var uncle = new Tree();
+grandma.addChild(mom);
+grandma.addChild(uncle);
+var me = new Tree();
+mom.addChild(me);
+grandma.getAncestorPath(me)
 /*
 // Valid Child
 var grandma = new Tree();
