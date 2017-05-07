@@ -46,15 +46,15 @@ var mixEvents = function(obj) {
 };
 
 
-var obj = {
-        method: 'POST',
-        uri: 'http://127.0.0.1:3000/classes/messages',
-        json: {
-          username: 'Valjean',
-          message: 'In mercy\'s name, three days is all I need.',
-          roomname: 'Hello'
-        }
-      }
-    console.log(obj)
-var string = JSON.stringify(obj.json.message);
-console.log(string.toString());
+// var obj = {
+//         method: 'POST',
+//         uri: 'http://127.0.0.1:3000/classes/messages',
+//         json: {
+//           username: 'Valjean',
+//           message: 'In mercy\'s name, three days is all I need.',
+//           roomname: 'Hello'
+//         }
+//       }
+//     console.log(obj)
+// var string = JSON.stringify(obj.json.message);
+// console.log(string.toString());

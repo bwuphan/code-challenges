@@ -1,6 +1,25 @@
-var hasCycle = function(linkedList){
-  //Your beautiful code here
+const hasCycle = (linkedList) => {
+  //Plan: Have 2 runs, 1 is 1 node at a time, other is 2 nodes at a time
+  //If the double time node laps the other before one run, then is a cycle
+  let slow = 0, fast = 0;
+  // for (let i = 0; i < lin)
 };
+
+function Node (val) {
+  var obj = {};
+  obj.value = val || null;
+  obj.next = null;
+  return obj;
+}
+
+// var nodeA = Node('A');
+// var nodeB = nodeA.next = Node('B');
+// var nodeC = nodeB.next = Node('C');
+
+var nodeA = Node('A');
+    var nodeB = nodeA.next = Node('B');
+    var nodeC = nodeB.next = Node('C');
+console.log(nodeA)
 
 /*
 Write a function that returns true if a linked list contains a cycle, or false if it terminates somewhere.
