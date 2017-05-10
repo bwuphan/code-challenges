@@ -1,82 +1,38 @@
-//Connie Chow
+/*
+ * Given a sorted array, find the index of an element
+ * using a binary search algorithm.
+ *
+ * Example usage:
+ *
+ * var index = binarySearch([1, 2, 3, 4, 5], 4);
+ * console.log(index); // 3
+ */
 
-// function sayHello() {
-//   console.log('Hello, World');
-// }
 
-// sayHello();
-// click 'run'
-
-var salesTeam = [{name: {first: 'aleen', last: 'atkins'}, age: 26, sales: '$2314'},
-    {name: {first: 'alvaro', last: 'angelos'}, age: 55, sales: '$1668'},
-    {name: {first: 'denese', last: 'dossett'}, age: 29, sales: '$9248'},
-    {name: {first: 'douglas', last: 'denney'}, age: 53, sales: '$5058'},
-    {name: {first: 'earline', last: 'erickson'}, age: 19, sales: '$18876'},
-    {name: {first: 'herman', last: 'hazell'}, age: 25, sales: '$2746'},
-    {name: {first: 'homer', last: 'hirth'}, age: 26, sales: '$474'},
-    {name: {first: 'hwa', last: 'heidt'}, age: 53, sales: '$9607'},
-    {name: {first: 'hyon', last: 'hampshire'}, age: 46, sales: '$13598'},
-    {name: {first: 'issac', last: 'ingerson'}, age: 45, sales: '$5225'},
-    {name: {first: 'jeraldine', last: 'joplin'}, age: 39, sales: '$2891'},
-    {name: {first: 'jin', last: 'jeffrey'}, age: 17, sales: '$14402'},
-    {name: {first: 'joleen', last: 'jolin'}, age: 45, sales: '$15736'},
-    {name: {first: 'jude', last: 'jarrett'}, age: 53, sales: '$7557'},
-    {name: {first: 'magda', last: 'mireles'}, age: 18, sales: '$1498'},
-    {name: {first: 'mistie', last: 'montealegre'}, age: 31, sales: '$6920'},
-    {name: {first: 'nancy', last: 'napoli'}, age: 49, sales: '$5255'},
-    {name: {first: 'regine', last: 'rohrbaugh'}, age: 33, sales: '$7881'},
-    {name: {first: 'rolando', last: 'riebel'}, age: 35, sales: '$8573'},
-    {name: {first: 'scarlett', last: 'stagg'}, age: 36, sales: '$7126'},
-    {name: {first: 'sherron', last: 'strawn'}, age: 36, sales: '$8848'},
-    {name: {first: 'susan', last: 'shilling'}, age: 29, sales: '$8542'},
-    {name: {first: 'tama', last: 'tworek'}, age: 16, sales: '$9200'},
-    {name: {first: 'tonisha', last: 'taunton'}, age: 41, sales: '$5219'},
-    {name: {first: 'vergie', last: 'villescas'}, age: 25, sales: '$8712'}];
-    
-//Create a function that capitalizes the first letter of the first and last names of the team members.
-
-// Access names: first and last
-// map
-function capitalizeNames(salesTeam){ 
-  return salesTeam.map(function(employee) {
-    employee.name.first = capitalizeString(employee.name.first);
-    employee.name.last = capitalizeString(employee.name.last);
-    return employee;
-  });
-}
-
-// helper function to captialize first letter of string
-function capitalizeString(name) {
-  var array = name.split('');
-  console.log(array);
-  array[0] = array[0].toUpperCase();
-  return array.join('');
-}
-
- 
-function assert(expectedBehavior, descriptionOfCorrectBehavior) {
-  if (!expectedBehavior) {
-    console.log(descriptionOfCorrectBehavior);
-  } else {
-    console.log('test passed');
-  }
-}
-
-var testName = 'vergie';
-var expectName = 'Vergie';
-assert(capitalizeString(testName) === expectName, 'capitalizes string');
-console.log(capitalizeString(testName))
-// salesTeam.map(function(element) {
-//   return ;
-// });
-
-// [1, 1, 1, 1, 1, 1]
-
-var testTeam = [{name: {first: 'aleen', last: 'atkins'}, age: 26, sales: '$2314'}];
-var expectTeam = [{name: {first: 'Aleen', last: 'Atkins'}, age: 26, sales: '$2314'}]
-assert(JSON.stringify(capitalizeNames(testTeam)) === JSON.stringify(expectTeam), 'capitalizes single name');
-console.log(JSON.stringify(capitalizeNames(testTeam)))
-console.log(JSON.stringify(expectTeam))
+const binarySearch = (array, target) => {
+  const searched = {};
+  console.log(array.length)
+  const subroutine = (low, high) => {
+    console.log('low', low);
+    console.log('high', high)
+    const midIndex = Math.floor((low + high) / 2);
+    if (array[midIndex] === target) {
+      console.log('done', midIndex)
+      return midIndex;
+    };
+    if (low === high) {
+      return -1;
+    }
+    if (target < array[midIndex]) {
+      return subroutine(low, midIndex - 1);
+    } else {
+      return subroutine(midIndex + 1, high);
+    }
+  };
+  return subroutine(0, array.length - 1)
+};
+var arr = [0,100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4100,4200,4300,4400,4500,4600,4700,4800,4900]
+console.log(binarySearch(arr, 1700))
 
 // var binarySearch = function (array, target) {
 //   /* START SOLUTION */
