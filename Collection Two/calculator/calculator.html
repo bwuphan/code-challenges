@@ -1,33 +1,39 @@
-<html>
+<!doctype html>
 	<head>
 		<title>Calculator</title>
+		<script src="lib/jquery-2.1.0.min.js"></script>
+		<script src="calculator.js"></script>
+		<!-- <link rel="stylesheet" href="style.css"> -->
 	</head>
 	<body>
-	<div id="calculator">
-		<form name="calculator" >
-			<input id="num" name="num" type="number" value="0">
+		<div class="calculator">
+			<input id="num" name="num" type="string" value="">
 			<table>
 				<tr>
-					<td><input type="button" value="7"></td>
-					<td><input type="button" value="8"></td>
-					<td><input type="button" value="9"></td>
-					<td><input type="button" value="-"></td>
+					<td><button>7</button></td>
+					<td><button>8</button></td>
+					<td><button>9</button></td>
+					<td><button>-</button></td>
 				</tr>
 				<tr>
-					<td><input type="button" value="4"></td>
-					<td><input type="button" value="5"></td>
-					<td><input type="button" value="6"></td>
-					<td><input type="button" value="+"></td>
+					<td><button>4</button></td>
+					<td><button>5</button></td>
+					<td><button>6</button></td>
+					<td><button>+</button></td>
 				</tr>
 				<tr>
-					<td><input type="button" value="1"></td>
-					<td><input type="button" value="2"></td>
-					<td><input type="button" value="3"></td>
-					<td><input type="button" value="="></td>
+					<td><button>1</button></td>
+					<td><button>2</button></td>
+					<td><button>3</button></td>
+					<td><button>=</button></td>
+				</tr>
+				<tr>
+					<td><button>C</button></td>
+					<td><button>0</button></td>
+					<td><button>*</button></td>
+					<td><button>/</button></td>
 				</tr>
 			</table>
-		</form>
 		</div>
-		<script src="calculator.js"></script>
 	</body>
 </html>

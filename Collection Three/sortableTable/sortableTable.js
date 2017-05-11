@@ -8,7 +8,7 @@
  * Use the table provided in index.html.
  **/
 
-(function () {
+$(function () {
   // TODO: your code here!
   const table = document.getElementById('myTable');
   const topRow = table.querySelector('tr');
