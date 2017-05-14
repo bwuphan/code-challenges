@@ -49,7 +49,7 @@ var bubbleSort = function(array) {
   //create for loop iterate thru length of array starting at array.length - 1, then --
   for (i = array.length - 1; i > 0; i--) {
     //create nested for loop taht iterates until < i
-    for (let j = 1; j < i; j++) {
+    for (let j = 1; j <= i; j++) {
       //check if next index is greater than than the current index, do swap
       if (array[j] < array[j - 1]) {
         array = swap(j, j - 1, array);
@@ -59,7 +59,7 @@ var bubbleSort = function(array) {
   return array;
 };
 
-console.log(bubbleSort([20, -10, -10.1, 2, 4, 299]))
+console.log(bubbleSort([2, 2, 2, 2, 2, 22, 2, 2, 222, 2222, 22, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 22]))
 // var i;
 
 // // Feel free to add helper functions if needed.
