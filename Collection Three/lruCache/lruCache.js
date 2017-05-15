@@ -103,7 +103,7 @@ List.prototype.unshift = function (val) {
 
   return this.head;
 };
-
+console.log(List.prototype.unshift)
 // Delete at the head of the list.
 List.prototype.shift = function () {
   // Empty list
