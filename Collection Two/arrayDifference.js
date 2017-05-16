@@ -7,6 +7,19 @@
 
 // difference([1,2,2,2,3],[2]) == [1,3]
 
-const difference = () => {
-
+const difference = (a, b) => {
+	const bChars = {};
+	const results = [];
+	for (let i = 0; i < b.length; i++) {
+		bChars[b[i]] = true;
+	};
+	for (let i = 0; i < a.length; i++) {
+		console.log(a[i])
+		if (!(a[i] in bChars)) {
+			results.push(a[i])
+		}
+	}
+	return results;
 };
+
+console.log(difference([1,2,2,2,3],[2]))
