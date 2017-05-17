@@ -14,7 +14,6 @@ const difference = (a, b) => {
 		bChars[b[i]] = true;
 	};
 	for (let i = 0; i < a.length; i++) {
-		console.log(a[i])
 		if (!(a[i] in bChars)) {
 			results.push(a[i])
 		}
