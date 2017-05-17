@@ -40,8 +40,6 @@ var makeHashTable = function() {
     } else {
       for (let i = 0; i < bucket.length; i++) {
         if (bucket[i][0] === key) {
-          console.log('hello', bucket)
-
           bucket[i][1] = value;
           replaced = true;
         }
