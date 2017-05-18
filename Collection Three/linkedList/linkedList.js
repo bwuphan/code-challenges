@@ -18,6 +18,68 @@
 // list.removeHead(); //yields '5';
 // list.removeHead(); //yields 'null';
 
+var LinkedList = function(val) {
+  //fill me in!
+  this.head = null;
+  this.tail = null;
+  if (val) {
+    this.addToTail(val);
+  }
+};
+
+//write methods here!
+
+LinkedList.prototype.addToTail = function(val) {
+  const newNode = this.makeNode(val);
+  if (this.tail) {
+    this.tail.next = newNode;
+    this.tail = newNode
+  } else {
+    this.head = newNode;
+    this.tail = newNode;
+  }
+};
+
+LinkedList.prototype.removeHead = function() {
+  if (this.head) {
+    const returnVal = this.head.value;
+    this.head = this.head.next;
+    return returnVal;
+  }
+  return null;
+};
+
+LinkedList.prototype.contains = function(val) {
+  let thisNode = this.head;
+  while(thisNode) {
+    if (thisNode.value === val) {
+      return true;
+    };
+    thisNode = thisNode.next;
+  };
+  return false;
+};
+
+LinkedList.prototype.makeNode = function(val) {
+  const node = {};
+  node.value = val;
+  node.next = null;
+  return node;
+};
+
+var list = new LinkedList();
+list.tail;         //yields 'null'
+list.addToTail(4);
+list.addToTail(5);
+list.head.value;   //yields '4';
+console.log(list)
+console.log(list.contains(5));  //yields 'true';
+console.log(list.contains(6));  //yields 'false';
+list.removeHead(); //yields '4';
+console.log(list)
+console.log(list.tail.value);   //yields '5';
+list.removeHead(); //yields '5';
+list.removeHead(); //yields 'null';
 
 // var LinkedList = function() {
 //   //fill me in!
