@@ -1,19 +1,19 @@
 const partition = (array, start, end) => {
-	const pNum = array[end - 1];
-	let pIndex = 0;
-	for (let i = 0; i < end - 1; i++) {
-		if (array[i] < pNum) {
-			console.log('hello')
+	const pNum = array[end];
+	console.log(pNum)
+	let pIndex = start;
+	for (let i = start; i < end; i++) {
+		if (array[i] <= pNum) {
 			const temp = array[i];
 			array[i] = array[pIndex];
 			array[pIndex] = temp;
 			pIndex++;
 		}
 	}
-	const temp = array[end - 1];
-	array[end - 1] = array[pIndex];
+	const temp = array[end];
+	array[end] = array[pIndex];
 	array[pIndex] = temp;
-	return array;
+	return pIndex;
 };
 
 const quickSort = (array) => {
@@ -24,8 +24,9 @@ const quickSort = (array) => {
 			recurse(partitionIndex + 1, end);
 		}
 	};
+	recurse(0, array.length - 1);
 	return array;
 }
 
-let test = [5, 7, 9, 2, 6];
-console.log(partition(test, 0, 5))
+let test = [5, 7, 9, 2, 6, 6, 1,2, 5, 10, 11];
+console.log(quickSort(test))
