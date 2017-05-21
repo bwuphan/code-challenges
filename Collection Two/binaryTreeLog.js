@@ -6,12 +6,9 @@ const test = {
 };
 
 const binaryTreeLog = (node) => {
-	console.log(node.value);
-	if (node.children[0]) {
-		binaryTreeLog(node.children[0])
-	}
-	if (node.children[1]) {
-		binaryTreeLog(node.children[1])
+	let storage = [];
+	const recurse = (node) => {
+		if ()
 	}
 	
 }
