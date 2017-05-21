@@ -97,54 +97,89 @@
 
 /* START SOLUTION */
 // Merge two sorted arrays in sorted order
-var merge = function (left, right) {
-  var merged = [];
-  var iL = 0;
-  var iR = 0;
-  while (merged.length < left.length + right.length) {
-    // Default to the left element for stability
-    if (iR >= right.length || left[iL] <= right[iR]) {
-      merged.push(left[iL]);
-      iL += 1;
-    } else {
-      merged.push(right[iR]);
-      iR += 1;
-    }
-  }
-  return merged;
-};
-/* END SOLUTION */
 
-var mergeSort = function(array) {
-  // Your code here.
-  /* START SOLUTION */
-  var lists = [];
-  // Split array into sublists
-  // Natural variant: split array into pre-sorted sublists
-  var currentList = [];
-  lists = [];
-  for (var i = 0; i < array.length; i++) {
-    if (currentList.length && array[i] < currentList[currentList.length - 1]) {
-      lists.push(currentList);
-      currentList = [];
+const merge = (left, right) => {
+  let result = [];
+  let i = 0;
+  let j = 0;
+  while (i < left.length && j < right.length) {
+    if (left[i] <= right[j]) {
+      result.push(left[i]);
+      i++;
+    } else if (left[i] > right[j]) {
+      result.push(right[j]);
+      j++;
     }
-    currentList.push(array[i]);
   }
-  lists.push(currentList);
-  // Until the entire array is sorted
-  while (lists.length > 1) {
-    var newLists = [];
-    // Merge all adjacent lists
-    for (var i = 0; i < Math.floor(lists.length / 2); i++) {
-      newLists.push(merge(lists[i * 2], lists[i * 2 + 1]));
-    }
-    // Include the leftover list if the number is odd
-    if (lists.length % 2) {
-      newLists.push(lists[lists.length - 1]);
-    }
-    lists = newLists;
-  }
-  // we have a single, fully sorted list
-  return lists[0];
-  /* END SOLUTION */
+  console.log('left right', left, right)
+  const remaining = i === left.length ? right.slice(j) : left.slice(i);
+  return result.concat(remaining);
 };
+
+const mergeSort = (array) => {
+  if (array.length <= 1) {
+    return array;
+  }
+  const slicePoint = Math.floor(array.length / 2);
+  const left = array.slice(0, slicePoint);
+  const right = array.slice(slicePoint, array.length);
+  console.log(left, right)
+  return merge(mergeSort(left), mergeSort(right));
+};
+
+var array = [3,4,1,6,0,9, 6];
+console.log(mergeSort(array))
+
+
+
+// var merge = function (left, right) {
+//   var merged = [];
+//   var iL = 0;
+//   var iR = 0;
+//   while (merged.length < left.length + right.length) {
+//     // Default to the left element for stability
+//     if (iR >= right.length || left[iL] <= right[iR]) {
+//       merged.push(left[iL]);
+//       iL += 1;
+//     } else {
+//       merged.push(right[iR]);
+//       iR += 1;
+//     }
+//   }
+//   return merged;
+// };
+// /* END SOLUTION */
+
+// var mergeSort = function(array) {
+//   // Your code here.
+//   /* START SOLUTION */
+//   var lists = [];
+//   // Split array into sublists
+//   // Natural variant: split array into pre-sorted sublists
+//   var currentList = [];
+//   lists = [];
+//   for (var i = 0; i < array.length; i++) {
+//     if (currentList.length && array[i] < currentList[currentList.length - 1]) {
+//       lists.push(currentList);
+//       currentList = [];
+//     }
+//     currentList.push(array[i]);
+//   }
+//   lists.push(currentList);
+//   // Until the entire array is sorted
+//   while (lists.length > 1) {
+//     var newLists = [];
+//     // Merge all adjacent lists
+//     for (var i = 0; i < Math.floor(lists.length / 2); i++) {
+//       newLists.push(merge(lists[i * 2], lists[i * 2 + 1]));
+//     }
+//     // Include the leftover list if the number is odd
+//     if (lists.length % 2) {
+//       newLists.push(lists[lists.length - 1]);
+//     }
+//     lists = newLists;
+//   }
+//   // we have a single, fully sorted list
+//   return lists[0];
+//   /* END SOLUTION */
+// };
