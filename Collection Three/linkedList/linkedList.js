@@ -43,7 +43,12 @@ LinkedList.prototype.addToTail = function(val) {
 LinkedList.prototype.removeHead = function() {
   if (this.head) {
     const returnVal = this.head.value;
-    this.head = this.head.next;
+    if (this.head === this.tail) {
+      this.head = null;
+      this.tail = null;
+    } else {
+      this.head = this.head.next;
+    }
     return returnVal;
   }
   return null;
