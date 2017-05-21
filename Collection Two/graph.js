@@ -89,23 +89,73 @@ graph.addEdge(3,0);
 graph.addNode(4);
 graph.addNode(5);
 graph.addEdge(4,2);
-graph.addEdge(5,4);
+graph.addEdge(5,3);
 
 console.log(JSON.stringify(graph));
 
-function Stack(){
-  this.storage = [];
-  var size = 0;
-  this.push = (val) => {
-    storage.push(val);
-    size++;
+var Stack = function() {
+  var storage = [];
+  var length = 0;
+
+  this.push = function(){
+    storage[length] = arguments[0];
+    length++;
   };
-  this.pop = () => {
-    return storage.pop();
-    size--;
-  }
-  this.size = () => {
-    return size;
+
+  this.pop = function(){
+    if (length > 0) {
+      var returnVal = storage[length - 1];
+      // console.log('1', storage)
+      length--;
+      delete storage[length];
+      // console.log('2', storage)
+      return returnVal;
+    }
+    return null;
+  };
+
+  this.size = function(){
+    return length;
+  };
+};
+
+var Queue = function() {
+
+  var inbox = new Stack();
+  var outbox = new Stack();
+
+  this.enqueue = function(){
+    inbox.push(arguments[0]);
+  };
+
+  this.dequeue = function(){
+    if (!outbox.size()) {
+      var inboxSize = inbox.size();
+      while (inboxSize > 0) {
+        outbox.push(inbox.pop())
+        inboxSize--;
+      }
+    }
+    return outbox.pop();
+  };
+
+  this.size = function(){
+    return inbox.size();
+  };
+};
+
+var Queue = function() {
+  this.storage = [];
+  this.enqueue = function() {
+    this.storage.push(arguments[0]);
+  };
+  this.dequeue = function() {
+    if (this.storage.length > 0) {
+      return this.storage.shift();
+    }
+  };
+  this.size = function() {
+    return this.storage.length
   }
 }
 
@@ -124,8 +174,38 @@ const graphDFS = (graph) => {
       }
     }
   }
+  console.log(Object.keys(graph._nodes))
   recurse(graph['_nodes']['0'])
   return stack;
 }
 
-console.log(graphDFS(graph))
+// console.log(graphDFS(graph))
+
+const graphBFS = (graph) => {
+  let queue = new Queue();
+  let visited = {};
+  let nodes = graph['_nodes'];
+  const recurse = (node) => {
+    if (!node) {
+      return;
+    }
+    visited[node.value] = true;
+    queue.enqueue(node);
+    console.log(queue.size())
+    while (queue.size() > 0) {
+      // console.log('hello')
+      var dequeued = queue.dequeue();
+      console.log('dequeued', dequeued);
+      for (var key in dequeued.edges) {
+        if (!visited[key]) {
+          // console.log('enqueue', key)
+          visited[key] = true;
+          queue.enqueue(nodes[key]);
+        }
+      }
+    }
+  }
+  recurse(graph['_nodes']['0'])
+}
+
+graphBFS(graph)
