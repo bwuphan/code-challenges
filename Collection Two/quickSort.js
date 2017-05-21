@@ -28,5 +28,5 @@ const quickSort = (array) => {
 	return array;
 }
 
-let test = [5, 7, 9, 2, 6, 6, 1,2, 5, 10, 11];
+let test = [5, 7, 9, 2, 6, 1,2, 5, 10, 11];
 console.log(quickSort(test))
