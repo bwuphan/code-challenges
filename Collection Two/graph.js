@@ -209,3 +209,5 @@ const graphBFS = (graph) => {
 }
 
 graphBFS(graph)
+
+exports.Graph = Graph ;
