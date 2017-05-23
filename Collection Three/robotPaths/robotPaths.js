@@ -31,11 +31,33 @@ var makeBoard = function(n) {
 
 
 var robotPaths = function(n, board, i, j) {
-  var result = 0;
-  
+  console.log('hello')
+  if (!board) {
+    var board = makeBoard(n);
+    var i = 0;
+    var j = 0;
+  }
+
+  if (!(i >= 0 && i < n && j >= 0 && j < n) || board.hasBeenVisited(i, j)) {
+    return 0;
+  }
+  if (i === (n - 1) && j === (n - 1)) {
+    console.log('1', board)
+    console.log('here')
+    return 1;
+  }
+  board.togglePiece(i, j);
+  var result = robotPaths(n, board, i + 1, j) +
+    robotPaths(n, board, i - 1, j) +
+    robotPaths(n, board, i, j + 1) +
+    robotPaths(n, board, i, j - 1);
+  board.togglePiece(i, j);
+  console.log('2', board)
+  return result;
+
 };
 
-
+console.log(robotPaths(2))
 
 // var makeBoard = function(n) {
 //   var board = [];
