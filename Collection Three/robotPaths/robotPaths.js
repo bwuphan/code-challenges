@@ -52,7 +52,7 @@ var robotPaths = function(n, board, i, j) {
     robotPaths(n, board, i, j + 1) +
     robotPaths(n, board, i, j - 1);
   board.togglePiece(i, j);
-  console.log('2', board)
+  // console.log('2', board)
   return result;
 
 };
