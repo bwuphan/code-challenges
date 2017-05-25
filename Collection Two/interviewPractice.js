@@ -78,7 +78,6 @@ Graph.prototype.depthFirstSearch = function(callback) {
 		visited[node] = true;
 		stack.push(node);
 		for (let key in nodes[node].edges) {
-			console.log('hello')
 			if (!visited[key]) {
 				recurse(key);
 			}
@@ -97,3 +96,85 @@ const testFunc = (key) => {
 }
 console.log(graph.nodes)
 console.log(graph.depthFirstSearch(testFunc))
+
+
+//implement BFS
+function Queue() {
+  this.storage = [];
+  this.enqueue = function() {
+    this.storage.push(arguments[0]);
+  };
+  this.dequeue = function() {
+    if (this.storage.length > 0) {
+      return this.storage.shift();
+    }
+  };
+  this.size = function() {
+    return this.storage.length
+  }
+}
+
+Graph.prototype.breadthFirstSearch = function(node1, node2) {
+	let queue = new Queue();
+	let visited = {};
+	const nodes = this.nodes
+	const node = Object.keys(nodes)[0];
+	queue.enqueue(node);
+	visited[node] = true;
+	while(queue.size() > 0) {
+		const dequeuedKey = queue.dequeue();
+		const dequeued = nodes[dequeuedKey];
+		for (let key in dequeued.edges) {
+			if (dequeuedKey == node1) {
+				if (node2 in dequeued.edges) {
+					return true;
+				}
+			}
+			if (dequeuedKey == node2) {
+				if (node1 in dequeued.edges) {
+					return true;
+				}
+			}
+			if (!visited[key]) {
+				queue.enqueue(key);
+				visited[key] = true;
+			}
+		}
+	}
+	return false;
+}
+
+console.log(graph.breadthFirstSearch(3, 1));
+
+
+//Quick sort
+
+const quickSort = (array) => {
+	const partition = (start, end) => {
+		const pNum = array[end];
+		let pIndex = 0;
+		for (let i = 0; i < array.length - 1; i++) {
+			if (pNum > array[i]) {
+				const temp = array[pIndex];
+				array[pIndex] = array[i];
+				array[i] = temp;
+				pIndex++;
+			}
+		}
+		const temp = array[pIndex];
+		array[pIndex] = array[end];
+		array[end] = temp; 
+		return pIndex;
+	};
+	const recurse = (start, end) => {
+		if (start < end) {
+			const partitionIndex = partition(start, end);
+			recurse(start, partitionIndex - 1);
+			recurse(partitionIndex + 1, end);
+		}
+	};
+	recurse(0, array.length - 1)
+	return array;
+}
+
+console.log(quickSort([4,4,2,7,8,1,2,3]))
