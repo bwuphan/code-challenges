@@ -68,15 +68,17 @@ graph.addEdge(5,3);
 
 //Implement DFS
 Graph.prototype.depthFirstSearch = function(callback) {
-	let stack = [];
+	// let stack = [];
 	let visited = {};
 	let nodes = this.nodes;
+	let test = 0;
 	const recurse = (node) => {
 		if (!node) {
 			return;
 		}
 		visited[node] = true;
-		stack.push(node);
+		callback(node)
+		// stack.push(node);
 		for (let key in nodes[node].edges) {
 			if (!visited[key]) {
 				recurse(key);
@@ -85,34 +87,40 @@ Graph.prototype.depthFirstSearch = function(callback) {
 	}
 	const firstKey = Object.keys(nodes)[0];
 	recurse(firstKey);
-	for (let i = stack.length - 1; i >= 0; i--) {
-		const key = stack[i];
-		callback(nodes[key]);
-	}
-	return stack;
+	// for (let i = stack.length - 1; i >= 0; i--) {
+	// 	const key = stack[i];
+	// 	callback(nodes[key]);
+	// }
+	// return stack;
 }
 const testFunc = (key) => {
 	console.log(key)
 }
 console.log(graph.nodes)
-console.log(graph.depthFirstSearch(testFunc))
+graph.depthFirstSearch(testFunc);
 
 
 //implement BFS
 function Queue() {
-  this.storage = [];
-  this.enqueue = function() {
-    this.storage.push(arguments[0]);
+  this.storage = {};
+  let start = 0;
+  let end = 0;
+  this.enqueue = function(val) {
+    this.storage[end++] = val;
   };
   this.dequeue = function() {
-    if (this.storage.length > 0) {
-      return this.storage.shift();
+    if (this.size()) {
+      const dequeued = this.storage[start];
+      delete this.storage[start];
+      start++;
+      return dequeued;
     }
   };
   this.size = function() {
-    return this.storage.length
+    return end - start;
   }
 }
+
 
 Graph.prototype.breadthFirstSearch = function(node1, node2) {
 	let queue = new Queue();
@@ -127,11 +135,13 @@ Graph.prototype.breadthFirstSearch = function(node1, node2) {
 		for (let key in dequeued.edges) {
 			if (dequeuedKey == node1) {
 				if (node2 in dequeued.edges) {
+					console.log('hello1')
 					return true;
 				}
 			}
 			if (dequeuedKey == node2) {
 				if (node1 in dequeued.edges) {
+					console.log('hello2');
 					return true;
 				}
 			}
@@ -144,7 +154,7 @@ Graph.prototype.breadthFirstSearch = function(node1, node2) {
 	return false;
 }
 
-console.log(graph.breadthFirstSearch(3, 1));
+console.log(graph.breadthFirstSearch(2, 5));
 
 
 //Quick sort
@@ -177,4 +187,4 @@ const quickSort = (array) => {
 	return array;
 }
 
-console.log(quickSort([4,4,2,7,8,1,2,3]))
+// console.log(quickSort([4,4,2,7,8,1,2,3]))

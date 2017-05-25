@@ -42,3 +42,7 @@ Array.prototype.isSubsetOf = function (arr) {
   return true;
   /* END SOLUTION */
 };
+
+
+console.log([].isSubsetOf(['hello','woo']));
+var result = [].isSubsetOf([1, 2, 2]);
