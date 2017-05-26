@@ -173,7 +173,7 @@ const quickSort = (array) => {
 		}
 		const temp = array[pIndex];
 		array[pIndex] = array[end];
-		array[end] = temp; 
+		array[end] = temp;
 		return pIndex;
 	};
 	const recurse = (start, end) => {
@@ -186,5 +186,33 @@ const quickSort = (array) => {
 	recurse(0, array.length - 1)
 	return array;
 }
-
 // console.log(quickSort([4,4,2,7,8,1,2,3]))
+
+
+//Merge Sort
+const merge = (left, right) => {
+  const result = [];
+  let i = 0;
+  let j = 0;
+  while (i < left.length && j < right.length) {
+    if (left[i] < right[j]) {
+      result.push(left[i++]);
+    } else {
+      result.push(right[j++]);
+    }
+  }
+  const leftover = i === left.length ? right.slice(j, right.length) : left.slice(i, left.length);
+  return result.concat(leftover)
+}
+
+const mergeSort = (array) => {
+  if (array.length === 1) {
+    return array;
+  }
+	const splitPoint = Math.floor(array.length / 2);
+  const left = array.slice(0, splitPoint);
+  const right = array.slice(splitPoint, array.length);
+  return merge(mergeSort(left), mergeSort(right));
+};
+
+console.log(mergeSort([4,1,6,2,7,1,1]))
