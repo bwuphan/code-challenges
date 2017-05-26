@@ -175,4 +175,34 @@ const quickSort = (array) => {
   return array;
 }
 
-console.log(quickSort([3,4,1,6,1,2,3,8,0,10]))
+console.log(quickSort([3,4,1,6,1,2,3,8,0,10]));
+
+
+const merge = (left, right) => {
+
+  let i = 0;
+  let j = 0;
+  let result = [];
+  while (i < left.length && j < right.length) {
+    if (left[i] < right[j]) {
+      result.push(left[i++]);
+    } else {
+      result.push(right[j++]);
+    };
+  };
+  console.log(result)
+  const remaining = i === left.length ? right.slice(j) : left.slice(i);
+  return result.concat(remaining);
+};
+
+const mergeSort = (array) => {
+  if (array.length <= 1) {
+    return array;
+  }
+  const half = Math.floor(array.length / 2);
+  const left = array.slice(0, half);
+  const right = array.slice(half);
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+console.log(mergeSort([4,2,5,1,67,1,2,3]))
