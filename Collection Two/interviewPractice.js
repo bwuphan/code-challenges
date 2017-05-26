@@ -135,13 +135,11 @@ Graph.prototype.breadthFirstSearch = function(node1, node2) {
 		for (let key in dequeued.edges) {
 			if (dequeuedKey == node1) {
 				if (node2 in dequeued.edges) {
-					console.log('hello1')
 					return true;
 				}
 			}
 			if (dequeuedKey == node2) {
 				if (node1 in dequeued.edges) {
-					console.log('hello2');
 					return true;
 				}
 			}
