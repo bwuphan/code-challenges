@@ -122,95 +122,159 @@ function Queue() {
 }
 
 
+// Graph.prototype.breadthFirstSearch = function(node1, node2) {
+// 	let queue = new Queue();
+// 	let visited = {};
+// 	const nodes = this.nodes
+// 	const node = Object.keys(nodes)[0];
+// 	queue.enqueue(node);
+// 	visited[node] = true;
+// 	while(queue.size() > 0) {
+// 		const dequeuedKey = queue.dequeue();
+// 		const dequeued = nodes[dequeuedKey];
+// 		for (let key in dequeued.edges) {
+// 			if (dequeuedKey == node1) {
+// 				if (node2 in dequeued.edges) {
+// 					return true;
+// 				}
+// 			}
+// 			if (dequeuedKey == node2) {
+// 				if (node1 in dequeued.edges) {
+// 					return true;
+// 				}
+// 			}
+// 			if (!visited[key]) {
+// 				queue.enqueue(key);
+// 				visited[key] = true;
+// 			}
+// 		}
+// 	}
+// 	return false;
+// }
+
+// console.log(graph.breadthFirstSearch(2, 5));
+
+
+// //Quick sort
+
+// const quickSort = (array) => {
+// 	const partition = (start, end) => {
+// 		const pNum = array[end];
+// 		let pIndex = 0;
+// 		for (let i = 0; i < array.length - 1; i++) {
+// 			if (pNum > array[i]) {
+// 				const temp = array[pIndex];
+// 				array[pIndex] = array[i];
+// 				array[i] = temp;
+// 				pIndex++;
+// 			}
+// 		}
+// 		const temp = array[pIndex];
+// 		array[pIndex] = array[end];
+// 		array[end] = temp;
+// 		return pIndex;
+// 	};
+// 	const recurse = (start, end) => {
+// 		if (start < end) {
+// 			const partitionIndex = partition(start, end);
+// 			recurse(start, partitionIndex - 1);
+// 			recurse(partitionIndex + 1, end);
+// 		}
+// 	};
+// 	recurse(0, array.length - 1)
+// 	return array;
+// }
+// // console.log(quickSort([4,4,2,7,8,1,2,3]))
+
+
+// //Merge Sort
+// const merge = (left, right) => {
+//   const result = [];
+//   let i = 0;
+//   let j = 0;
+//   while (i < left.length && j < right.length) {
+//     if (left[i] < right[j]) {
+//       result.push(left[i++]);
+//     } else {
+//       result.push(right[j++]);
+//     }
+//   }
+//   const leftover = i === left.length ? right.slice(j, right.length) : left.slice(i, left.length);
+//   return result.concat(leftover)
+// }
+
+// const mergeSort = (array) => {
+//   if (array.length === 1) {
+//     return array;
+//   }
+// 	const splitPoint = Math.floor(array.length / 2);
+//   const left = array.slice(0, splitPoint);
+//   const right = array.slice(splitPoint, array.length);
+//   return merge(mergeSort(left), mergeSort(right));
+// };
+
+// console.log(mergeSort([4,1,6,2,7,1,1]))
+
 Graph.prototype.breadthFirstSearch = function(node1, node2) {
-	let queue = new Queue();
-	let visited = {};
-	const nodes = this.nodes
-	const node = Object.keys(nodes)[0];
-	queue.enqueue(node);
-	visited[node] = true;
-	while(queue.size() > 0) {
-		const dequeuedKey = queue.dequeue();
-		const dequeued = nodes[dequeuedKey];
-		for (let key in dequeued.edges) {
-			if (dequeuedKey == node1) {
-				if (node2 in dequeued.edges) {
-					return true;
-				}
-			}
-			if (dequeuedKey == node2) {
-				if (node1 in dequeued.edges) {
-					return true;
-				}
-			}
-			if (!visited[key]) {
-				queue.enqueue(key);
-				visited[key] = true;
-			}
-		}
-	}
-	return false;
-}
-
-console.log(graph.breadthFirstSearch(2, 5));
-
-
-//Quick sort
-
-const quickSort = (array) => {
-	const partition = (start, end) => {
-		const pNum = array[end];
-		let pIndex = 0;
-		for (let i = 0; i < array.length - 1; i++) {
-			if (pNum > array[i]) {
-				const temp = array[pIndex];
-				array[pIndex] = array[i];
-				array[i] = temp;
-				pIndex++;
-			}
-		}
-		const temp = array[pIndex];
-		array[pIndex] = array[end];
-		array[end] = temp;
-		return pIndex;
-	};
-	const recurse = (start, end) => {
-		if (start < end) {
-			const partitionIndex = partition(start, end);
-			recurse(start, partitionIndex - 1);
-			recurse(partitionIndex + 1, end);
-		}
-	};
-	recurse(0, array.length - 1)
-	return array;
-}
-// console.log(quickSort([4,4,2,7,8,1,2,3]))
-
-
-//Merge Sort
-const merge = (left, right) => {
-  const result = [];
-  let i = 0;
-  let j = 0;
-  while (i < left.length && j < right.length) {
-    if (left[i] < right[j]) {
-      result.push(left[i++]);
-    } else {
-      result.push(right[j++]);
-    }
-  }
-  const leftover = i === left.length ? right.slice(j, right.length) : left.slice(i, left.length);
-  return result.concat(leftover)
-}
-
-const mergeSort = (array) => {
-  if (array.length === 1) {
-    return array;
-  }
-	const splitPoint = Math.floor(array.length / 2);
-  const left = array.slice(0, splitPoint);
-  const right = array.slice(splitPoint, array.length);
-  return merge(mergeSort(left), mergeSort(right));
+  const visited = {};
+  const queue = new Queue();
+  const nodes = this.nodes;
+  const firstKey = Object.keys(nodes)[0];
+  queue.enqueue(firstKey);
+  while (queue.size() > 0) {
+    const dequeued = queue.dequeue();
+    visited[dequeued] = true;
+    const nodeEdges = nodes[dequeued].edges;
+    for (let key in nodeEdges) {
+      if (node1 == dequeued) {
+        if (node2 == key) {
+          return true;
+        };
+      };
+      if (node2 == dequeued) {
+        if (node2 == dequeued) {
+          if (node1 == key) {
+            return true;
+          };
+        };
+      };
+      if (!visited[key]) {
+        queue.enqueue(key);
+      }
+    };
+  };
+  return false;
 };
 
-console.log(mergeSort([4,1,6,2,7,1,1]))
+console.log(graph.breadthFirstSearch(3,2));
+
+const quickSort = (array) => {
+  const partition = (start, end) => {
+    console.log('hello')
+    const pNum = array[end];
+    let pIndex = start;
+    for (var i = start; i < end; i++) {
+      if (array[i] < pNum) {
+        const temp = array[i];
+        array[i] = array[pIndex];
+        array[pIndex] = temp;
+        pIndex++;
+      }
+    }
+    const temp = array[end];
+    array[end] = array[pIndex];
+    array[pIndex] = temp;
+    return pIndex;
+  }
+  const recurse = (start, end) => {
+    if (start < end) {
+      const partitionIndex = partition(start, end);
+      recurse(start ,partitionIndex - 1);
+      recurse(partitionIndex + 1, end);
+    }
+  }
+  recurse(0, array.length - 1);
+  return array;
+}
+
+console.log(quickSort([1,5,2,7,1,9,10]))
