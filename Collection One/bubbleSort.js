@@ -54,3 +54,14 @@ var swap = function (i, j, array) {
 // J ^= I // I:1111, J:1111      L ^= K // K:100111110, L:010010111
 // I ^= J // I:0000, J:1111      K ^= L // K:110101001, L:010010111
 */
+
+
+function mutate(array) {
+  array[0] = 1;
+  return array;
+}
+
+
+var test = [3,1,7];
+mutate(test);
+console.log(test);
