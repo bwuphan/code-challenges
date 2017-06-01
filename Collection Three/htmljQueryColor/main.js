@@ -1,3 +1,26 @@
+// $(function() {
+//   $('p').each(function(index, value) {
+//     console.log($(value).text().split(' '));
+//   })
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $(function() {
   // --------------STEP 1--------------
   // wrap every word in every `<p>` tag with a `<span>` tag.
