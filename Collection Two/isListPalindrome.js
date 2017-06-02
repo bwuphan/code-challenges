@@ -23,5 +23,23 @@
 
 // Return true if l is a palindrome, otherwise return false.
 function isListPalindrome(l) {
-
+  let node = l;
+  let array = [];
+  while (node) {
+    array.push(node);
+    node = node.next;
+  }
+  const half = Math.floor(array.length / 2);
+  for (var i = 0; i < half; i++) {
+    if (array[i] !== array[array.length - 1 - i]) {
+      return false;
+    }
+  }
+  return true;
 }
+
+
+console.log(isListPalindrome([1, 2, 2, 3]))
+console.log(isListPalindrome([1, 2, 2, 1]))
+console.log(isListPalindrome([1, 2, 3, 2, 1]))
+console.log(isListPalindrome([]))

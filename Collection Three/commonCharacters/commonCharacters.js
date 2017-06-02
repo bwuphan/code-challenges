@@ -39,6 +39,8 @@ var commonCharacters = function(string1, string2) {
  // Go look at the helper functions and figure out what they do!
   var common = otherStrings.reduce(function(obj, string) {
     obj = intersection(obj, objectify(string));
+    console.log('string', string);
+    console.log('obj', obj);
     return obj;
   }, objectify(string1)); // An object representing all characters in string1 is passed in as a starting value
 
@@ -49,3 +51,5 @@ var commonCharacters = function(string1, string2) {
   }, '');
   /* END SOLUTION */
 };
+
+commonCharacters('acexivou', 'aegihobu', 'wudisop', 'ieuos')
