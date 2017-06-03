@@ -30,3 +30,34 @@ var largestProductOfThree = function(array) {
   END SOLUTION */
 };
 console.log(largestProductOfThree([-1,3,6,9]))
+
+/* Write a function that finds the largest possible product of any three numbers
+ * from an array.
+ *
+ * Example:
+ * largestProductOfThree([2, 1, 3, 7]) === 42
+ *
+ * Extra credit: Make your function handle negative numbers.
+ */
+ var largestProductOfThree = function(array) {
+   // TODO: everything
+   var product;
+   var sorted = array.sort((a, b) => a < b);
+   var largest = sorted[0];
+   console.log('Sorted: ', sorted);
+   var productOfTwoSecondLargest = sorted.slice(1, 3).reduce((a, b) => a * b, 1);
+   console.log('productOfTwoSecondLargest:', productOfTwoSecondLargest);
+   var negative = array.filter((a) => a < 0);
+   //console.log('Negative: ', negative);
+   if (negative.length > 1) {
+     var productOfTwoLargestNegative = negative.sort((a, b) => a > b).slice(0, 2).reduce((a, b) => a * b, 1);
+     product = largest * (productOfTwoSecondLargest > productOfTwoLargestNegative ?
+                 productOfTwoSecondLargest : productOfTwoLargestNegative);
+   } else {
+     product = largest * productOfTwoSecondLargest;
+   }
+   //console.log('Product: ', product);
+   return product;
+ };
+
+ console.log(largestProductOfThree([2, 5, 3, 7]));

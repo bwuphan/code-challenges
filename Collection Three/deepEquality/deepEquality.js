@@ -18,11 +18,18 @@ var deepEquals = function(apple, orange) {
   if (!(apple instanceof Object) || !(orange instanceof Object)) { return false; }
   var appleKeys = Object.keys(apple);
   var orangeKeys = Object.keys(orange);
+  console.log(appleKeys)
   if (appleKeys.length !== orangeKeys.length) { return false; }
   if (appleKeys.length === 0) { return true; } // two empty objects are equal
   for (var i = 0; i < appleKeys.length; i++) {
+    console.log(apple[appleKeys[i]],orange[appleKeys[i]]);
     if (!deepEquals(apple[appleKeys[i]], orange[appleKeys[i]])) { return false; }
   }
   return true;
   /* END SOLUTION */
 };
+
+let test = { foo: 1, b: { c: 'potato'} };;
+let b = { foo: 1, b: { c: 3 } };
+console.log(deepEquals(test,b))
+

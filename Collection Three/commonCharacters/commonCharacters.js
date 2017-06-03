@@ -10,8 +10,6 @@
  * Extra credit: Extend your function to handle more than two input strings.
  */
 
-/* START SOLUTION */
-// HELPER FUNCTIONS!
 // Given two objects, intersection() uses reduce to create an object with only the common keys
 var intersection = function (set1, set2) {
   return Object.keys(set1).reduce(function (out, val) {
@@ -27,11 +25,9 @@ var objectify = function (string) {
     return obj;
   }, {});
 };
-/* END SOLUTION */
 
 var commonCharacters = function(string1, string2) {
   // TODO: Your code here!
-  /* START SOLUTION */
   // Separate out multiple input strings
   var otherStrings = Array.prototype.slice.call(arguments, 1);
 
@@ -43,13 +39,15 @@ var commonCharacters = function(string1, string2) {
     console.log('obj', obj);
     return obj;
   }, objectify(string1)); // An object representing all characters in string1 is passed in as a starting value
-
+  console.log('COMMON', common);
   // use reduce to create a string representing all common chars in the order seen in string1, and return it!
   return string1.split('').reduce(function(result, char) {
     if (common[char]) { result += char; common[char] = false; }
     return result;
   }, '');
-  /* END SOLUTION */
 };
 
 commonCharacters('acexivou', 'aegihobu', 'wudisop', 'ieuos')
+
+const test = [3,503,392,10];
+console.log(test.sort())
