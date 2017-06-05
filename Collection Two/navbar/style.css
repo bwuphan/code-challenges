@@ -3,8 +3,7 @@ body{
 }
 .container {
   display: flex;
-  background-color: black;
-  border-radius: 5px;
+  background-color: #36454F;
   padding: 0px;
 }
 .container li a{
@@ -16,7 +15,8 @@ body{
 }
 
 .container li a:hover{
-  background-color: grey;
+  background-color: black;
+  color: #D3D3D3;
 }
 
 .left {

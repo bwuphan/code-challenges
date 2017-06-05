@@ -1,8 +1,8 @@
-// $(function() {
-//   $('p').each(function(index, value) {
-//     console.log($(value).text().split(' '));
-//   })
-// });
+$(function() {
+  $('p').each(function(index, value) {
+    console.log($(value).text().split(' '));
+  })
+});
 
 
 
