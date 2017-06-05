@@ -1,22 +1,37 @@
+body{
+ margin: 0px;
+}
 .container {
   display: flex;
   background-color: black;
-  justify-content: space-between;
+  border-radius: 5px;
+  padding: 0px;
 }
 .container li a{
   color: white;
+  padding: 14px 16px;
+  padding-left: 25px;
+  padding-right: 25px;
+  text-decoration: none;
+}
+
+.container li a:hover{
+  background-color: grey;
 }
 
 .left {
+  list-style-type: none;
   display: flex;
-  flex: 2;
+  flex: 6;
   /*flex-direction: row-reverse;*/
-  justify-content: space-between;
+  justify-content: flex-start;
+  padding: 0px;
 }
 
 .right {
+  list-style-type: none;
   display: flex;
-  flex: 4;
+  flex: 1;
   /*flex-direction: row-reverse;*/
   justify-content: flex-end;
 }
