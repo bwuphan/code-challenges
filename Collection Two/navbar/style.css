@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  background-color: black;
+  justify-content: space-between;
+}
+.container li a{
+  color: white;
+}
+
+.left {
+  display: flex;
+  flex: 2;
+  /*flex-direction: row-reverse;*/
+  justify-content: space-between;
+}
+
+.right {
+  display: flex;
+  flex: 4;
+  /*flex-direction: row-reverse;*/
+  justify-content: flex-end;
+}
