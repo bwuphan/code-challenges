@@ -42,8 +42,13 @@
 // The shortest possible time it will take to build the academy.
 
 function allianceHelp(t, allianceSize) {
-  var secondsSubtracted = Math.max(60, 1000 * 0.10);
-  return secondsSubtracted;
+  var secondsSubtracted = Math.max(60, Math.floor(t * 0.10));
+  var allianceNum = Math.min(allianceSize, 10);
+  return Math.max(0, t - (secondsSubtracted * allianceNum));
 };
 
-console.log(1000,10);
+console.log(allianceHelp(1000,10));
+console.log(allianceHelp(999,11));
+console.log(allianceHelp(100,1));
+console.log(allianceHelp(909,500));
+console.log(allianceHelp(100,10));
