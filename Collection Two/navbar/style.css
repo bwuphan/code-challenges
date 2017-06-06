@@ -6,6 +6,9 @@ body{
   background-color: #36454F;
   padding: 0px;
 }
+.home {
+  font-size: 20px;
+}
 .container li a{
   color: white;
   padding: 14px 16px;

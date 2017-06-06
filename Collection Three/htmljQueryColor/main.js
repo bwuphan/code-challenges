@@ -1,5 +1,6 @@
 $(function() {
   $('p').each(function(index, element) {
+    console.log(element);
     var $element = $(element);
     var array = $element.text().split(' ');
     $element.empty();
@@ -14,7 +15,6 @@ $(function() {
   }
   setInterval(function() {
     $('span').each(function(index, element) {
-      console.log(generateColor());
       $(this).css('color', generateColor());
     });
   }, 1000);
