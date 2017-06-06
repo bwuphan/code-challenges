@@ -13,20 +13,18 @@ $(function() {
     var hue = `${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)}`;
     return `rgb(${hue})`
   }
-  setInterval(function() {
-    $('span').each(function(index, element) {
-      $(this).css('color', generateColor());
-    });
-  }, 1000);
+  // setInterval(function() {
+  //   $('span').each(function(index, element) {
+  //     $(this).css('color', generateColor());
+  //   });
+  // }, 1000);
+  $('span').each(function(index, element) {
+    var context = this;
+    setInterval(function() {
+      $(context).css('color', generateColor());
+    }, Math.random() * 1000)
+  });
 });
-
-
-
-
-
-
-
-
 
 
 
