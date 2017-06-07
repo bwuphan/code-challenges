@@ -60,4 +60,9 @@ console.log(largestProductOfThree([-1,3,6,9]))
    return product;
  };
 
- console.log(largestProductOfThree([2, 5, 3, 7]));
+console.log(largestProductOfThree([2, 5, 3, 7]));  //30
+
+console.log(largestProductOfThree([2, 13, 7, 3, 5, 11])) //300 something
+console.log(largestProductOfThree([2, 3, -11, 7, 5, -13])) //300 something
+
+//

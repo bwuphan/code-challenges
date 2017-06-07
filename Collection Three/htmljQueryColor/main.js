@@ -1,6 +1,8 @@
 $(function() {
+  // console.log($('p'));
   $('p').each(function(index, element) {
     console.log(element);
+    console.log($(element).each);
     var $element = $(element);
     var array = $element.text().split(' ');
     $element.empty();
@@ -20,7 +22,7 @@ $(function() {
   // }, 1000);
   $('span').each(function(index, element) {
     var context = this;
-    setInterval(function() {
+    setInterval(() => {
       $(context).css('color', generateColor());
     }, Math.random() * 1000)
   });

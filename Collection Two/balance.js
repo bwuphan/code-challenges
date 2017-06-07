@@ -30,3 +30,7 @@ const balance = (left, right) => {
 	};
 	return leftSum > rightSum ? 'Left' : 'Right';
 }
+
+setInterval(function() {
+	console.log('hello');
+}, 1000)
