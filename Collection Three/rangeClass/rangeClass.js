@@ -38,56 +38,117 @@
  * evenNumbers.includes(2) should be true, evenNumbers.includes(3) should be false
  */
 
-
 var Range = function(start, end, step) {
-  /* START SOLUTION */
-  if (start === undefined) {
-    return null;
-  }
-
+  //Your code here
   this.start = start;
-
-  if (end === undefined) {
-    this.end = this.start;
-  } else {
-    this.end = end;
+  this.end = end || start;
+  if (end === 0) {
+    this.end = 0;
   }
-
-  if (step === undefined) {
-    this.step = (this.start < this.end) ? 1 : -1;
-  } else {
-    this.step = step;
+  this.orderBool = this.start < this.end;
+  this.step = step || 1;
+  if (!this.orderBool && this.step > 0) {
+    this.step *= -1;
   }
-
-  return this;
-  /* END SOLUTION */
 };
 
 Range.prototype.size = function () {
-  /* START SOLUTION */
-  return Math.floor((this.end - this.start) / this.step) + 1;
-  /* END SOLUTION */
+  //Your code here
+  return Math.abs(Math.ceil((this.end - this.start + 1) / this.step));
 };
 
 Range.prototype.each = function (callback) {
-  /* START SOLUTION */
-  if (this.step > 0) {
-    for (var i = this.start; i <= this.end; i += this.step) {
-      callback(i);
-    }
-  } else {
-    for (var i = this.start; i >= this.end; i += this.step) {
-      callback(i);
-    }
+  //Your code here
+  console.log(this.orderBool, this.start, this.end)
+  for (let i = this.start; this.orderBool ? i <= this.end : i >= this.end; i += this.step) {
+    callback(i);
   }
-  /* END SOLUTION */
 };
 
 Range.prototype.includes = function (val) {
-  /* START SOLUTION */
-  return ((val >= this.start) && (val <= this.end) && (((this.start - val) % this.step) === 0));
-  /* END SOLUTION */
+  //Your code here
+  var bool = false;
+  this.each(function(number) {
+    if (number === val) {
+      bool = true;
+    }
+  });
+  return bool;
 };
 
-var range = new Range(1);
+var range = new Range(2,8,2);
+console.log(range.size())
+var testFunc = function(val) {
+  console.log(val);
+}
+console.log(range.step)
+range.each(testFunc);
+
+// var oneToOneHundred = new Range(1, 100);
+// var sum = 0;
+// oneToOneHundred.each(function(val){
+//   sum += val;
+// });
+// console.log(sum)
+
+// var countdown = new Range(10, 0, -2); // Let's count down by twos
+// var elements = [];
+// countdown.each(function(val){elements.push(val);});
+// console.log(elements);
+// elements.should.eql([10, 8, 6, 4, 2, 0]);
+// elements.should.eql([10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]);
+
+// console.log(range.includes(5));
+
+
+// var Range = function(start, end, step) {
+//   /* START SOLUTION */
+//   if (start === undefined) {
+//     return null;
+//   }
+
+//   this.start = start;
+
+//   if (end === undefined) {
+//     this.end = this.start;
+//   } else {
+//     this.end = end;
+//   }
+
+//   if (step === undefined) {
+//     this.step = (this.start < this.end) ? 1 : -1;
+//   } else {
+//     this.step = step;
+//   }
+
+//   return this;
+//   /* END SOLUTION */
+// };
+
+// Range.prototype.size = function () {
+//   /* START SOLUTION */
+//   return Math.floor((this.end - this.start) / this.step) + 1;
+//    END SOLUTION
+// };
+
+// Range.prototype.each = function (callback) {
+//   /* START SOLUTION */
+//   if (this.step > 0) {
+//     for (var i = this.start; i <= this.end; i += this.step) {
+//       callback(i);
+//     }
+//   } else {
+//     for (var i = this.start; i >= this.end; i += this.step) {
+//       callback(i);
+//     }
+//   }
+//   /* END SOLUTION */
+// };
+
+// Range.prototype.includes = function (val) {
+//   /* START SOLUTION */
+//   return ((val >= this.start) && (val <= this.end) && (((this.start - val) % this.step) === 0));
+//   /* END SOLUTION */
+// };
+
 
