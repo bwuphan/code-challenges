@@ -14,11 +14,40 @@
  *
  * Target time complexity: O(log(array.length))
  */
+const rotatedArraySearch = (rotated, search) => {
+  const midpoint = Math.floor(rotated.length / 2);
+  rotated[midpoint];
+  const recurse = (left, right) => {
+    const midpoint = Math.floor((left + right) / 2);
+    console.log(rotated[midpoint], left, right)
+    if (rotated[midpoint] === search) {
+      console.log('found');
+      return midpoint;
+    }
+    if (left >= right) {
+      return -1;
+    }
+    if (rotated[left] < rotated[midpoint]) {
+      console.log('hello', left, midpoint)
+      if (search <= rotated[midpoint - 1] && search >= rotated[left]) {
+        return recurse(left, midpoint - 1);
+      } else {
+        return recurse(midpoint + 1, right);
+      }
+    } else {
+      console.log('by', midpoint, right)
+      if (search >= rotated[midpoint + 1] && search <= rotated[right]) {
+        return recurse(midpoint + 1, right);
+      } else {
+        return recurse(left, midpoint - 1);
+      }
+    }
 
- const rotatedArraySearch = (rotated, search) => {
+  }
+  return recurse(0, rotated.length - 1);
+}
 
- }
-
+console.log(rotatedArraySearch([3,4,5,6,7,1,2], 3))
 // var rotatedArraySearch = function (rotated, target) {
 //   // Your code here:
 //   /* START SOLUTION */
