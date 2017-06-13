@@ -90,6 +90,9 @@ function allianceVersusMonster(healthPoints, attackDamage) {
   return 0;
 }
 
-var healthPoints = [110, 30, 50]
-var attackDamage = [12, 11, 20]
+var healthPoints = [2000000000, 2000000000]
+var attackDamage = [1, 1]
+
+// healthPoints: [2000000000, 2000000000]
+// attackDamage: [1, 1]
 console.log(allianceVersusMonster(healthPoints, attackDamage));

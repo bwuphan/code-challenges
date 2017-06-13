@@ -1,0 +1,33 @@
+body {
+  margin: 0px; }
+
+.container {
+  display: flex;
+  background-color: #36454F;
+  padding: 0px; }
+  .container li a {
+    color: white;
+    padding: 14px 16px;
+    padding-left: 25px;
+    padding-right: 25px;
+    text-decoration: none; }
+  .container li a:hover {
+    background-color: black;
+    color: #D3D3D3; }
+
+.left {
+  list-style-type: none;
+  display: flex;
+  flex: 6;
+  /*flex-direction: row-reverse;*/
+  justify-content: flex-start;
+  padding: 0px; }
+
+.right {
+  list-style-type: none;
+  display: flex;
+  flex: 1;
+  /*flex-direction: row-reverse;*/
+  justify-content: flex-end; }
+
+/*# sourceMappingURL=main.css.map */

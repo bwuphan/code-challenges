@@ -26,37 +26,57 @@
 // Negative numbers and duplicate numbers can and will appear.
 
 
-function sumPairs(arr, sum) {
-  let results = null;
-  let storage = {};
-  let memo = {};
-  for (let i = 0; i < arr.length; i++) {
-    if (!(arr[i] in memo)) {
-      memo[arr[i]] = true;
-      for (let j = 1; j < arr.length; j++) {
-        if (j !== i) {
-          if (arr[i] + arr[j] === sum) {
-            results = [arr[i], arr[j]];
-            if (!(Math.max(j, i) in storage)){
-              storage[Math.max(j, i)] = results;
-            }
-          }
-        }
-      }
-    }
-  }
-  let lowest = false;
-  for (let key in storage) {
-    if (!lowest) {
-      lowest = key;
+// function sumPairs(arr, sum) {
+//   let results = null;
+//   let storage = {};
+//   let memo = {};
+//   for (let i = 0; i < arr.length; i++) {
+//     if (!(arr[i] in memo)) {
+//       memo[arr[i]] = true;
+//       for (let j = 1; j < arr.length; j++) {
+//         if (j !== i) {
+//           if (arr[i] + arr[j] === sum) {
+//             results = [arr[i], arr[j]];
+//             if (!(Math.max(j, i) in storage)){
+//               storage[Math.max(j, i)] = results;
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+//   let lowest = false;
+//   for (let key in storage) {
+//     if (!lowest) {
+//       lowest = key;
+//     } else {
+//       if (key < lowest) {
+//         lowest = key;
+//       }
+//     }
+//   }
+//   if (lowest) {
+//     return storage[lowest]
+//   }
+//   return null
+// }
+
+const sumPairsLinear = (array, sum) => {
+  const indices = array.reduce((obj, current, idx) => {
+    if (!(current in obj)) {
+      obj[current] = [];
     } else {
-      if (key < lowest) {
-        lowest = key;
-      }
+      obj[current].push(idx);
     }
+    return obj;
+  }, {});
+  let lowestIdx = 9999999999999;
+  for (let i = 0; i < array.length; i++) {
+    const difference = sum - array[i];
+    if ()
   }
-  if (lowest) {
-    return storage[lowest]
-  }
-  return null
+
+  return indices;
 }
+
+console.log(sumPairsLinear([5,3,7,5,8,8,1,10], 10))

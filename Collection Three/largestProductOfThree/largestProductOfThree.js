@@ -1,4 +1,4 @@
-/* Write a function that finds the largest possible product of any three numbers
+ /* Write a function that finds the largest possible product of any three numbers
  * from an array.
  *
  * Example:
@@ -46,7 +46,7 @@ console.log(largestProductOfThree([-1,3,6,9]))
    var largest = sorted[0];
    console.log('Sorted: ', sorted);
    var productOfTwoSecondLargest = sorted.slice(1, 3).reduce((a, b) => a * b, 1);
-   console.log('productOfTwoSecondLargest:', productOfTwoSecondLargest);
+   // console.log('productOfTwoSecondLargest:', productOfTwoSecondLargest);
    var negative = array.filter((a) => a < 0);
    //console.log('Negative: ', negative);
    if (negative.length > 1) {
@@ -54,7 +54,9 @@ console.log(largestProductOfThree([-1,3,6,9]))
      product = largest * (productOfTwoSecondLargest > productOfTwoLargestNegative ?
                  productOfTwoSecondLargest : productOfTwoLargestNegative);
    } else {
+      // console.log('largest': largest)
      product = largest * productOfTwoSecondLargest;
+     // console.log('PRODUCT': product)
    }
    //console.log('Product: ', product);
    return product;
