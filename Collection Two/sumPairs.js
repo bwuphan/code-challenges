@@ -71,9 +71,12 @@ const sumPairsLinear = (array, sum) => {
     return obj;
   }, {});
   let lowestIdx = 9999999999999;
+  let tuple;
   for (let i = 0; i < array.length; i++) {
     const difference = sum - array[i];
-    if ()
+    if ((difference in indices) && indices[difference].length > 0) {
+
+    }
   }
 
   return indices;
