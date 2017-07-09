@@ -85,7 +85,6 @@ Range.prototype.each = function (callback) {
 
 Range.prototype.includes = function (val) {
   /* START SOLUTION */
-  console.log('hello', ((this.start - val) % this.step))
   if (this.start <= this.end) {
   return ((val >= this.start) && (val <= this.end) && (((this.start - val) % this.step) === 0));
   } else {
@@ -123,3 +122,5 @@ range.each(function(val) {
   console.log(val)
 })
 console.log(range.includes(2))
+
+console.log((-4 % 2) ===0)

@@ -1,6 +1,8 @@
+@import "partials/mixins";
+
 body {
   margin: 0px;
-};
+}
 
 .container {
   display: flex;
@@ -13,10 +15,24 @@ body {
       padding-left: 25px;
       padding-right: 25px;
       text-decoration: none;
+      border-bottom: 1px solid transparentize(#fefefe, 1);
+      transition: border-bottom 0.5s;
+      transition-timing-function: ease-in-out;
     }
     a:hover {
-      background-color: black;
-      color: #D3D3D3;
+      border-bottom: 1px solid opacify(#fefefe, 0.5);
+    }
+    img {
+      height: 20px;
+      width: auto;
+    }
+  }
+  .dropdown {
+    display:none;
+  }
+  @include small-screens {
+    .dropdown {
+      display: flex;
     }
   }
 }
