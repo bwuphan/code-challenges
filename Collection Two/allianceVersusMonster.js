@@ -47,5 +47,52 @@
 // The maximum number of your warriors that will remain after defeating the monster, or 0 if it's impossible to kill a monster without losing all your warriors.
 
 function allianceVersusMonster(healthPoints, attackDamage) {
-
+  var warriorsHp = healthPoints.slice(1)
+  var warriorsAtk = attackDamage.slice(1);
+  var newArr = warriorsHp.reduce((update, warrior, index) => {
+    var newWarrior = {
+      hp: warrior,
+      atk: warriorsAtk[index],
+    }
+    update.push(newWarrior);
+    return update;
+  },[]).sort((a, b) => b.atk - a.atk);
+  var monster = {
+    hp: healthPoints[0],
+    atk: attackDamage[0],
+  };
+  var numWarriors = warriorsHp.length;
+  var firstPass = true;
+  while (numWarriors > 0 && monster.hp > 0) {
+    for (let i = 0; i < numWarriors; i++) {
+      console.log('i',i)
+      if (firstPass) {
+        while (newArr[i].hp - monster.atk > 0) {
+          // console.log('in here')
+          monster.hp -= newArr[i].atk;
+          if (monster.hp < 0) {
+            return numWarriors;
+          }
+          newArr[i].hp -= monster.atk;
+        }
+      } else {
+        // console.log('innn')
+        monster.hp -= newArr[i].atk;
+        if (monster.hp < 0) {
+          return numWarriors;
+        }
+        numWarriors--;
+      }
+      console.log(monster.hp, i, numWarriors)
+    }
+    firstPass = false;
+  }
+  return 0;
 }
+
+var healthPoints = [2000000000, 2000000000]
+var attackDamage = [1, 1]
+
+// healthPoints: [2000000000, 2000000000]
+// attackDamage: [1, 1]
+console.log(allianceVersusMonster(healthPoints, attackDamage));

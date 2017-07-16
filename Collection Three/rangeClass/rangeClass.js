@@ -74,6 +74,13 @@ Range.prototype.includes = function (val) {
     }
   });
   return bool;
+  /* START SOLUTION */
+  if (this.start <= this.end) {
+  return ((val >= this.start) && (val <= this.end) && (((this.start - val) % this.step) === 0));
+  } else {
+    return ((val <= this.start) && (val >= this.end) && (((this.start - val) % this.step) === 0));
+  }
+  /* END SOLUTION */
 };
 
 var range = new Range(2,8,2);
@@ -152,3 +159,32 @@ range.each(testFunc);
 // };
 
 
+var linearSpace = function(n) {
+  var array = [];
+  for (var i = 0; i < n; i++) {
+    array.push(Math.floor(Math.random() * 6));
+  }
+  return array;
+}
+
+var quadratic = function(n) {
+  var matrix = [];
+  for (var i = 0; i < n; i++) {
+    matrix[i] = [];
+    for (var j = 0; j < n; j++) {
+      matrix[i][j] = Math.floor(Math.random() * 6);
+    };
+  }
+  return matrix
+}
+
+console.log(linearSpace(4));
+console.log(quadratic(4))
+
+var range = new Range(10, 2, -2);
+range.each(function(val) {
+  console.log(val)
+})
+console.log(range.includes(2))
+
+console.log((-4 % 2) ===0)

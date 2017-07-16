@@ -2,30 +2,25 @@ function powerSet (string) {
   // Write your code here, and
   // return your final answer.
   var strArr = string.split('');
-  var unique = strArr.reduce(function(word, letter) {
-    if (word.indexOf(letter) === -1) {
-      word.push(letter);
+  var unique = strArr.reduce(function(obj, letter) {
+    if (!(letter in obj)) {
+      obj[letter] = true;;
     }
-    return word;
-  }, []).sort();
-  const results = [];
+    return obj;
+  }, {});
+  unique = Object.keys(unique).join('');
 
   //create a subroutine, pass in array
-  const recurse = function(string, array) {
-    console.log('string', string)
-    if (array.length === 0 || string.length === unique.length) {
-      return;
+
+  return (function recurse(index, string) {
+    if (index >= unique.length) {
+      return [string];
+    } else {
+      var include = recurse(index + 1, string);
+      var exclude = recurse(index + 1, unique[index] + string);
+      return include.concat(exclude);
     }
-    results.push(string);
-    for (let i = 0; i < array.length; i++) {
-      string += array[i];
-      const clone = [...array];
-      clone.splice(i,1);
-      recurse(string, clone);
-    }
-  }
-  recurse('', unique)
-  return results;
+  })(0, '').sort();
     //if array length.length === 0
 
       //return
@@ -40,7 +35,8 @@ function powerSet (string) {
 }
 
 
-console.log(powerSet("obama"))
+console.log(powerSet('').length)
+console.log([ "", "a", "ab", "abm", "abmo", "abo", "am", "amo", "ao", "b", "bm", "bmo", "bo", "m", "mo", "o" ].length);
 // var array = [1,2,3];
 // const clone = [...array];
 // clone.splice(0,1);

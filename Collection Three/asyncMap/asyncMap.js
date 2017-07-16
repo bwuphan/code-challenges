@@ -57,3 +57,57 @@ var asyncMap = function(tasks, callback) {
   }
   /* END SOLUTION */
 };
+
+
+var asyncMap = function(tasks, callback){
+  var resultsArray = [];
+  var resultsCount = 0;
+
+  for(var i = 0; i < tasks.length; i++){
+    tasks[i](function (result) {
+      resultsArray[i] = result;
+      resultsCount++;
+      if(resultsCount === tasks.length){
+        callback(resultsArray);
+      }
+    });
+  }
+  // From this point on, i === tasks.length
+};
+
+var wait3For1 = function (callback) {
+      setTimeout(function() {
+        console.log('1');
+        callback(1);
+      }, 300);
+    };
+
+    var wait2For2 = function (callback) {
+      setTimeout(function() {
+        console.log('2');
+        callback(2);
+      }, 200);
+    };
+
+    var wait5For4 = function (callback) {
+      setTimeout(function() {
+        callback(4);
+      }, 500);
+    };
+
+    var wait1For3 = function (callback) {
+      setTimeout(function() {
+        callback(3);
+      }, 100);
+    };
+
+
+    var wait1For5 = function (callback) {
+      setTimeout(function() {
+        callback(5);
+      }, 100);
+    };
+
+ asyncMap([wait3For1, wait2For2, wait1For3, wait5For4, wait1For5], function(results) {
+      console.log(results);
+    });
