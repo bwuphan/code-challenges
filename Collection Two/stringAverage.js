@@ -5,19 +5,20 @@
 // If the string is empty or includes a number greater than 9, return "n/a"
 
 const averageString = (str) => {
-  const translateObj = {
-    'one': 1,
-    'two': 2,
-    'three': 3,
-    'four': 4,
-    'five': 5,
-    'six': 6,
-    'seven': 7,
-    'eight': 8,
-    'nine': 9
-  };
+  const numArr = ['zero','one','two','three','four','five','six','seven','eight','nine'];
   const strArr = str.split(' ');
-  return strArr.reduce((sum, number) => {
-
-  }, 0);
+  let sum = 0;
+  for (let i = 0; i < strArr.length; i++) {
+    const currentNum = numArr.indexOf(strArr[i]);
+    if (currentNum > -1) {
+      sum += currentNum;
+    } else {
+      sum = null;
+      break;
+    };
+  };
+  return typeof sum === 'number' ? numArr[Math.floor(sum / strArr.length)] : 'n/a';
 };
+
+
+console.log(averageString("zero nine five two"))
