@@ -1,5 +1,5 @@
 // Randomize ping pong partners
 
-const pongPartners(players) {
+const pongPartners(numMembers, players) {
 
 }
