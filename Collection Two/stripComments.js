@@ -13,5 +13,17 @@
 // grapes
 // bananas
 const stripComments = (string, markers) => {
-
+  const markersObj = {};
+  markers.forEach(marker => {
+    markersObj[marker] = true;
+  });
+  const strArr = string.split('');
+  let strippedStr = '';
+  for (let i = 0; i < strArr.length; i++) {
+    if (strArr[i] in markersObj) return strippedStr;
+    strippedStr += strArr[i];
+  }
+  return strippedStr;
 }
+
+console.log(stripComments('apples, pears # and bananas', ['#']))
