@@ -12,6 +12,8 @@
 // apples, pears
 // grapes
 // bananas
+
+// only works for one line
 const stripComments = (string, markers) => {
   const markersObj = {};
   markers.forEach(marker => {

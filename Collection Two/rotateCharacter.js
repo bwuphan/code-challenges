@@ -12,11 +12,7 @@ const rotate = (array, num) => {
   let idx = array.length - num;
   for (let i = 0; i < array.length; i++) {
     array[i] = originalArr[idx];
-    if (idx + 1 >= array.length) {
-      idx = 0;
-    } else {
-      idx++;
-    }
+    idx + 1 >= array.length ? idx = 0 : idx++;
   }
   return array;
 }
