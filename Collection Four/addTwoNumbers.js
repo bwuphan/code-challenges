@@ -10,37 +10,27 @@
  * @param {ListNode} l2
  * @return {ListNode}
  */
-var addTwoNumbers = function(l1, l2, carry) {
-  var addedOne = addLinkedList(l1);
-  var addedTwo = addLinkedList(l2);
 
-  var sum = parseInt(addedOne) + parseInt(addedTwo);
-  return createdLinkedListFromArr(sum.toString.split(''));
-};
+var addTwoNumbers = function(l1, l2, sumNode, carry) {
+  if (!carry) var carry = 0;
+  if (!l1 && !l2 && carry === 0) return null;
 
-var addLinkedList = function(l1, l2) {
-  if (!listNode.next) return numString;
-  if (!numString) numString = '';
 
-  numString = listNode + numString;
+  sumNode = {...blankNode};
 
-  return addLinkedList(listNode.next, numString);
-}
+  l1 = l1 === null ? {...blankNode} : l1;
+  l2 = l2 === null ? {...blankNode} : l2;
 
-var createdLinkedListFromArr = function(arr, index) {
-  if (!index) index = 0;
-  if (index >= arr.length) return null;
+  const sum = (+l1.val + +l2.val + (carry ? +carry : 0)).toString();
 
-  return {
-    val  : arr[index],
-    next : createdLinkedListFromArr(arr, index + 1)
+  if (sum.length > 1) {
+    carry = sum[0]
+    sumNode.val = sum[1];
+  } else {
+    sumNode.val = sum[0];
+    carry = 0;
   }
+
+  sumNode.next = addTwoNumbers(l1.next, l2.next, sumNode, carry);
+  return sumNode;
 }
-
-var reverseString = function(string) {
-  return string.split('').reverse().join('');
-}
-
-console.log(JSON.stringify(createdLinkedListFromArr([1,2,3,4,5])))
-
-console.log(reverseString("807"))
