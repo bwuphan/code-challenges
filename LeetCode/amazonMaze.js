@@ -34,3 +34,35 @@ Output: 3
 Explanation: Starting from the top-left corner, the demolition robot traversed the cells (0,0) -> (1,0)-> (2,0)->(2,1)
 The robot moves 3 times to remove the obstacle “9”
 */
+
+function demolish(grid) {
+	let minSolution = null;
+
+	const dfs = (x, y, numMoves, grid) => {
+		if (grid[y][x] === 0) return;
+
+		if (grid[y][x] === 9) {
+			if (!minSolution) minSolution = numMoves;
+			else if (numMoves < minSolution) minSolution = numMoves;
+			return;
+		}
+
+		numMoves++;
+
+		grid = [...grid];
+		grid[y][x] = 0;
+		if (x + 1 < grid[0].length) dfs(x + 1, y, numMoves, grid);
+		if (x - 1 >= 0) dfs(x - 1, y, numMoves, grid);
+		if (y + 1 < grid.length) dfs(x, y + 1, numMoves, grid);
+		if (y - 1 >= 0) dfs(x, y - 1, numMoves, grid);
+	};
+
+	dfs(0, 0, 0, grid);
+	return minSolution;
+}
+
+lot = [
+[1, 1, 1, 0],
+[1, 0, 0, 0],
+[1, 1, 1, 9]]
+console.log(demolish(lot));
