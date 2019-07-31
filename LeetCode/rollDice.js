@@ -29,3 +29,27 @@ A ssume that:
 • each element of the array A is an integer within the range [1..6].
 */
 
+const rollDice = (dices) => {
+	const diceHelper = (source, target) => {
+		if (source === target) return 0;
+		else if (source + target === 7) return 2;
+		return 1;
+	}
+
+	let rolls = Number.MAX_SAFE_INTEGER;
+	console.log(rolls);
+	for (let i = 0; i < dices.length; ++i) {
+		let tmp = 0;
+		for (let j = 0; j < dices.length; ++j) {
+			tmp += diceHelper(dices[i], dices[j]);
+		}
+		if (tmp < rolls) {
+			rolls = tmp;
+		}
+	}
+	return rolls;
+};
+
+console.log(rollDice([1, 2, 3]))
+console.log(rollDice([1, 1, 6]))
+console.log(rollDice([1, 6, 2, 3]))
