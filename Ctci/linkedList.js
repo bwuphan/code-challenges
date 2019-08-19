@@ -95,7 +95,18 @@ LinkedList.prototype.outputVals = function() {
   }
 }
 
-
+LinkedList.prototype.returnKthFromTail = function(k) {
+  let i = 0;
+  let curNode = this.tail;
+  while (curNode !== null) {
+    if (i === k) {
+      return curNode;
+    }
+    i++;
+    curNode = curNode.prev;
+  }
+  return null;
+}
 
 let ll = new LinkedList();
 ll.addToTail(3);
