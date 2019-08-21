@@ -1,3 +1,5 @@
+const Queue = require('../Prototypes/Queue').Queue;
+
 var isValidBST = function(root) {
   let isValid = true;
   var traverseTree = function(node, lowerLimit, upperLimit) {
@@ -16,13 +18,13 @@ var isValidBST = function(root) {
   return traverseTree(root, null, null);
 };
 
-var Node = function(val) {
+var Tree = function(val) {
   this.val = val;
   this.left = null;
   this.right = null;
 }
 
-var createBST = function(arr) {
+Tree.prototype.createBST = function(arr) {
   if (arr.length === 0) {
     return null;
   }
@@ -31,16 +33,55 @@ var createBST = function(arr) {
   const leftArr = arr.slice(0, leftLength);
   const rightArr = arr.slice(leftLength + 1, arr.length);
 
-  const newNode = new Node(thisVal);
-  newNode.left = createBST(leftArr);
-  newNode.right = createBST(rightArr);
+  const newNode = new Tree(thisVal);
+  newNode.left = this.createBST(leftArr);
+  newNode.right = this.createBST(rightArr);
   return newNode;
 }
 
-var test1 = [1,2,3,4,5,6,7,8,9,10];
+Tree.prototype.breadthFirstSearch = function() {
+  let queue = new Queue();
+  let results = [];
+  let item;
 
-const bst1 = createBST(test1);
-const bst2 = createBST([1,2,3]);
+  queue.enqueue({ tree: this, depth: 0 });
 
-console.log(isValidBST(bst1));
-console.log(isValidBST(bst2));
+  while (item = queue.dequeue()) {
+    let tree = item.tree;
+    let depth = item.depth;
+
+    results.push(item);
+
+    if (tree.left) queue.enqueue({ tree: tree.left, depth: depth + 1 });
+    if (tree.right) queue.enqueue({ tree: tree.right, depth: depth + 1 });
+  }
+  return results;
+}
+
+Tree.prototype.inOrderTraversal = function(callback) {
+  var traverse = function(tree) {
+    if (tree === null) return;
+
+    traverse(tree.left);
+
+    if (callback) callback(tree.val);
+    else console.log(tree.val);
+
+    traverse(tree.right);
+  }
+
+  traverse(this);
+}
+
+var test1 = [1,2,3,4,5,6];
+
+// const bst1 = createBST(test1);
+// const bst2 = createBST([1,2,3]);
+
+// console.log(isValidBST(bst1));
+// console.log(isValidBST(bst2));
+
+let tree = new Tree();
+let bst = tree.createBST(test1);
+console.log(bst.breadthFirstSearch());
+bst.inOrderTraversal(console.log);
