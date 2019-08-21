@@ -1,40 +1,25 @@
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-
-/**
+/*
  * Encodes a tree to a single string.
  *
  * @param {TreeNode} root
  * @return {string}
  */
-
-var Queue = () => {
-  this.storage = [];
-}
-
-Queue.prototype.push = (item) => {
-  this.storage.push(item)
-}
-
-Queue.prototype.pop = () => {
-  return this.storage.shift();
-}
-
 var serialize = function(root) {
-  let queue = new Queue();
-  let results = [];
+  let string = '';
 
-  let item;
-  queue.push({ tree: root, depth: 0 });
-
-  while(item = queue.pop()) {
-    const tree = item.tree
+  function buildString(node) {
+    if (!node) {
+      string += 'e ';
+    } else {
+      string += node.val + ' ';
+      buildString(node.left);
+      buildString(node.right);
+    }
   }
+
+  buildString(root);
+
+  return string;
 };
 
 /**
@@ -44,25 +29,20 @@ var serialize = function(root) {
  * @return {TreeNode}
  */
 var deserialize = function(data) {
+  let nodes = data.split(' ');
 
-};
+  function buildTree() {
+    let val = nodes.shift();
 
-/**
- * Your functions will be called as such:
- * deserialize(serialize(root));
- */
-
-/*
-  var traverseTree = function(node) {
-    if (node) {
-      results.push(node.val);
-      traverseTree(node.left || null);
-      traverseTree(node.right || null);
+    if (val === 'e') {
+      return null;
     } else {
-      results.push(null);
+      let node = new TreeNode(Number(val));
+      node.left = buildTree();
+      node.right = buildTree();
+      return node;
     }
   }
-  traverseTree(root);
-  console.log(results);
-  return results;
-*/
+
+  return buildTree();
+};
