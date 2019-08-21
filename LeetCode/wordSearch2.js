@@ -31,9 +31,71 @@ The values of words are distinct.
  * @return {string[]}
  */
 var findWords = function(board, words) {
+  let results = [];
 
+  const traverse = function(word, idx, x, y, board) {
+    // If it's out of bounds, return.
+    if (y >= board.length || y < 0) {
+      return;
+    }
+    if (x >= board[0].length || x < 0) {
+      return;
+    }
+
+    // If the current node is null, return (This means that it has been visited).
+    if (board[y][x] === null) {
+      return;
+    }
+
+    // If there is a match between the current letter and the letter at the current node.
+    if (board[y][x] === word[idx]) {
+      // Make a copy of the board.
+      copiedBoard = copy2dArray(board);
+
+      // Mark the node as visited.
+      copiedBoard[y][x] = null;
+
+      idx++;
+
+      // If the index is now greated or equal to the length of the word, we are done.
+      if (idx >= word.length) {
+        results.push(word);
+        removeFromWords(word, words);
+      }
+
+      traverse(word, idx, x + 1, y, copiedBoard);
+      traverse(word, idx, x - 1, y, copiedBoard);
+      traverse(word, idx, x, y + 1, copiedBoard);
+      traverse(word, idx, x, y - 1, copiedBoard);
+    }
+  }
+
+  for (let i = 0; i < board.length; ++i) {
+    for (let j = 0; j < board[0].length; ++j) {
+      words.forEach(word => {
+        if (board[i][j] === word[0]) {
+          traverse(word, 0, j, i, board);
+        }
+      });
+    }
+  }
+  return results;
 };
 
+function copy2dArray(arr) {
+  return arr.map(arr => arr.slice());
+}
+
+function removeFromWords(word, words) {
+  let idx = null;
+  for (let i = 0; i < words.length; ++i) {
+    if (word === words[i]) {
+      idx = i;
+      break;
+    }
+  }
+  words.splice(idx, 1);
+}
 
 const board = [
   ['o','a','a','n'],
@@ -43,4 +105,17 @@ const board = [
 ]
 const words = ["oath","pea","eat","rain"]
 
-console.log(findWords(board, words));
+// console.log(findWords(board, words));
+
+const board2 = [
+  ["a","b","c"],
+  ["a","e","d"],
+  ["a","f","g"]
+]
+const words2 = ["abcdefg","gfedcbaaa","eaabcdgfa","befa","dgc","ade"]
+
+console.log(findWords(board2, words2))
+
+board3 = copy2dArray(board2);
+board3[0][0] = null;
+console.log(board2, board3);
