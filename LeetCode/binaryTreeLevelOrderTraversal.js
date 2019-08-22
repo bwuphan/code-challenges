@@ -32,6 +32,7 @@ let levelOrder = function(root) {
   let results = [];
   // Account for case where root is undefined.
   if (root) {
+
     let queue = new Queue();
     let itemArr = []; // Array that holds items { node, depth }
     queue.enqueue({ node: root, depth: 0 });
@@ -63,6 +64,7 @@ let levelOrder = function(root) {
       }
     }
     results.push(subArr);
+    return results;
   }
   return results;
 };
