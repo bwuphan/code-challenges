@@ -16,41 +16,45 @@ this node's descendants. The tree s could also be considered as a subtree of its
  * @return {boolean}
  */
 var isSubtree = function(s, t) {
-
+  // Create a map to store the nodes { [node.val] : node }
   let map = {};
-  var traverseAndMap = function(root) {
-    if (root === null) return;
 
-    map[root.val] = root;
+  // Traverse subtree s and add nodes to the map.
+  var traverseAndMap = function(node) {
+    if (node === null) return;
 
-    traverseAndMap(root.left);
-    traverseAndMap(root.right);
+    map[node.val] = node;
+
+    traverseAndMap(node.left);
+    traverseAndMap(node.right);
   }
 
   traverseAndMap(s);
 
-  let match = false;
-  var traverseAndMatch = function(root) {
-    if (root === null) return;
-    if (match === true) return;
 
-    if (root.val in map) {
+  let match = false; // Variable stores whether there is a match or not.
 
-      const sNode = JSON.stringify(map[root.val]);
-      const tNode = JSON.stringify(root);
-      console.log('HELLO', sNode, 'WOLRD', tNode);
+  // Traverse and find a match.
+  var traverseAndMatch = function(node) {
+    if (node === null) return;
+
+    if (node.val in map) {
+      const sNode = JSON.stringify(map[node.val]);
+      const tNode = JSON.stringify(node);
+
       if (sNode === tNode) {
         match = true;
       }
-
     }
 
+    // If a match has been made, no need to traverse any longer.
     if (!match) {
-      traverseAndMatch(root.left);
-      traverseAndMatch(root.right);
+      traverseAndMatch(node.left);
+      traverseAndMatch(node.right);
     }
   }
 
   traverseAndMatch(t);
+
   return match;
 };
