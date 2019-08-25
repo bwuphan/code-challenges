@@ -1,3 +1,4 @@
+const Queue = require('../Prototypes/Queue').Queue;
 /*
 https://leetcode.com/problems/symmetric-tree/
 
@@ -38,5 +39,52 @@ Bonus points if you could solve it both recursively and iteratively.
  * @return {boolean}
  */
 var isSymmetric = function(root) {
+  // If the root does not exist, return true.
+  if (!root) {
+    return true;
+  }
 
+  // If both left and right do not exist, it is symmetrical, return true.
+  if (!root.left && !root.right) {
+    return true;
+  }
+
+  // If either right or left of the root are falsey but not both, return false.
+  if ((root.left && !root.right) || (!root.left && root.right)) {
+    return false;
+  }
+
+  // Create a new queue and start by adding left and right mirrors.
+  let queue = new Queue();
+  queue.enqueue(root.left);
+  queue.enqueue(root.right);
+
+  while(!queue.isEmpty()) {
+    const left = queue.dequeue();
+    const right = queue.dequeue();
+
+    // If both left and right are falsey, continue but do not add to queue.
+    if (!left && !right) {
+      continue;
+    }
+
+    // If either right or left are falsey but not both, return false.
+    if ((left && !right) || (!left && right)) {
+      return false;
+    }
+
+    // If the left val does not equal the right val, return false.
+    if (left.val !== right.val) {
+      return false;
+    }
+
+    // Queue the mirrors.
+    queue.enqueue(left.left);
+    queue.enqueue(right.right);
+
+    queue.enqueue(left.right);
+    queue.enqueue(right.left);
+  }
+
+  return true;
 };
