@@ -1,25 +1,34 @@
-/*
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+
+/**
  * Encodes a tree to a single string.
  *
  * @param {TreeNode} root
  * @return {string}
  */
 var serialize = function(root) {
-  let string = '';
+  let resultsArr = [];
 
-  function buildString(node) {
+  const serializeTree = function(node) {
     if (!node) {
-      string += 'e ';
-    } else {
-      string += node.val + ' ';
-      buildString(node.left);
-      buildString(node.right);
+      resultsArr.push(null);
+      return;
     }
+    resultsArr.push(node.val);
+
+    serializeTree(node.left);
+    serializeTree(node.right);
   }
 
-  buildString(root);
+  serializeTree(root);
 
-  return string;
+  return JSON.stringify(resultsArr);
 };
 
 /**
@@ -29,20 +38,25 @@ var serialize = function(root) {
  * @return {TreeNode}
  */
 var deserialize = function(data) {
-  let nodes = data.split(' ');
+  let dataArr = JSON.parse(data);
 
-  function buildTree() {
-    let val = nodes.shift();
+  const deserializeArr = function() {
+    // This is the first element of the continually changing array.
+    const firstEl = dataArr.shift();
 
-    if (val === 'e') {
+    // If the first element is null, return null.
+    if (firstEl === null) {
       return null;
-    } else {
-      let node = new TreeNode(Number(val));
-      node.left = buildTree();
-      node.right = buildTree();
-      return node;
+    }
+    // Else, create a new node.
+    else {
+      const newNode = new TreeNode(firstEl);
+      newNode.left = deserializeArr();
+      newNode.right = deserializeArr();
+
+      return newNode;
     }
   }
 
-  return buildTree();
+  return deserializeArr();
 };
