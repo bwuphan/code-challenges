@@ -31,6 +31,42 @@ const Queue = require('../Prototypes/Queue').Queue;
  * @return {number[][]}
  */
 var zigzagLevelOrder = function(root) {
+  if (!root) return [];
 
+  let queue = new Queue();
+  let curDepth = 0;
+  let item = { node: root, depth: curDepth };
+  queue.enqueue(item);
+
+  let results = [[]];
+
+  while (item = queue.dequeue()) {
+    let curNode = item.node;
+
+    if (curNode) {
+      // If the depth is changing, create a new sub array and update curDepth.
+      if (curDepth !== item.depth) {
+        curDepth = item.depth;
+        results.push([]);
+      }
+
+      // Push the current value to the last sub array.
+      results[results.length - 1].push(curNode.val);
+
+      queue.enqueue({ node: curNode.left, depth: item.depth + 1 });
+      queue.enqueue({ node: curNode.right, depth: item.depth + 1 });
+    }
+  }
+
+  return results.map((arr, i) => {
+    // Reverse the array if it is an even array. (Doesn't look even because depth starts at 0)
+    if (i % 2 !== 0) {
+      return arr.reverse();
+    }
+    else {
+      return arr;
+    }
+  });
 };
 
+console.log(zigzagLevelOrder(test));
