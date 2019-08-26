@@ -22,5 +22,26 @@ definition to get new method signature.
  * @return {boolean}
  */
 var canAttendMeetings = function(intervals) {
+  // Sort intervals by meeting start time ascending.
+  intervals = intervals.sort((a, b) => a[0] - b[0]);
 
+  for (let i = 0; i < intervals.length; ++i) {
+    const curInterval = intervals[i];
+
+    // Only do at not first interation.
+    if (i !== 0) {
+      // Set to previous interval.
+      const prevInterval = intervals[i - 1];
+
+      // If current interval start time is less than previous interval end, we have overlap.
+      if (curInterval[0] < prevInterval[1]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 };
+
+console.log(canAttendMeetings([[0,30],[5,10],[15,20]]));
+console.log(canAttendMeetings([[7,10],[2,4]]));
