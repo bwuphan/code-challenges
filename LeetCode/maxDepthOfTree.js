@@ -31,5 +31,19 @@ return its depth = 3.
  * @return {number}
  */
 var maxDepth = function(root) {
+  let deepestDepth = 0;
+  const traverse = function(node, depth) {
+    if (depth > deepestDepth) {
+      deepestDepth = depth;
+    }
+    if (!node) {
+      return;
+    }
 
+    traverse(node.left, depth + 1);
+    traverse(node.right, depth + 1);
+  }
+
+  traverse(root, 0);
+  return deepestDepth;
 };
