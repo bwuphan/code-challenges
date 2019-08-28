@@ -21,5 +21,34 @@ Explanation: T is "aa" which its length is 2.
  * @return {number}
  */
 var lengthOfLongestSubstringKDistinct = function(s, k) {
-
+  if (k === 0) return 0;
+  let longest = 0;
+  for (let i = 0; i < s.length; ++i) {
+    let occurences = {};
+    let curStr = '';
+    let numUnique = 0;
+    for (let j = i; j < s.length; ++j) {
+      let curLetter = s[j];
+      if (curLetter in occurences) {
+        occurences[curLetter]++;
+      }
+      else {
+        numUnique++;
+        if (numUnique > k) {
+          break;
+        }
+        occurences[curLetter] = 0;
+      }
+      curStr += curLetter;
+      if (curStr.length > longest) {
+        longest = curStr.length;
+      }
+    }
+  }
+  return longest;
 };
+
+// console.log(lengthOfLongestSubstringKDistinct("eceba", 2));
+// console.log(lengthOfLongestSubstringKDistinct("aa", 1));
+// console.log(lengthOfLongestSubstringKDistinct("a", 0));
+console.log(lengthOfLongestSubstringKDistinct("aba", 1));
