@@ -43,5 +43,25 @@ Output: False
  * @return {boolean}
  */
 var findTarget = function(root, k) {
+  let numArr = [];
+  let numObj = {};
+  const fillNums = function(root) {
+    if (!root) return;
 
+    numArr.push(root.val);
+    numObj[root.val] = true;
+
+    fillNums(root.left);
+    fillNums(root.right);
+  }
+  fillNums(root);
+
+  for(let i = 0; i < numArr.length; ++i) {
+    const num = numArr[i];
+    const numNeeded = k - num;
+    if (numNeeded in numObj && num !== numNeeded) {
+      return true;
+    }
+  }
+  return false;
 };
