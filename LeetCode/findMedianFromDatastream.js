@@ -29,122 +29,13 @@ Follow up:
 If all integer numbers from the stream are between 0 and 100, how would you optimize it?
 If 99% of all integer numbers from the stream are between 0 and 100, how would you optimize it?
 */
-var Node = function(val) {
-  this.val = val;
-  this.next = null;
-  this.prev = null;
-}
-
-var LinkedList = function() {
-  this.head = null;
-  this.tail = null;
-}
-
-LinkedList.prototype.addToTail = function(val) {
-  const newNode = new Node(val);
-  // If there is no head, make this the new head.
-  if (!this.head) {
-    this.head = newNode;
-  }
-  // Else, add to tail.
-  else {
-    const oldTail = this.tail;
-    // If there is no tail, add tail to head.
-    if (!this.tail) {
-      this.head.next = newNode;
-      newNode.prev = this.head;
-    }
-    // Else, add to previous tail.
-    else {
-      newNode.prev = oldTail;
-      oldTail.next = newNode;
-    }
-
-    // Set tail to newest node.
-    this.tail = newNode;
-  }
-}
-
-LinkedList.prototype.removeFromHead = function() {
-  // Only remove if a head exists.
-  if (this.head) {
-    this.head = this.head.next;
-
-    // If the head and tail are the same, this is the only node and we need to null out this.tail.
-    if (this.head === this.tail) {
-      this.tail = null;
-    }
-  }
-}
-
-LinkedList.prototype.removeFromTail = function() {
-  // Only remove if a tail exists.
-  if (this.tail) {
-    this.tail = this.tail.prev;
-    this.tail.next = null;
-  }
-}
-
-LinkedList.prototype.removeNode = function(node) {
-  if (this.head === node) {
-    this.removeFromHead();
-  }
-  else if (this.tail === node) {
-    this.removeFromTail();
-  }
-  else {
-    // Connect previous node to next node.
-    node.prev.next = node.next;
-    node.next.prev = node.prev;
-  }
-}
-
-LinkedList.prototype.removeDuplicates = function() {
-  let valObj = {};
-
-  let curNode = this.head;
-  while(curNode !== null) {
-    const nextNode = curNode.next;
-    // If the current node value is in valObj, remove the node.
-    if (curNode.val in valObj) {
-      this.removeNode(curNode);
-    }
-    // Else, set current node value in valObj.
-    else {
-      valObj[curNode.val] = true;
-    }
-
-    curNode = nextNode;
-  }
-}
-
-LinkedList.prototype.outputVals = function() {
-  let curNode = this.head;
-  while (curNode !== null) {
-    console.log(curNode.val);
-    curNode = curNode.next;
-  }
-}
-
-LinkedList.prototype.returnKthFromTail = function(k) {
-  let i = 0;
-  let curNode = this.tail;
-  while (curNode !== null) {
-    if (i === k) {
-      return curNode;
-    }
-    i++;
-    curNode = curNode.prev;
-  }
-  return null;
-}
 
 
 /**
  * initialize your data structure here.
  */
 var MedianFinder = function() {
-  this._storage = new LinkedList();
+  this._storage = [];
 };
 
 /**
@@ -152,22 +43,39 @@ var MedianFinder = function() {
  * @return {void}
  */
 MedianFinder.prototype.addNum = function(num) {
-  // If there is nothing in storage, just push.
+  // If storage is empty, just push.
   if (!this._storage.length) {
     this._storage.push(num);
-  }
-  // Otherwise, find the correct spot.
-  else {
-
+    return;
   }
 
+  for (let i = 0; i < this._storage.length; ++i) {
+    const curNum = this._storage[i];
+    // If the number to insert is less than the number at current idx, then we know this is the spot.
+    if (num <= curNum) {
+      this._storage.splice(i, 0, num);
+      return;
+    }
+  }
+
+  // If we never found a spot, it must belong last.
+  this._storage.push(num);
+  return;
 };
 
 /**
  * @return {number}
  */
 MedianFinder.prototype.findMedian = function() {
-
+  // If odd ...
+  if (this._storage.length % 2 !== 0) {
+    return this._storage[Math.floor(this._storage.length / 2)];
+  }
+  // If even ...
+  else {
+    let halfIdx = this._storage.length / 2;
+    return (this._storage[halfIdx - 1] + this._storage[halfIdx]) / 2;
+  }
 };
 
 /**
@@ -178,10 +86,27 @@ MedianFinder.prototype.findMedian = function() {
  */
 
 let medianFinder = new MedianFinder();
-medianFinder.addNum(1)
+medianFinder.addNum(6)
+console.log(medianFinder.findMedian())
+medianFinder.addNum(10)
+console.log(medianFinder.findMedian())
 medianFinder.addNum(2)
-medianFinder.findMedian()
+console.log(medianFinder.findMedian())
+medianFinder.addNum(6)
+console.log(medianFinder.findMedian())
+medianFinder.addNum(5)
+console.log(medianFinder.findMedian())
+medianFinder.addNum(0)
+console.log(medianFinder.findMedian())
+medianFinder.addNum(6)
+console.log(medianFinder.findMedian())
 medianFinder.addNum(3)
-medianFinder.findMedian()
+console.log(medianFinder.findMedian())
+medianFinder.addNum(1)
+console.log(medianFinder.findMedian())
+medianFinder.addNum(0)
+console.log(medianFinder.findMedian())
+medianFinder.addNum(0)
+console.log(medianFinder.findMedian())
 
 
