@@ -57,28 +57,32 @@ LinkedList.prototype.removeFromHead = function() {
 LinkedList.prototype.removeFromTail = function() {
   // Only remove if a tail exists.
   if (this.tail) {
+    const removedTail = this.tail;
     this.tail = this.tail.prev;
     this.tail.next = null;
+    return removedTail;
   }
 }
 
 LinkedList.prototype.removeNode = function(node) {
   if (this.head === node) {
-    this.removeFromHead();
+    return this.removeFromHead();
   }
   else if (this.tail === node) {
-    this.removeFromTail();
+    return this.removeFromTail();
   }
   else {
     // Connect previous node to next node.
     node.prev.next = node.next;
     node.next.prev = node.prev;
+    return node;
   }
 }
 
 LinkedList.prototype.moveToTail = function(node) {
   this.removeNode(node);
-  return this.addToTail(node.val);
+  node.prev = null; node.next = null;
+  return this.addToTail(node.key, node.val);
 }
 
 LinkedList.prototype.removeDuplicates = function() {
@@ -103,7 +107,6 @@ LinkedList.prototype.removeDuplicates = function() {
 LinkedList.prototype.outputVals = function() {
   let curNode = this.head;
   while (curNode !== null) {
-    console.log(curNode.val);
     curNode = curNode.next;
   }
 }
@@ -128,7 +131,7 @@ var LRUCache = function(capacity) {
   this._capacity = capacity;
   this._size = 0;
   this._cache = new LinkedList();
-  this._map = new Map();
+  this._map = {};
 };
 
 /**
@@ -136,16 +139,13 @@ var LRUCache = function(capacity) {
  * @return {number}
  */
 LRUCache.prototype.get = function(key) {
-  // console.log(this._map);
   if (key in this._map) {
-    this._cache.moveToTail(this._map.get(key));
-  }
-  // console.log(this._map.get(key));
-  if (this._map.get(key)) {
-    return this._map.get(key).val;
+    const node = this._cache.moveToTail(this._map[key]);
+    this._map[key] = node;
+    return node.val;
   }
   else {
-    return null;
+    return -1;
   }
   // return this._map.get(key).val;
 };
@@ -156,27 +156,31 @@ LRUCache.prototype.get = function(key) {
  * @return {void}
  */
 LRUCache.prototype.put = function(key, value) {
-  // If we are already at capacity.
-  if (this._size === this._capacity) {
+  // If we are already at capacity but also the key can not be already in the map because
+  // in that case, we don't want to remove anything, just overwrite.
+  if (this._size === this._capacity && !(key in this._map)) {
     const removedNode = this._cache.removeFromHead();
-    this._map.delete(removedNode.key);
+    delete this._map[removedNode.key];
     this._size--;
     this.put(key, value);
   }
   else {
-    // If the key already exists in the cache, just get.
+    // If the key already exists in the cache, delete the old node and call put again..
     if (key in this._map) {
-      this.get(key);
+      const removedNode = this._cache.removeNode(this._map[key]);
+      delete this._map[removedNode.key];
+      this._size--;
+      this.put(key,value);
     }
     // Else, set values as usual.
     else {
       const newNode = this._cache.addToTail(key, value);
-      this._map.set(key, newNode);
+      this._map[key] = newNode;
       this._size++;
     }
   }
-  console.log(this._map.keys());
 };
+
 
 /**
  * Your LRUCache object will be instantiated and called as such:
@@ -184,3 +188,52 @@ LRUCache.prototype.put = function(key, value) {
  * var param_1 = obj.get(key)
  * obj.put(key,value)
  */
+// let cache = new LRUCache( 2 /* capacity */ );
+
+// console.log(cache.put(1, 1));
+// console.log(cache.put(2, 2));
+// console.log(cache.get(1));       // returns 1
+// console.log(cache.put(3, 3));    // evicts key 2
+// console.log(cache.get(2));       // returns -1 (not found)
+// console.log(cache.put(4, 4));    // evicts key 1
+// console.log(cache.get(1));       // returns -1 (not found)
+// console.log(cache.get(3));       // returns 3
+// console.log(cache.get(4));       // returns 4
+
+
+// let cache = new LRUCache(1);
+
+// cache.put(2,1);
+// console.log(cache.get(2));
+// cache.put(3,2);
+// console.log(cache.get(2));
+// console.log(cache.get(3));
+
+// let cache = new LRUCache(2);
+
+// cache.put(2,1);
+// cache.put(2,2);
+// console.log(cache.get(2));
+// cache.put(1,1);
+// cache.put(4,1);
+// console.log(cache.get(2));
+
+
+// let cache = new LRUCache(2);
+
+// cache.put(2,1);
+// cache.put(1,1);
+// console.log(cache.get(2));
+// cache.put(4,1);
+// console.log(cache.get(2));
+// console.log(cache.get(1));
+
+let cache = new LRUCache(2);
+
+console.log(cache.get(2));
+cache.put(2,6);
+console.log(cache.get(1));
+cache.put(1,5);
+cache.put(1,2);
+console.log(cache.get(1));
+console.log(cache.get(2));
