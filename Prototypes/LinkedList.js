@@ -1,16 +1,18 @@
-var Node = function(val) {
+var Node = function(key, val) {
+  this.key = key;
   this.val = val;
   this.next = null;
   this.prev = null;
 }
+
 
 var LinkedList = function() {
   this.head = null;
   this.tail = null;
 }
 
-LinkedList.prototype.addToTail = function(val) {
-  const newNode = new Node(val);
+LinkedList.prototype.addToTail = function(key, val) {
+  const newNode = new Node(key, val);
   // If there is no head, make this the new head.
   if (!this.head) {
     this.head = newNode;
@@ -32,18 +34,24 @@ LinkedList.prototype.addToTail = function(val) {
     // Set tail to newest node.
     this.tail = newNode;
   }
+
+  return newNode;
 }
 
 LinkedList.prototype.removeFromHead = function() {
   // Only remove if a head exists.
   if (this.head) {
+    const curHead = this.head;
     this.head = this.head.next;
 
     // If the head and tail are the same, this is the only node and we need to null out this.tail.
     if (this.head === this.tail) {
       this.tail = null;
     }
+
+    return curHead;
   }
+  return null;
 }
 
 LinkedList.prototype.removeFromTail = function() {
@@ -66,6 +74,11 @@ LinkedList.prototype.removeNode = function(node) {
     node.prev.next = node.next;
     node.next.prev = node.prev;
   }
+}
+
+LinkedList.prototype.moveToTail = function(node) {
+  this.removeNode(node);
+  return this.addToTail(node.val);
 }
 
 LinkedList.prototype.removeDuplicates = function() {
