@@ -50,7 +50,8 @@ Explanation: By calling next repeatedly until hasNext returns false,
  * @param {NestedInteger[]} nestedList
  */
 var NestedIterator = function(nestedList) {
-
+  this._gen = listGenerator(nestedList);
+  this._idx = null;
 };
 
 
@@ -59,7 +60,7 @@ var NestedIterator = function(nestedList) {
  * @returns {boolean}
  */
 NestedIterator.prototype.hasNext = function() {
-
+  return this._idx + 1 < this._gen.length;
 };
 
 /**
@@ -67,12 +68,47 @@ NestedIterator.prototype.hasNext = function() {
  * @returns {integer}
  */
 NestedIterator.prototype.next = function() {
-
+  // If this._idx is null, start by setting it to 0.
+  if (this._idx === null) {
+    this._idx = 0;
+  }
+  // Else, just increment.
+  else {
+    this._idx++;
+  }
+  return this._gen[this._idx];
 };
 
+function listGenerator(list) {
+  let newList = [];
+
+  const recurseArr = function(array) {
+    array.forEach(el => {
+      if (!Array.isArray(el)) {
+        newList.push(el);
+      }
+      else {
+        recurseArr(el);
+      }
+    });
+  }
+
+  recurseArr(list, 0);
+
+  return newList;
+}
 /**
  * Your NestedIterator will be called like this:
  * var i = new NestedIterator(nestedList), a = [];
  * while (i.hasNext()) a.push(i.next());
 */
 
+var nestedList = [[1,1],2,[1,1]]
+var i = new NestedIterator(nestedList), a = [];
+while (i.hasNext()) a.push(i.next());
+console.log(a);
+
+// var n2 = new NestedIterator([1,[4,[6]]]);
+
+// console.log(listGenerator([[1,1],2,[1,1]]));
+// console.log(listGenerator([1,[4,[6]]]));
