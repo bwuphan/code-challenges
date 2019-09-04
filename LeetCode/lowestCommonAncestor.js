@@ -12,55 +12,48 @@
  * @return {TreeNode}
  */
 
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {TreeNode}
+ */
+
 var lowestCommonAncestor = function(root, p, q) {
-  let pResults = [];
-  let qResults = [];
+  let solution = null;
+  const traverse = function(node) {
+    if (solution) return;
 
-  var traverse = function(node, history) {
-    if (node === null) return;
+    if (!node) {
+      return false;
+    }
 
-    // Make a copy of history to prevent mutation.
-    history = [...history];
+    let left = false;
+    let right = false;
+    if (node.left) {
+      left = traverse(node.left) ? 1: 0;
+    }
+    if (node.right) {
+      right = traverse(node.right) ? 1 : 0;
+    }
 
-    // Push current node into history.
-    history.push(node);
+    let mid = (node.val === p.val || node.val === q.val) ? 1 : 0;
 
-    if (node.val === p.val) {
-      pResults = history;
+    if (mid + left + right >= 2) {
+      solution = node;
       return;
     }
 
-    if (node.val === q.val) {
-      qResults = history;
-      return;
-    }
-
-    traverse(node.left, history);
-    traverse(node.right, history);
-
+    return (mid + left + right > 0);
   }
 
-  traverse(root, []);
-
-  // If either results are empty, one of the targets does not exist, return null.
-  if (qResults.length === 0 || pResults.length === 0) {
-    return null;
-  }
-
-  // Create lookup object for one of the results.
-  const pObj = pResults.reduce((obj, node, i) => {
-    obj[node.val] = i;
-    return obj;
-  }, {});
-
-
-  for (let i = qResults.length - 1; i >= 0; i--) {
-    const currentVal = qResults[i].val;
-    if (currentVal in pObj) {
-      return qResults[i];
-    }
-  }
-
-  return null;
-
-};
+  traverse(root);
+  return solution;
+}
