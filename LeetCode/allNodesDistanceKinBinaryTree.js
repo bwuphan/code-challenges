@@ -30,3 +30,69 @@ Each node in the tree has unique values 0 <= node.val <= 500.
 The target node is a node in the tree.
 0 <= K <= 1000.
 */
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} target
+ * @param {number} K
+ * @return {number[]}
+ */
+var distanceK = function(root, target, K) {
+  const dfs = function(node, parent) {
+    if (!node) return null;
+
+    node.parent = parent || null;
+
+
+    dfs(node.left, node);
+    dfs(node.right, node);
+  }
+
+  dfs(root, null);
+
+  let queue = [{ node: target, distance: 0, history: {} }];
+  let item = null;
+  let results = [];
+  let node = null;
+  while (queue.length > 0) {
+    item = queue.shift();
+    node = item.node;
+
+    if (item.distance === K) {
+      // console.log(item);
+      results.push(item.node.val);
+    }
+    if (item.distance <= K) {
+      if (node.left && !(node.left.val in item.history)) {
+
+        queue.push({
+          node: node.left,
+          distance: item.distance + 1,
+          history: Object.assign({ [node.val]: true }, item.history)
+        });
+      }
+      if (node.right && !(node.right.val in item.history)) {
+        queue.push({
+          node: node.right,
+          distance: item.distance + 1,
+          history: Object.assign({ [node.val]: true }, item.history)
+        });
+      }
+      if (node.parent && !(node.parent.val in item.history)) {
+        queue.push({
+          node: node.parent,
+          distance: item.distance + 1,
+          history: Object.assign({ [node.val]: true }, item.history)
+        });
+      }
+    }
+  }
+  return results;
+};
