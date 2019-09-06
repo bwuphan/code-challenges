@@ -24,7 +24,25 @@ Your algorithm's time complexity must be better than O(n log n), where n is the 
  * @return {number[]}
  */
 var topKFrequent = function(nums, k) {
+  let map = {};
 
+  nums.forEach(num => {
+    if (!(num in map)) {
+      map[num] = 0;
+    }
+    else {
+      map[num]++;
+    }
+  });
+
+  let occurArr = [];
+  for (let key in map) {
+    occurArr.push({ num: key, occurences: map[key] });
+  }
+  return occurArr
+    .sort((a, b) => b.occurences - a.occurences)
+    .map(occurObj => parseInt(occurObj.num))
+    .slice(0, k);
 };
 
 
