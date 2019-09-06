@@ -23,3 +23,36 @@ Input words contain only lowercase letters.
 Follow up:
 Try to solve it in O(n log k) time and O(n) extra space.
 */
+
+
+/**
+ * @param {string[]} words
+ * @param {number} k
+ * @return {string[]}
+ */
+var topKFrequent = function(words, k) {
+  let occurMap = {};
+
+  words.forEach(word => {
+    if (!(word in occurMap)) occurMap[word] = 1;
+    else occurMap[word]++;
+  });
+
+  let occurArr = [];
+  for (let word in occurMap) {
+    occurArr.push({ word, occurences: occurMap[word] });
+  }
+
+  return occurArr.sort((a, b) => {
+    if (a.occurences < b.occurences) {
+      return 1;
+    }
+    if (a.occurences > b.occurences) {
+      return -1;
+    }
+    if (a.word < b.word) {
+      return -1;
+    }
+    return 1;
+  }).map(wordObj => wordObj.word).slice(0, k);
+};
