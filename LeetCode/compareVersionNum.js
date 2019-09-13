@@ -52,3 +52,10 @@ Version strings do not start or end with dots, and they will not be two consecut
 var compareVersion = function(version1, version2) {
 
 };
+
+
+console.log(compareVersion(version1 = "0.1", version2 = "1.1"));
+console.log(compareVersion(version1 = "1.0.1", version2 = "1"));
+console.log(compareVersion(version1 = "7.5.2.4", version2 = "7.5.3"));
+console.log(compareVersion(version1 = "1.01", version2 = "1.001"));
+console.log(compareVersion(version1 = "1.0", version2 = "1.0.0"));
