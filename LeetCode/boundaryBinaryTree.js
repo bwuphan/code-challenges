@@ -49,3 +49,94 @@ The leaves are node 4,7,8,9,10.
 The right boundary are node 1,3,6,10. (10 is the right-most node).
 So order them in anti-clockwise without duplicate nodes we have [1,2,4,7,8,9,10,6,3].
 */
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var boundaryOfBinaryTree = function(root) {
+  /*
+  Break the problem into three parts.
+  1. Get Left Boundary
+  2. Get Leaves
+  3. Get Right Boundary
+  4. Remove dups and add node values to a new array.
+  */
+
+  // First part: Get the Left Boundary.
+  let leftBound = [];
+  const getLeftBoundary = function(node) {
+    if (!node) return;
+
+    leftBound.push(node);
+
+    if (node.left) {
+      getLeftBoundary(node.left);
+    }
+    else if (node !== root && node.right) {
+      getLeftBoundary(node.right);
+    }
+  }
+
+  getLeftBoundary(root);
+
+  // Second part: Get leaves.
+  let leaves = [];
+  const getLeaves = function(node) {
+    if (!node) return;
+
+    if (!node.left && !node.right) {
+      leaves.push(node);
+    }
+
+    getLeaves(node.left);
+    getLeaves(node.right);
+  }
+
+  getLeaves(root);
+
+  // Third part: Get right boundary.
+  let rightBound = [];
+  const getRightBoundary = function(node) {
+    if (!node) return;
+
+    rightBound.push(node);
+
+    if (node.right) {
+      getRightBoundary(node.right);
+    }
+    else if (node.left && node !== root) {
+      getRightBoundary(node.left);
+    }
+  }
+  getRightBoundary(root);
+
+  // Reverse rightBound to satisfy counter clockwise order.
+  rightBound = rightBound.reverse();
+
+  // Concat left, leaves, right to one giant array.
+  let fullArr = leftBound.concat(leaves).concat(rightBound);
+
+  // Create set to store nodes to weed out duplicates.
+  let nodeSet = new Set();
+
+  // The final Array.
+  let results = [];
+
+  fullArr.forEach(node => {
+    // If the node is not in the set, add node to set and push value to results.
+    if (!nodeSet.has(node)) {
+      nodeSet.add(node);
+      results.push(node.val);
+    }
+  });
+
+  return results;
+};
