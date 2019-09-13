@@ -50,7 +50,24 @@ Version strings do not start or end with dots, and they will not be two consecut
  * @return {number}
  */
 var compareVersion = function(version1, version2) {
+  const versionToArr = function(version) {
+    return version
+      .split('.')
+      .map(numStr => +numStr);
+  }
 
+  const arrV1 = versionToArr(version1);
+  const arrV2 = versionToArr(version2);
+
+  for (let i = 0; i < Math.max(arrV1.length, arrV2.length); ++i) {
+    const oneEl = arrV1[i] || 0;
+    const twoEl = arrV2[i] || 0;
+
+    if (oneEl > twoEl) return 1;
+    else if (oneEl < twoEl) return -1;
+  }
+
+  return 0;
 };
 
 
