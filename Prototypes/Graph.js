@@ -4,15 +4,15 @@ var Node = function(val) {
 }
 
 var Graph = function() {
-  this.vertices = {};
+  this.nodes = {};
 }
 
-Graph.prototype.addVertex = function(val, overwrite) {
+Graph.prototype.addNode = function(val, overwrite) {
   const newNode = new Node(val);
 
-  // Check if val is already in vertices.
-  if (!(val in this.vertices) || overwrite === true) {
-    this.vertices[val] = newNode;
+  // Check if val is already in nodes.
+  if (!(val in this.nodes) || overwrite === true) {
+    this.nodes[val] = newNode;
     return newNode;
   }
 
@@ -20,9 +20,9 @@ Graph.prototype.addVertex = function(val, overwrite) {
 }
 
 Graph.prototype.addEdge = function(val, edgeVal) {
-  // Make sure the vertices exist in the graph.
-  if (val in this.vertices && edgeVal in this.vertices) {
-    this.vertices[val].edges[edgeVal] = true;
+  // Make sure the nodes exist in the graph.
+  if (val in this.nodes && edgeVal in this.nodes) {
+    this.nodes[val].edges[edgeVal] = true;
   }
   else {
     return null;
@@ -30,16 +30,16 @@ Graph.prototype.addEdge = function(val, edgeVal) {
 }
 
 Graph.prototype.hasEdge = function(val, edgeVal) {
-  // Make sure val exists in vertices and the edgeVal exists in the val's edges.
-  if (val in this.vertices && edgeVal in this.vertices[val].edges) {
+  // Make sure val exists in nodes and the edgeVal exists in the val's edges.
+  if (val in this.nodes && edgeVal in this.nodes[val].edges) {
     return true;
   }
   return false;
 }
 
 Graph.prototype.log = function() {
-  for (let val in this.vertices) {
-    const edgeObj = this.vertices[val].edges;
+  for (let val in this.nodes) {
+    const edgeObj = this.nodes[val].edges;
     console.log(`Val: ${val}`);
     let edgeArr = [];
     for (let edgeVal in edgeObj) {
@@ -47,6 +47,31 @@ Graph.prototype.log = function() {
     }
     console.log(`Edges: ${edgeArr}`);
   }
+}
+
+Graph.prototype.topologicalSort = function() {
+
+  const Stack = require('./Stack.js').Stack;
+  let visited = {};
+  let sorted = new Stack();
+
+  const traverseEdges = function(node) {
+    if (node.val in visited) {
+      return;
+    }
+    visited[node.val] = true;
+    for (let key in this.edges) {
+      traverseEdges(this.edges[key]);
+    }
+    console.log(node);
+    sorted.push(node);
+    return;
+  }
+
+  for (let key in this.nodes) {
+    traverseEdges(this.nodes[key]);
+  }
+  console.log(sorted);
 }
 
 module.exports = {
