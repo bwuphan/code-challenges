@@ -48,13 +48,77 @@ The board square with number 1 has no snake or ladder.
 The board square with number N*N has no snake or ladder.
 */
 
+var Queue = require('../Prototypes/Queue.js').Queue;
 /**
  * @param {number[][]} board
  * @return {number}
  */
-var snakesAndLadders = function(board) {
 
+// var queue = new LinkedList();
+// queue.enqueue = queue.addToTail;
+// queue.dequeue = queue.removeFromHead;
+
+var snakesAndLadders = function(board) {
+  /* Turn board to 2D, then find moves by BFS. */
+
+  // Turn the board 2D.
+  const finalIdx = board.length * board[0].length;
+  const lastIdx = board.length - 1;
+  let map = {};
+  let idx = 1;
+  for (let i = lastIdx; i >= 0; --i) {
+    let row = board[i];
+    // If it is not an even distance from the last row, reverse the row.
+    if ((lastIdx - i) % 2 !== 0) {
+      row = row.reverse();
+    }
+    row.forEach(cell => {
+      map[idx++] = cell;
+    });
+  }
+
+  let queue = new Queue();
+  queue.enqueue({ idx: 1, moves: 0 });
+
+  while(!queue.isEmpty()) {
+    let item = queue.dequeue();
+
+    // If we are at the final index, then we are done and return the number of moves.
+    if (item.idx === finalIdx) {
+      return item.moves;
+    }
+
+    // If we are at a visited cell, skip.
+    if (map[item.idx] === 0) {
+      continue;
+    }
+
+    // Set current cell to visited.
+    map[item.idx] = 0;
+
+    // Do moves from +1 to +6.
+    for (let i = 1; i <= 6; ++i) {
+      // Get new index.
+      let index = item.idx + i;
+
+      // If the inded is not at the finalIdx yet and we have not visited this cell, proceed.
+      if (index <= finalIdx && map[index] !== 0) {
+        // If the cell is -1, then it is not a chute or ladder, just use index.
+        if (map[index] === -1) {
+          queue.enqueue({ idx: index, moves: item.moves + 1 });
+        }
+        // Else, we are at a chute and ladder and we need to get the index from looking at the map.
+        else {
+          queue.enqueue({ idx: map[index], moves: item.moves + 1 });
+        }
+      }
+    }
+  }
+
+  // If no solutions, return -1.
+  return -1;
 };
+
 
 var test = [
 [-1,-1,-1,-1,-1,-1],
@@ -62,6 +126,30 @@ var test = [
 [-1,-1,-1,-1,-1,-1],
 [-1,35,-1,-1,13,-1],
 [-1,-1,-1,-1,-1,-1],
-[-1,15,-1,-1,-1,-1]];
+[-1,15,-1,-1,-1,-1]
+];
 
+var test2 = [[-1,-1],[-1,3]];
+var test3 = [
+[1,1,-1],
+[1,1,1],
+[-1,1,1]
+];
+
+var test4 = [
+[-1,-1,128,-1,-1,-1,136,-1,-1,-1,109,-1],
+[-1,-1,-1,-1,-1,103,-1,-1,56,10,-1,-1],
+[-1,-1,-1,-1,-1,-1,116,-1,-1,-1,-1,-1],
+[-1,-1,-1,-1,-1,-1,-1,-1,50,-1,67,107],
+[-1,40,-1,-1,-1,20,-1,59,-1,67,-1,-1],
+[-1,-1,-1,-1,-1,-1,112,133,111,-1,-1,-1],
+[-1,-1,112,-1,74,-1,-1,-1,-1,-1,-1,-1],
+[23,-1,115,-1,129,126,-1,-1,-1,-1,-1,-1],
+[106,143,81,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+[-1,-1,-1,-1,-1,-1,-1,-1,26,102,1,29],
+[26,-1,-1,-1,-1,-1,-1,-1,27,-1,-1,-1],
+[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]
 console.log(snakesAndLadders(test));
+console.log(snakesAndLadders(test2));
+console.log(snakesAndLadders(test3));
+console.log(snakesAndLadders(test4));
