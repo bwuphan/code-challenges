@@ -69,15 +69,28 @@ var DIGIT_VALUES = {
 var romanToInt = function(s) {
   let total = 0;
   for (let i = 0; i < s.length; ++i) {
-    if (DIGIT_VALUES(s[i + 1]) > DIGIT_VALUES(s[i])) {
-      total += DIGIT_VALUES(s[])
+    // console.log(s[i]);
+    if ((i + 1) >= s.length) {
+      total += DIGIT_VALUES[s[i]];
+    }
+    else {
+      if (DIGIT_VALUES[s[i + 1]] > DIGIT_VALUES[s[i]]) {
+        // console.log('asdf', DIGIT_VALUES[s[i + 1]], DIGIT_VALUES[s[i]]);
+        total += (DIGIT_VALUES[s[i + 1]] - DIGIT_VALUES[s[i]]);
+        i++;
+      }
+      else {
+        total += DIGIT_VALUES[s[i]];
+        // console.log(total);
+      }
     }
   }
+  return total;
 };
 
 
-console.log(romanToInt("III"));
+// console.log(romanToInt("III"));
 // console.log(romanToInt("IV"));
 // console.log(romanToInt("IX"));
-// console.log(romanToInt("LVIII"));
-// console.log(romanToInt("MCMXCIV"));
+console.log(romanToInt("LVIII"));
+console.log(romanToInt("MCMXCIV"));
