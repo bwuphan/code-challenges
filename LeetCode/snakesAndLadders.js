@@ -1,4 +1,6 @@
 /*
+UNSOLVED. PASSED 206/211 test cases.
+
 https://leetcode.com/problems/snakes-and-ladders/
 
 On an N x N board, the numbers from 1 to N*N are written boustrophedonically starting from the
