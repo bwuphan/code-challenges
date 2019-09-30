@@ -32,5 +32,31 @@ You may assume the sum of all the numbers is in the range of a signed 32-bit int
  * @return {boolean}
  */
 var checkSubarraySum = function(nums, k) {
+  let sums = [];
+  let cumulativeSum = 0;
+  nums.forEach(num => {
+    cumulativeSum += num;
+    sums.push(cumulativeSum);
+  });
 
+
+  for (let i = 0; i < nums.length; ++i) {
+    for (let j = i + 1; j < nums.length; ++j) {
+      /* The subArrSum is the cumulative sum at the current j el - the cum sum at the i el and then
+         adding the num at index i.*/
+      const subArrSum = sums[j] - sums[i] + nums[i];
+      if (subArrSum === 0 || subArrSum % k === 0) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 };
+
+
+
+console.log(checkSubarraySum([23, 2, 4, 6, 7], 6))
+console.log(checkSubarraySum([23, 2, 6, 4, 7], 6))
+console.log(checkSubarraySum([23,2,6,4,7], 0))
+console.log(checkSubarraySum([0,0], 0))
