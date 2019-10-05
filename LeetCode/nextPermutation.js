@@ -23,4 +23,50 @@ the right-hand column.
  */
 var nextPermutation = function(nums) {
 
+  // Find next decreasing from right.
+  let decIdx = null;
+  for (let i = nums.length - 1; i >= 0; --i) {
+    if (i >= nums.length) continue;
+    const curNum = nums[i];
+    if (curNum < nums[i + 1]) {
+      decIdx = i;
+      break;
+    }
+  }
+
+  // If there is no number decreasing from the left, then the solution is to just sort nums and return.
+  if (decIdx === null) return nums.sort((a, b) => a - b);
+
+  // Now, we increase from the decIdx and find where decIdx should be switched with.
+  let incIdx = null;
+  for (let i = decIdx + 1; i < nums.length; ++i) {
+    const nextNum = nums[i + 1];
+
+    // If the next number is less than the decIdx or is undefined, then we found the right spot.
+    if (nextNum < nums[decIdx] || nextNum === undefined) {
+      // Swap elements and break.
+      incIdx = i;
+      let temp = nums[decIdx];
+      nums[decIdx] = nums[i];
+      nums[i] = temp;
+      break;
+    }
+  }
+
+  // Sort from the dexIdx to the end.
+  if (incIdx !== null) {
+    return nums.slice(0, decIdx + 1).concat(nums.slice(decIdx + 1, nums.length).sort((a, b) => a - b));
+  }
+
+  return nums;
 };
+
+// assert(nextPermutation([1,2,3]), [1,3,2]);
+// assert(nextPermutation([3,2,1]), [1,2,3]);
+// assert(nextPermutation([1,1,5]), [1,5,1]);
+// assert(nextPermutation([1,2]), [2,1]);
+assert(nextPermutation([1,3,2]), [2,1,3]);
+
+function assert(one, two) {
+  console.log(JSON.stringify(one) === JSON.stringify(two));
+}
