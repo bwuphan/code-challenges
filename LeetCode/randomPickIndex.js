@@ -25,7 +25,7 @@ solution.pick(1);
  * @param {number[]} nums
  */
 var Solution = function(nums) {
-
+  this.nums = nums;
 };
 
 /**
@@ -33,7 +33,11 @@ var Solution = function(nums) {
  * @return {number}
  */
 Solution.prototype.pick = function(target) {
-
+  let indices = [];
+  this.nums.forEach((num, i) => {
+    if (num === target) indices.push(i);
+  });
+  return indices[Math.floor(Math.random()*indices.length)];
 };
 
 /**
