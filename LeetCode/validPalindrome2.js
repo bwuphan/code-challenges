@@ -56,17 +56,24 @@ var isPalindrome = function(s) {
 var validPalindrome = function(s) {
   let sArr = s.toLowerCase().split('').filter(char => char.match(/^[0-9a-z]+$/));
 
+  // Set left and right pointers at ends.
   let left = 0;
   let right = s.length - 1;
 
+  // Go until both pointers meet.
   while (left <= right) {
+    // If what is at the left pointer does not equal the right pointer.
     if (sArr[left] !== sArr[right]) {
-      let unshift = sArr.slice(left, right + 1);
-      unshift.unshift();
+      // shift the left pointer out.
+      let shift = sArr.slice(left, right + 1);
+      shift.shift();
+
+      // Shift the right pointer out.
       let pop = sArr.slice(left, right + 1);
       pop.pop();
-      console.log(unshift, pop);
-      return (isPalindrome(unshift.join('')) || isPalindrome(pop.join('')));
+
+      // Call isPalindrome for shift and pop.
+      return (isPalindrome(shift.join('')) || isPalindrome(pop.join('')));
     }
 
     left++;
@@ -78,3 +85,4 @@ var validPalindrome = function(s) {
 
 console.log(validPalindrome('aba'));
 console.log(validPalindrome('abbbaca'));
+console.log(validPalindrome('deeeee'));
