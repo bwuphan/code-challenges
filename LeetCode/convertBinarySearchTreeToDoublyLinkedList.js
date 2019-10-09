@@ -28,3 +28,50 @@ successor. We should return the pointer to the first element of the linked list.
 The figure below shows the transformed BST. The solid line indicates the successor relationship,
 while the dashed line means the predecessor relationship.
 */
+
+
+/**
+ * // Definition for a Node.
+ * function Node(val,left,right) {
+ *    this.val = val;
+ *    this.left = left;
+ *    this.right = right;
+ * };
+ */
+/**
+ * @param {Node} root
+ * @return {Node}
+ */
+var treeToDoublyList = function(root) {
+  if (!root) return null;
+  let vals = [];
+
+  // First is going to be the first node in the list.
+  // Last will keep changing to the last recorded node until we finally find the real last node.
+  let first, last = null;
+  const inOrderTraverse = function(node) {
+    if (!node) return;
+
+    inOrderTraverse(node.left);
+
+    // This will execute every time after our first iteration.
+    if (last) {
+      last.right = node;
+      node.left = last;
+    }
+    // Our first iteration.
+    else {
+      first = node;
+    }
+    // Set last to the current node before we move to the right.
+    last = node;
+    inOrderTraverse(node.right);
+  }
+
+  inOrderTraverse(root);
+
+  last.right = first;
+  first.left = last;
+
+  return first;
+};
