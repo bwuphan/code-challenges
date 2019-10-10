@@ -48,3 +48,7 @@ The graph is undirected: if any element j is in graph[i], then i will be in grap
 var isBipartite = function(graph) {
 
 };
+
+
+console.log(isBipartite([[1,3], [0,2], [1,3], [0,2]]));
+console.log(isBipartite([[1,2,3], [0,2], [0,1,3], [0,2]]));
