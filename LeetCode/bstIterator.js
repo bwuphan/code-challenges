@@ -45,7 +45,16 @@ smallest number in the BST when next() is called.
  * @param {TreeNode} root
  */
 var BSTIterator = function(root) {
+  this.values = [];
+  this.curIndex = -1;
+  const traverse = function(node, values) {
+    if (!node) return;
 
+    traverse(node.left, values);
+    values.push(node.val);
+    traverse(node.right, values);
+  }
+  traverse(root, this.values);
 };
 
 /**
@@ -53,7 +62,8 @@ var BSTIterator = function(root) {
  * @return {number}
  */
 BSTIterator.prototype.next = function() {
-
+  this.curIndex++;
+  return this.values[this.curIndex];
 };
 
 /**
@@ -61,7 +71,7 @@ BSTIterator.prototype.next = function() {
  * @return {boolean}
  */
 BSTIterator.prototype.hasNext = function() {
-
+  return (this.curIndex + 1) < this.values.length;
 };
 
 /**
