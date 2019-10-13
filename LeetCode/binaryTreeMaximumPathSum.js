@@ -42,5 +42,25 @@ Output: 42
  * @return {number}
  */
 var maxPathSum = function(root) {
+  let maxSum = null;
 
+  const getMaxGain = function(node) {
+    if (!node) return 0;
+
+    let max = node.val;
+
+    const left = Math.max(getMaxGain(node.left), 0);
+    const right = Math.max(getMaxGain(node.right), 0);
+
+    max = max + left + right;
+
+    if (maxSum === null || max > maxSum) {
+      maxSum = max;
+    }
+
+    return node.val + Math.max(left, right);
+  }
+
+  getMaxGain(root);
+  return maxSum;
 };
