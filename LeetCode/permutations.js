@@ -23,8 +23,37 @@ Output:
  * @return {number[][]}
  */
 var permute = function(nums) {
+  if (!nums.length) return [];
 
+  let permutations = [];
+
+  const dfs = function(startArr, resultArr) {
+    // If there is nothing left in the startArr, we know we have a result.
+    if (startArr.length === 0) {
+      permutations.push(resultArr);
+    }
+
+    // Loop through the startArr.
+    for (let i = 0; i < startArr.length; ++i) {\
+      // Make copies to avoid side effects.
+      let resultArrCpy = [...resultArr];
+      let startArrCpy = [...startArr];
+
+      // Push the next element onto the result array copy.
+      resultArrCpy.push(startArr[i]);
+
+      // Take the element out of the start array copy.
+      startArrCpy.splice(i, 1);
+
+      // Recurse.
+      dfs(startArrCpy, resultArrCpy);
+    }
+  }
+
+  dfs(nums, []);
+  return permutations;
 };
 
 
 console.log(permute([1,2,3]));
+console.log(permute([1]));
