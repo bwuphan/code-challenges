@@ -36,5 +36,31 @@ Note:
  * @return {number}
  */
 var lastStoneWeight = function(stones) {
+  if (!stones.length) return null;
 
+  stonesCpy = [...stones].sort((a, b) => a - b);
+
+
+  for (let i = stonesCpy.length - 1; stonesCpy.length > 1; --i) {
+    const bigger = stonesCpy[i];
+    const smaller = stonesCpy[i - 1];
+
+    const diff = bigger - smaller;
+    if (diff === 0) {
+      stonesCpy.pop();
+      stonesCpy.pop();
+      --i;
+    }
+    else {
+      stonesCpy[i - 1] = diff;
+      stonesCpy.pop();
+    }
+    stonesCpy = stonesCpy.sort((a, b) => a - b);
+  }
+  return stonesCpy.length === 1 ? stonesCpy[0] : 0;
 };
+
+
+// console.log(lastStoneWeight([2,7,4,1,8,1]))
+// console.log(lastStoneWeight([1,3]))
+console.log(lastStoneWeight([10,10,7,2]))
