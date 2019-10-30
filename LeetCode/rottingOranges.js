@@ -44,3 +44,8 @@ grid[i][j] is only 0, 1, or 2.
 var orangesRotting = function(grid) {
 
 };
+
+
+console.log(orangesRotting([[2,1,1],[1,1,0],[0,1,1]]));
+console.log(orangesRotting([[2,1,1],[0,1,1],[1,0,1]]));
+console.log(orangesRotting([[0,2]]));
