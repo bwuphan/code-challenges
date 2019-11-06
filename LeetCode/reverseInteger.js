@@ -27,5 +27,24 @@ integer range: [−231,  231 − 1]. For the purpose of this problem, assume tha
  * @return {number}
  */
 var reverse = function(x) {
+  let neg = false;
+  if (x < 0) {
+    neg = true;
+    x *= -1;
+  }
+  let newX = x
+    .toString()
+    .split('')
+    .reverse()
+    .join('');
+
+
+  newX = +newX;
+
+  if (neg === true) newX *= -1;
+
+  return (newX < (Math.pow(2, 31) - 1) && newX > Math.pow(-2, 31)) ? newX : 0;
 
 };
+
+console.log(reverse(120));
