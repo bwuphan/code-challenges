@@ -35,10 +35,18 @@ class MinHeap {
     const pIdx = Math.floor((idx - 1) / 2);
     return pIdx < 0 ? null : pIdx;
   }
+
+  peek() {
+    const topOfHeap = this._heap.length ? this._heap[0] : null;
+    console.log('Top:', topOfHeap);
+    return topOfHeap;
+  }
 }
 
 var minHeap = new MinHeap();
 minHeap.insert(1);
 minHeap.insert(2);
 minHeap.insert(0);
+minHeap.insert(-5);
+minHeap.peek();
 console.log(minHeap);
