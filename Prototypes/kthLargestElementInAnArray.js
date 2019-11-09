@@ -72,6 +72,10 @@ class MaxHeap {
   }
 
   remove() {
+    /*
+
+
+    */
     if (this._heap.length === 0)
       return null;
 
@@ -83,23 +87,21 @@ class MaxHeap {
     let curIdx, leftChildIdx, rightChildIdx, largerIdx = null;
 
     curIdx = 0;
-    do {
 
-      let leftChildIdx = this.getLeftChildIdx(curIdx);
+    while (true) {
+      leftChildIdx = this.getLeftChildIdx(curIdx);
 
-      let rightChildIdx = this.getRightChildIdx(curIdx);
+      rightChildIdx = this.getRightChildIdx(curIdx);
 
-      let largerIdx = null;
+      largerIdx = null;
 
-      // console.log('larger', this._heap, this._heap[curIdx], curIdx)
       if (rightChildIdx === null || this._heap[leftChildIdx] > this._heap[rightChildIdx]) {
-        // console.log('left')
         largerIdx = leftChildIdx;
       }
       else {
-        // console.log('right');
         largerIdx = rightChildIdx;
       }
+
       if (this._heap[curIdx] < this._heap[largerIdx]) {
         this.swap(curIdx, largerIdx);
         curIdx = largerIdx;
@@ -108,11 +110,7 @@ class MaxHeap {
       else {
         break;
       }
-
-      // console.log('CUR IDX', this._heap[curIdx], curIdx)
-      // console.log('larger IDX', this._heap[largerIdx], largerIdx)
     }
-    while (true);
     return returnVal;
   }
 
@@ -132,13 +130,12 @@ var findKthLargest = function(nums, k) {
   for (let i = 0; i < nums.length; ++i) {
     maxHeap.insert(nums[i]);
   }
+
   maxHeap.log();
+
   let largest = null;
   for (let i = 0; i < k; ++i) {
-    // maxHeap.log();
     largest = maxHeap.remove();
-    // console.log('remove', largest)
-    // maxHeap.log();
   }
 
   return largest;
