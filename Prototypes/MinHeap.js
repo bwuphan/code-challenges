@@ -1,6 +1,10 @@
 class MinHeap {
-  constructor() {
+  constructor(array) {
     this._heap = [];
+
+    if (array) {
+      array.forEach(num => this.insert(num));
+    }
   }
 
   insert(val) {
