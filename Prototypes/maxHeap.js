@@ -1,6 +1,10 @@
 class MaxHeap {
-  constructor() {
+  constructor(array) {
     this._heap = [];
+
+    if (array) {
+      array.forEach(num => this.insert(num));
+    }
   }
 
   insert(val) {
@@ -38,7 +42,6 @@ class MaxHeap {
 
   peek() {
     const topOfHeap = this._heap.length ? this._heap[0] : null;
-    console.log('Top:', topOfHeap);
     return topOfHeap;
   }
 
