@@ -57,14 +57,12 @@ Could you do better than O(n2) per move() operation?
  * @param {number} n
  */
 var TicTacToe = function(n) {
-  this.player1 = [];
-  this.player2 = [];
-  this.n = n;
+  this.size = n;
+  this.rows = [... new Array(n)].map(() => 0);
+  this.cols = [... new Array(n)].map(() => 0);
 
-  for (let i = 0; i < n; ++i) {
-    this.player1.push([...new Array(n)].map(() => 0));
-    this.player2.push([...new Array(n)].map(() => 0));
-  }
+  this.diagonal = 0;
+  this.antiDiagonal = 0;
 
 };
 
@@ -83,46 +81,27 @@ var TicTacToe = function(n) {
  * @return {number}
  */
 TicTacToe.prototype.move = function(row, col, player) {
-  if (player === 1)
-    this.player1[row][col] = 1;
-  else if (player === 2)
-    this.player2[row][col] = 1;
+  const toAdd = player === 1 ? 1 : -1;
 
-  const board = this[`player${player}`];
+  this.rows[row] += toAdd;
+  this.cols[col] += toAdd;
 
-  // this.log();
+  if (row === col)
+    this.diagonal += toAdd;
 
-  let rowCount = 0;
-  let colCount = 0;
-  let diaCount = 0;
-  let antiDiaCount = 0;
-  for (let i = 0; i < this.n; ++i) {
-    if (board[row][i])
-      rowCount++;
-    if (board[i][col])
-      colCount++;
-    if (board[i][i])
-      diaCount++;
-    if (board[this.n - i - 1][i])
-      antiDiaCount++;
+  if ((row + col) === (this.size - 1))
+    this.antiDiagonal += toAdd;
+
+  if (Math.abs(this.rows[row]) === this.size ||
+      Math.abs(this.cols[col]) === this.size ||
+      Math.abs(this.diagonal) === this.size ||
+      Math.abs(this.antiDiagonal) === this.size) {
+    return player;
   }
 
-  if (rowCount === this.n || colCount === this.n || diaCount === this.n || antiDiaCount === this.n)
-    return player;
   return 0;
 };
 
-TicTacToe.prototype.check = function(row, col, player) {
-
-}
-
-TicTacToe.prototype.log = function() {
-  console.log('Player 1');
-  this.player1.forEach(row => console.log(row));
-
-  console.log('Player 2');
-  this.player2.forEach(row => console.log(row));
-}
 /**
  * Your TicTacToe object will be instantiated and called as such:
  * var obj = new TicTacToe(n)
