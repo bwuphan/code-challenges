@@ -39,5 +39,43 @@ Return:
  * @return {number[][]}
  */
 var pathSum = function(root, sum) {
+  let results = [];
 
+  const dfs = function(node, nodes, curSum) {
+    if (!node) return null;
+
+    curSum += node.val;
+    nodes = `${nodes}${node.val},`;
+
+    const left = dfs(node.left, nodes, curSum);
+    const right = dfs(node.right, nodes, curSum);
+
+
+    if (left === null && right === null && curSum === sum) {
+      nodes = nodes.split(',');
+      nodes.pop();
+      results.push(nodes);
+    }
+  }
+
+  dfs(root, '', 0);
+  return results;
 };
+
+
+const node = {
+
+}
+
+function TreeNode(val) {
+     this.val = val;
+     this.left = this.right = null;
+}
+
+var test1 = new TreeNode(1);
+test1.left = new TreeNode(2);
+
+var test2 = new TreeNode(1);
+
+console.log(pathSum(test1, 1));
+console.log(pathSum(test2, 1));
