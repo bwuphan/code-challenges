@@ -10,6 +10,10 @@ Stack.prototype.pop = function() {
   return this._storage.pop();
 }
 
+Stack.prototype.isEmpty = function() {
+  return this._storage.length === 0;
+}
+
 
 module.exports = {
   Stack: Stack

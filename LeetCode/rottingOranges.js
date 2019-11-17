@@ -37,10 +37,79 @@ Note:
 grid[i][j] is only 0, 1, or 2.
 */
 
+var Queue = require('../Prototypes/Queue.js').Queue;
+
 /**
  * @param {number[][]} grid
  * @return {number}
  */
 var orangesRotting = function(grid) {
+  /*
+    First, add the rotten ones to the queue.
+    Then, use BFS and add positions to the queue as you go.
+    Check at the end to make sure there aren't any fresh orangse.
+  */
+  let queue = new Queue();
 
+  for (let i = 0; i < grid.length; ++i) {
+    for (let j = 0; j < grid[i].length; ++j) {
+      if (grid[i][j] === 2)
+        queue.enqueue({row: i, col: j, minutes: 0});
+    }
+  }
+
+
+  let maxMinutes = 0;
+  while (!queue.isEmpty()) {
+    let posObj = queue.dequeue();
+
+    if (grid[posObj.row][posObj.col] !== 2 || posObj.minutes === 0) {
+      grid[posObj.row][posObj.col] = 2;
+
+      if (posObj.minutes > maxMinutes)
+        maxMinutes = posObj.minutes
+
+      const leftRow = posObj.row - 1;
+      if (leftRow >= 0 && grid[leftRow][posObj.col] === 1) {
+        queue.enqueue({ row: leftRow, col: posObj.col, minutes: posObj.minutes + 1 });
+      }
+
+      const rightRow = posObj.row + 1;
+      if (rightRow < grid.length && grid[rightRow][posObj.col] === 1) {
+        queue.enqueue({ row: rightRow, col: posObj.col, minutes: posObj.minutes + 1 });
+      }
+
+      const upCol = posObj.col + 1;
+      if (upCol >= 0 && grid[posObj.row][upCol] === 1) {
+        queue.enqueue({ row: posObj.row, col: upCol, minutes: posObj.minutes + 1 });
+      }
+
+      const downCol = posObj.col - 1;
+      if (downCol < grid[0].length && grid[posObj.row][downCol] === 1) {
+        queue.enqueue({ row: posObj.row, col: downCol, minutes: posObj.minutes + 1 });
+      }
+    }
+
+  }
+
+  for (let i = 0; i < grid.length; ++i) {
+    for (let j = 0; j < grid[i].length; ++j) {
+      if (grid[i][j] === 1)
+        return -1;
+    }
+  }
+
+  return maxMinutes;
 };
+
+
+console.log(orangesRotting([[2,1,1],[1,1,0],[0,1,1]]));
+console.log(orangesRotting([[2,1,1],[0,1,1],[1,0,1]]));
+console.log(orangesRotting([[0,2]]));
+console.log(orangesRotting([
+  [2,2],
+  [1,1],
+  [0,0],
+  [2,0]
+  ]
+))
