@@ -39,5 +39,34 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
  * @return {TreeNode}
  */
 var sortedListToBST = function(head) {
+  // First, convert linked list to an array.
+  let curNode = head;
+  let listArr = [];
 
+  while (curNode) {
+    listArr.push(curNode.val);
+    curNode = curNode.next;
+  }
+
+  // Subroutine to recurse through and create nodes from the array.
+  const convertToTree = function(start, end) {
+    // BC: if end is less than the start, we have gone too far and the value should be null.
+    if (end < start) return null;
+
+    // Get the middle index to create the current node.
+    const midIdx = Math.ceil((start + end) / 2);
+    const node = new TreeNode(listArr[midIdx]);
+
+    // Left should be the part of the array to the left of the midpoint.
+    node.left = convertToTree(start, midIdx - 1);
+    // Right should be the part of the array to the right of the midpoint.
+    node.right = convertToTree(midIdx + 1, end);
+
+    return node;
+  }
+
+  return convertToTree(0, listArr.length - 1);
 };
+
+
+// console.log(sortedListToBST([-10,-3,0,5,9]))
