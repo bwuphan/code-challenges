@@ -26,6 +26,26 @@ All elements in nums1 and nums2 are unique.
 The length of both nums1 and nums2 would not exceed 1000.
 */
 
+var Stack = function() {
+  this._storage = [];
+}
+
+Stack.prototype.push = function(val) {
+  return this._storage.push(val);
+}
+
+Stack.prototype.pop = function() {
+  return this._storage.pop();
+}
+
+Stack.prototype.isEmpty = function() {
+  return this._storage.length === 0;
+}
+
+Stack.prototype.peek = function() {
+  return this._storage[this._storage.length - 1];
+}
+
 
 /**
  * @param {number[]} nums1
@@ -33,5 +53,27 @@ The length of both nums1 and nums2 would not exceed 1000.
  * @return {number[]}
  */
 var nextGreaterElement = function(nums1, nums2) {
+  let numsTwoStack = new Stack();
+  let numsOneMap = new Map();
 
+  nums2.forEach(num => {
+    while (true) {
+      if (num > numsTwoStack.peek()) {
+        const popped = numsTwoStack.pop();
+        numsOneMap.set(popped, num);
+      }
+      else
+        break;
+    }
+
+    numsTwoStack.push(num);
+  });
+
+  numsTwoStack._storage.forEach(num => numsOneMap.set(num, -1));
+
+  return nums1.map(num => numsOneMap.get(num));
 };
+
+
+console.log(nextGreaterElement(nums1 = [4,1,2], nums2 = [1,3,4,2]));
+// console.log(nextGreaterElement(nums1 = [2,4], nums2 = [1,2,3,4]));
