@@ -47,5 +47,34 @@ Return false.
  * @return {boolean}
  */
 var isBalanced = function(root) {
+  let isBalanced = true;
 
+  const dfs = function(node, depth) {
+    // If there is no node here, just return the depth without incrementing.
+    if (!node) return depth;
+
+    depth++;
+
+    // If there is no node to the right or left, just return the depth.
+    if (!node.left && !node.right)
+      return depth;
+
+    // Recurse and find depths of left and right.
+    const leftDepth = dfs(node.left, depth);
+    const rightDepth = dfs(node.right, depth);
+
+
+    const diff = rightDepth - leftDepth;
+
+    // If the diff is greater than 1, we have found a falsey.
+    if (Math.abs(diff) > 1)
+      isBalanced = false;
+
+    // Return whatever is greater, the right of left depth.
+    return Math.max(leftDepth, rightDepth);
+  }
+
+  dfs(root, 0);
+
+  return isBalanced;
 };
