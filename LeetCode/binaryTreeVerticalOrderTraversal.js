@@ -84,6 +84,97 @@ Output:
  * @param {TreeNode} root
  * @return {number[][]}
  */
+
+var Node = function(val) {
+  this.val = val;
+
+  this.next = null;
+}
+
+class Queue {
+  constructor() {
+    this._first = null;
+    this._last = null;
+  }
+
+  enqueue(val) {
+    const node = new Node(val);
+    if (!this._first) {
+      this._first = node;
+      this._last = this._first;
+    }
+    else {
+      this._last.next = node;
+      this._last = node;
+    }
+  }
+
+  dequeue() {
+    if (!this._first) return null;
+
+    const dequeued = this._first;
+
+    if (this._first === this._last) {
+      this._first = null;
+      this._tail = null;
+    }
+    else {
+      this._first = dequeued.next;
+    }
+    return dequeued.val;
+  }
+
+  peek() {
+    return this._first.val;
+  }
+
+  isEmpty() {
+    return this._first === null;
+  }
+
+  log() {
+    let curNode = this._first;
+
+    let qString = '';
+    while (curNode) {
+      qString += `${curNode.val}, `;
+      curNode = curNode.next;
+    }
+
+    console.log(`Queue: ${qString}`);
+  }
+}
+
+
 var verticalOrder = function(root) {
+  /* We need to use BFS because the answer must be top to bottom. */
+  if (!root) return [];
+
+  let map = {}; // Stores the nodes indexed by their column.
+  let queue = new Queue(); // Queue for BFS.
+  queue.enqueue({ node: root, col: 0 });
+
+  while(!queue.isEmpty()) {
+    const item = queue.dequeue();
+    const node = item.node;
+    const col = item.col;
+
+    /* If col is already in map, push to the array. */
+    if (col in map)
+      map[col].push(node.val);
+    else /* Else, create a new array. */
+      map[col] = [node.val];
+
+    /* Enqueue the nodes with the correct columns to the queue for BFS. */
+    if (node.left)
+      queue.enqueue({ node: node.left, col: col - 1 });
+    if (node.right)
+      queue.enqueue({ node: node.right, col: col + 1 });
+  }
+
+  return Object.keys(map)
+    .map(num => +num)
+    .sort((a, b) => a - b)
+    .map(col => map[col]);
 
 };
