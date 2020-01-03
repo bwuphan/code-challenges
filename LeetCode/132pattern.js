@@ -33,5 +33,27 @@ Explanation: There are three 132 patterns in the sequence: [-1, 3, 2], [-1, 3, 0
  * @return {boolean}
  */
 var find132pattern = function(nums) {
+  const minArr = [];
+  let curMin = nums[0];
+  for (let i = 0; i < nums.length - 2; ++i) {
+    minArr[i] = curMin < nums[i] ? curMin : nums[i];
+  }
 
+  for (let i = 1; i < nums.length -1; ++i) {
+    for (let j = i; j < nums.length; ++j) {
+      const firstNum = minArr[i - 1];
+      const secondNum = nums[i];
+      const thirdNum = nums[j];
+      if (thirdNum < secondNum && firstNum < secondNum && thirdNum > firstNum) {
+        return true;
+      }
+    }
+  }
+  return false;
 };
+
+console.log(find132pattern([1,2,3,4]))
+console.log(find132pattern([3,1,4,2]))
+console.log(find132pattern([-1,3,2,0]))
+console.log(find132pattern([3,5,0,3,4]))
+console.log(find132pattern([1,0,1,-4,-3]))
