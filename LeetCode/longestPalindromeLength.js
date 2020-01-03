@@ -27,6 +27,13 @@ One longest palindrome that can be built is "dccaccd", whose length is 7.
  * @return {number}
  */
 var longestPalindrome = function(s) {
+  /* Create map of letters.
+   * Loop through string and set number of occurences of letters in map.
+   * If we add a letter occurence and it is not even, we found a pair and this means we can add 2 to
+   * the palindrome length.
+   * Once we get to the end, if the palindrome length is even and we still have letters left, we can
+   * theoretically put any remaining letter in the center to add to our palindrome length.
+   */
   const lMap = new Map();
 
   let palindromeLength = 0;
