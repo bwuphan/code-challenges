@@ -33,6 +33,12 @@ Explanation: There are three 132 patterns in the sequence: [-1, 3, 2], [-1, 3, 0
  * @return {boolean}
  */
 var find132pattern = function(nums) {
+  /* Do some preprocessing to get smallest possible value at each element.
+   * Example: [2, 3, -1, 1] -> [2, 2, -1, -1]
+   * Then, loop through to get second and third numbers and use pre-processed array to find first
+   * value. If the conditions meet 1 3 2, then return true.
+   * If we reach the end of the loops return false.
+   */
   const minArr = [];
   let curMin = nums[0];
   for (let i = 0; i < nums.length - 2; ++i) {
