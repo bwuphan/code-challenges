@@ -29,5 +29,29 @@ Output: 49
  * @return {number}
  */
 var maxArea = function(height) {
+  /* Set pointers at first and last element of height array.
+   * Calculate area at pointers and set new max if that area is greater.
+   * Move the smaller height pointer inwards because that's already the largest area that can be
+   * gained off that height.
+   */
+  let leftIdx = 0, rightIdx = height.length - 1;
 
+  let max = 0;
+  while (leftIdx < rightIdx) {
+    const lHeight = height[leftIdx];
+    const rHeight = height[rightIdx];
+
+    const h = Math.min(lHeight, rHeight);
+    const w = rightIdx - leftIdx;
+    const area = h * w;
+
+    if (area > max) max = area;
+
+    if (lHeight > rHeight) rightIdx--;
+    else leftIdx++;
+  }
+
+  return max
 };
+
+console.log(maxArea([1,8,6,2,5,4,8,3,7]));
