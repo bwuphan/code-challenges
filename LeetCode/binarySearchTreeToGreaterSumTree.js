@@ -26,3 +26,54 @@ The number of nodes in the tree is between 1 and 100.
 Each node will have value between 0 and 100.
 The given tree is a binary search tree.
 */
+
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var bstToGst = function(root) {
+  const vals = [];
+  const nodeMap = new Map();
+  let idx = 0;
+  const dfs = (node) => {
+    if (!node) return;
+
+    dfs(node.left);
+    vals.push(node.val);
+    nodeMap.set(node, idx);
+    idx++;
+    dfs(node.right);
+  }
+
+  dfs(root);
+
+  const sums = new Array(vals.length);
+  let sum = 0;
+  for (let i = vals.length - 1; i >= 0; i--) {
+    sum += vals[i];
+    sums[i] = sum;
+  }
+
+  const dfs2 = (node) => {
+    if (!node) return;
+
+    dfs2(node.left);
+
+    const idx = nodeMap.get(node);
+    node.val = sums[idx];
+
+    dfs2(node.right);
+  }
+
+  dfs2(root);
+
+  return root;
+};
