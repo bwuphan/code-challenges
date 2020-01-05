@@ -40,6 +40,16 @@ The given tree is a binary search tree.
  * @return {TreeNode}
  */
 var bstToGst = function(root) {
+  /*
+    First, dfs through tree and fill out vals in order along with mapping a node to its index in
+    the vals array.
+
+    Preprocess the sums by creating a sums array that sums up vals backwards.
+
+    Dfs again through the root. Use the nodeMap to look up the correct index to use in the sums
+    array.
+    Set the node.val to the sums[foundIdx].
+  */
   const vals = [];
   const nodeMap = new Map();
   let idx = 0;
