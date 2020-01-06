@@ -34,10 +34,104 @@ The number of nodes in the given tree is between 1 and 10^4.
  *     this.left = this.right = null;
  * }
  */
+var Node = function(val) {
+  this.val = val;
+
+  this.next = null;
+}
+
+class Queue {
+  constructor() {
+    this._first = null;
+    this._last = null;
+  }
+
+  enqueue(val) {
+    const node = new Node(val);
+    if (!this._first) {
+      this._first = node;
+      this._last = this._first;
+    }
+    else {
+      this._last.next = node;
+      this._last = node;
+    }
+  }
+
+  dequeue() {
+    if (!this._first) return null;
+
+    const dequeued = this._first;
+
+    if (this._first === this._last) {
+      this._first = null;
+      this._tail = null;
+    }
+    else {
+      this._first = dequeued.next;
+    }
+    return dequeued.val;
+  }
+
+  peek() {
+    return this._first.val;
+  }
+
+  isEmpty() {
+    return this._first === null;
+  }
+
+  log() {
+    let curNode = this._first;
+
+    let qString = '';
+    while (curNode) {
+      qString += `${curNode.val}, `;
+      curNode = curNode.next;
+    }
+
+    console.log(`Queue: ${qString}`);
+  }
+}
+
+
 /**
  * @param {TreeNode} root
  * @return {number}
  */
 var maxLevelSum = function(root) {
+  if (!root) return null;
 
+  const queue = new Queue();
+  queue.enqueue({ node: root, level: 0 });
+
+  const sums = [0];
+
+  while (!queue.isEmpty()) {
+    const item = queue.dequeue();
+    const node = item.node;
+    const level = item.level;
+
+    if (node) {
+      if (level > sums.length - 1) {
+        sums[level] = 0;
+      }
+      sums[level] += node.val;
+
+      queue.enqueue({ node: node.left, level: level + 1 });
+      queue.enqueue({ node: node.right, level: level + 1 });
+    }
+  }
+
+  let maxLevel = 0;
+  let highestSum = null;
+
+  sums.forEach((sum, i) => {
+    if (highestSum === null || sum > highestSum) {
+      highestSum = sum;
+      maxLevel = i + 1;
+    }
+  });
+
+  return maxLevel;
 };
