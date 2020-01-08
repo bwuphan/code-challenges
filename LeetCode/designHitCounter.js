@@ -37,12 +37,13 @@ Follow up:
 What if the number of hits per second could be very large? Does your design scale?
 */
 
+var Queue = require('../Prototypes/Queue.js').Queue;
 
 /**
  * Initialize your data structure here.
  */
 var HitCounter = function() {
-
+  this.queue = new Queue();
 };
 
 /**
@@ -52,7 +53,7 @@ var HitCounter = function() {
  * @return {void}
  */
 HitCounter.prototype.hit = function(timestamp) {
-
+  this.queue.enqueue(timestamp);
 };
 
 /**
@@ -62,7 +63,12 @@ HitCounter.prototype.hit = function(timestamp) {
  * @return {number}
  */
 HitCounter.prototype.getHits = function(timestamp) {
+  const earliestTime = timestamp - 300;
 
+  while (this.queue.peek() && earliestTime >= this.queue.peek()) {
+    this.queue.dequeue();
+  }
+  return this.queue._size;
 };
 
 /**
@@ -71,3 +77,36 @@ HitCounter.prototype.getHits = function(timestamp) {
  * obj.hit(timestamp)
  * var param_2 = obj.getHits(timestamp)
  */
+
+var counter = new HitCounter();
+
+// // hit at timestamp 1.
+// counter.hit(1);
+
+// // hit at timestamp 2.
+// counter.hit(2);
+
+// // hit at timestamp 3.
+// counter.hit(3);
+
+// // get hits at timestamp 4, should return 3.
+// counter.getHits(4);
+
+// // hit at timestamp 300.
+// counter.hit(300);
+
+// // get hits at timestamp 300, should return 4.
+// counter.getHits(300);
+
+// // get hits at timestamp 301, should return 3.
+// counter.getHits(303);
+
+counter.hit(2);
+counter.hit(3);
+counter.hit(4);
+counter.getHits(301);
+counter.getHits(302);
+counter.getHits(303);
+counter.getHits(304);
+counter.getHits(501);
+counter.getHits(601);
