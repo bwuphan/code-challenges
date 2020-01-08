@@ -37,6 +37,7 @@ Follow up:
 What if the number of hits per second could be very large? Does your design scale?
 */
 
+/* USE A QUEUE TO KEEP TRACK. */
 var Queue = require('../Prototypes/Queue.js').Queue;
 
 /**
