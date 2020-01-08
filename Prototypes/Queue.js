@@ -26,6 +26,8 @@ class Queue {
   constructor() {
     this._first = null;
     this._last = null;
+
+    this._size = 0;
   }
 
   enqueue(val) {
@@ -38,6 +40,8 @@ class Queue {
       this._last.next = node;
       this._last = node;
     }
+
+    this._size++;
   }
 
   dequeue() {
@@ -52,10 +56,15 @@ class Queue {
     else {
       this._first = dequeued.next;
     }
+
+    this._size--;
+
     return dequeued.val;
   }
 
   peek() {
+    if (!this._first) return null;
+
     return this._first.val;
   }
 
@@ -80,11 +89,3 @@ module.exports = {
   Queue: Queue
 }
 
-var queue = new Queue();
-queue.enqueue(1);
-queue.enqueue(2);
-queue.enqueue(3);
-queue.log();
-console.log(queue.dequeue());
-console.log(queue.dequeue());
-console.log(queue.dequeue());
