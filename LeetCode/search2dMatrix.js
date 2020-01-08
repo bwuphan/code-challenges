@@ -24,6 +24,11 @@ Given target = 20, return false.
 Accepted
 */
 
+const getRow = (num, matrix) =>
+  Math.floor(num / matrix[0].length);
+
+const getCol = (num, matrix) => num % matrix[0].length
+
 /**
  * @param {number[][]} matrix
  * @param {number} target
@@ -34,43 +39,37 @@ var searchMatrix = function(matrix, target) {
      smaller than the num, we decrement the row. If the target is greater, we increment the col.
      We do this until we reach the target or go out of bounds.
   */
+  if (!matrix[0] || !matrix[0][0]) return false;
+  let left = 0;
+  let right = matrix.length * matrix[0].length - 1;
 
-  // If either row or column has a length of 0, return false.
-  if (matrix.length === 0 || matrix[0].length === 0) return false;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
 
-  // Init the row at the bottom and col at 0.
-  let row = matrix.length - 1;
-  let col = 0;
+    const midVal = matrix[getRow(mid, matrix)][getCol(mid, matrix)];
 
-  let num = matrix[row][col];
-  while(num) {
-    // If our num equals the target, we are done.
-    if (num === target) return true;
+    if (midVal === target) return true;
 
-    if (num > target) {
-      row--;
-    }
-    else {
-      col++;
-    }
-
-    if (row < 0) return false;
-    num = matrix[row][col];
+    if (target < midVal)
+      right = mid - 1;
+    else
+      left = mid + 1;
   }
 
   return false;
 };
 
-const matrix = [
-  [1,   4,  7, 11, 15],
-  [2,   5,  8, 12, 19],
-  [3,   6,  9, 16, 22],
-  [10, 13, 14, 17, 24],
-  [18, 21, 23, 26, 30]
-];
+// const matrix = [
+//   [1,   3,  5,  7],
+//   [10, 11, 16, 20],
+//   [23, 30, 34, 50]
+// ]
+const matrix = [[1]]
 
 // console.log(searchMatrix(matrix, 5));
 
 // console.log(searchMatrix(matrix, 20));
 
-console.log(searchMatrix([[-5]], -10))
+console.log(searchMatrix(matrix, 2))
+console.log(getRow(10, matrix))
+console.log(getCol(4, matrix))
