@@ -56,6 +56,66 @@ No user visits two websites at the same time.
  * @return {string[]}
  */
 var mostVisitedPattern = function(username, timestamp, website) {
+  const userMap = new Map();
+
+  for (let i = 0; i < username.length; ++i) {
+    const curUser = username[i];
+    const curWebsite = website[i];
+    const curTimeStamp = timestamp[i];
+
+    let patternObjects = [];
+    if (userMap.has(curUser)) {
+      patternObjects = userMap.get(curUser);
+    }
+
+    patternObjects.push({
+      username: curUser,
+      website: curWebsite,
+      timestamp: curTimeStamp
+    });
+
+    userMap.set(curUser, patternObjects);
+
+  }
+  const visitUserMap = new Map();
+  const visitOccurencesMap = new Map();
+
+  let highestOccurences = 0;
+  let mostVisitedWebsites = [];
+  userMap.forEach(patternObjects => {
+    patternObjects = patternObjects.sort((a, b) => a.timestamp - b.timestamp);
+    const userVisits = new Map();
+
+    for (let i = 0; i < patternObjects.length; ++i) {
+      for (let j = i + 1; j < patternObjects.length; ++j) {
+        for (let k = j + 1; k < patternObjects.length; ++k) {
+          const first = patternObjects[i].website;
+          const second = patternObjects[j].website;
+          const third = patternObjects[k].website;
+
+          const visits = JSON.stringify([first, second, third]);
+
+          userVisits.set(visits, visits);
+        }
+      }
+    }
+    userVisits.forEach(visits => {
+      let visitsOccurences = visitOccurencesMap.get(visits);
+
+      visitsOccurences = visitsOccurences ? visitsOccurences + 1 : 1;
+      visitOccurencesMap.set(visits, visitsOccurences);
+
+      if (visitsOccurences > highestOccurences) {
+        highestOccurences = visitsOccurences;
+        mostVisitedWebsites = [visits];
+      }
+      else if (visitsOccurences === highestOccurences) {
+        mostVisitedWebsites.push(visits);
+      }
+    });
+  });
+
+  return JSON.parse(mostVisitedWebsites.sort((a, b) => a.localeCompare(b))[0]);
 
 };
 
@@ -63,4 +123,16 @@ console.log(mostVisitedPattern(
   username = ["joe","joe","joe","james","james","james","james","mary","mary","mary"],
   timestamp = [1,2,3,4,5,6,7,8,9,10],
   website = ["home","about","career","home","cart","maps","home","home","about","career"]
+))
+
+console.log(mostVisitedPattern(
+  ["u1","u1","u1","u2","u2","u2"],
+  [1,2,3,4,5,6],
+  ["a","b","c","a","b","a"]
+))
+
+console.log(mostVisitedPattern(
+["h","eiy","cq","h","cq","txldsscx","cq","txldsscx","h","cq","cq"],
+[527896567,334462937,517687281,134127993,859112386,159548699,51100299,444082139,926837079,317455832,411747930],
+["hibympufi","hibympufi","hibympufi","hibympufi","hibympufi","hibympufi","hibympufi","hibympufi","yljmntrclw","hibympufi","yljmntrclw"]
 ))
