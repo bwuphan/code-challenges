@@ -56,67 +56,72 @@ No user visits two websites at the same time.
  * @return {string[]}
  */
 var mostVisitedPattern = function(username, timestamp, website) {
+
+  /* First we need to create a map where the keys are the username and the values are an array of
+     their visits. We will need this to map over and get their visit patterns. */
   const userMap = new Map();
 
   for (let i = 0; i < username.length; ++i) {
     const curUser = username[i];
     const curWebsite = website[i];
-    const curTimeStamp = timestamp[i];
+    const curTimestamp = timestamp[i];
 
-    let patternObjects = [];
+    let websiteAndTimestamp = [];
     if (userMap.has(curUser)) {
-      patternObjects = userMap.get(curUser);
+      websiteAndTimestamp = userMap.get(curUser);
     }
 
-    patternObjects.push({
-      username: curUser,
+    websiteAndTimestamp.push({
       website: curWebsite,
-      timestamp: curTimeStamp
+      timestamp: curTimestamp,
     });
 
-    userMap.set(curUser, patternObjects);
+    userMap.set(curUser, websiteAndTimestamp);
 
   }
+  /* Create the visit map where the keys are the visit strings and the values are sets of users who
+     share the same visits. */
   const visitUserMap = new Map();
-  const visitOccurencesMap = new Map();
 
   let highestOccurences = 0;
-  let mostVisitedWebsites = [];
-  userMap.forEach(patternObjects => {
-    patternObjects = patternObjects.sort((a, b) => a.timestamp - b.timestamp);
-    const userVisits = new Map();
+  let mostVisitedWebsite;
 
-    for (let i = 0; i < patternObjects.length; ++i) {
-      for (let j = i + 1; j < patternObjects.length; ++j) {
-        for (let k = j + 1; k < patternObjects.length; ++k) {
-          const first = patternObjects[i].website;
-          const second = patternObjects[j].website;
-          const third = patternObjects[k].website;
+  /* Now, we loop through each user and sort their websiteAndTimestamp array ascending.
+     We will then triple loop over and populate the users for the visit from the visitUserMap
+     Then, last we will see if we have a new highest occurences/ most visited website.*/
+  userMap.forEach((websiteAndTimestamp, user) => {
+    websiteAndTimestamp = websiteAndTimestamp.sort((a, b) => a.timestamp - b.timestamp);
 
-          const visits = JSON.stringify([first, second, third]);
+    for (let i = 0; i < websiteAndTimestamp.length; ++i) {
+      for (let j = i + 1; j < websiteAndTimestamp.length; ++j) {
+        for (let k = j + 1; k < websiteAndTimestamp.length; ++k) {
+          const first = websiteAndTimestamp[i].website;
+          const second = websiteAndTimestamp[j].website;
+          const third = websiteAndTimestamp[k].website;
 
-          userVisits.set(visits, visits);
+          const visits = `${first},${second},${third}`;
+
+          let userSet = visitUserMap.get(visits);
+
+          // If there is not yet a userSet for the visit, init a new set.
+          if (!userSet) userSet = new Set();
+
+          userSet.add(user);
+          visitUserMap.set(visits, userSet);
+
+          if (userSet.size > highestOccurences) {
+            highestOccurences = userSet.size;
+            mostVisitedWebsite = visits;
+          }
+          else if (userSet.size === highestOccurences) {
+            mostVisitedWebsite = mostVisitedWebsite.localeCompare(visits) < 0 ? mostVisitedWebsite : visits;
+          }
         }
       }
     }
-    userVisits.forEach(visits => {
-      let visitsOccurences = visitOccurencesMap.get(visits);
-
-      visitsOccurences = visitsOccurences ? visitsOccurences + 1 : 1;
-      visitOccurencesMap.set(visits, visitsOccurences);
-
-      if (visitsOccurences > highestOccurences) {
-        highestOccurences = visitsOccurences;
-        mostVisitedWebsites = [visits];
-      }
-      else if (visitsOccurences === highestOccurences) {
-        mostVisitedWebsites.push(visits);
-      }
-    });
   });
 
-  return JSON.parse(mostVisitedWebsites.sort((a, b) => a.localeCompare(b))[0]);
-
+  return mostVisitedWebsite.split(',');
 };
 
 console.log(mostVisitedPattern(
