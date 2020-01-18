@@ -36,5 +36,64 @@ Note: The length of each dimension in the given grid does not exceed 50.
  * @return {number}
  */
 var numDistinctIslands = function(grid) {
+  /* Explore the islands which sets island parts to 0 in the grid and create the islandStr which
+     describes the shape of the island. */
+  const explore = (row, col, origRow, origCol) => {
+    if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length || !grid[row][col]) {
+      return '';
+    }
 
+    grid[row][col] = 0;
+
+    let islandStr = '';
+    // Init islandStr to this current diffs between the original and new positions.
+    islandStr += `row:${origRow - row},col:${origCol - col};`
+
+    islandStr += explore(row - 1, col, origRow, origCol);
+    islandStr += explore(row + 1, col, origRow, origCol);
+    islandStr += explore(row, col - 1, origRow, origCol);
+    islandStr += explore(row, col + 1, origRow, origCol);
+
+    return islandStr;
+  }
+
+  // Sets of unique islands.
+  const islandSet = new Set();
+  let numDistinctIslands = 0;
+
+  for (let i = 0; i < grid.length; ++i) {
+    for (let j = 0; j < grid[0].length; ++j) {
+      // If we come across an island...
+      if (grid[i][j]) {
+        const islandStr = explore(i, j, i, j);
+
+        /* If the islandSet does not have the current islandStr, add to the set and inc
+           the number is distinc islands. */
+        if (!islandSet.has(islandStr)) {
+          islandSet.add(islandStr);
+          numDistinctIslands++;
+        }
+      }
+    }
+  }
+
+  return numDistinctIslands;
 };
+
+
+const ex2 = [
+  [1,1,0,1,1],
+  [1,0,0,0,0],
+  [0,0,0,0,1],
+  [1,1,0,1,1]
+]
+
+const ex3 = [
+  [1,1,0],
+  [0,1,1],
+  [0,0,0],
+  [1,1,1],
+  [0,1,0]
+]
+console.log(numDistinctIslands(ex2));
+console.log(numDistinctIslands(ex3));
