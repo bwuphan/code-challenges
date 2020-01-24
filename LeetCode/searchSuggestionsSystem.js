@@ -156,6 +156,34 @@ class Trie {
 
     return false;
   }
+
+  wordsThatStartWith(prefix) {
+    const words = [];
+
+    // Find node for last letter of prefix.
+    let curNode = this.root;
+    for (let i = 0; i < prefix.length; ++i) {
+      const letter = prefix[i];
+
+      const curNodeChild = curNode.getChild(letter);
+      if (curNodeChild) curNode = curNodeChild;
+      else return words;
+    }
+
+    const dfs = (node, word) => {
+      if (!node) return;
+
+      word += node.letter;
+      if (node.endOfWord) words.push(word);
+
+      node.children.forEach(n => dfs(n, word));
+    }
+
+    dfs(curNode, prefix.slice(0, prefix.length - 1));
+
+    return words;
+
+  }
 }
 
 /**
@@ -164,5 +192,27 @@ class Trie {
  * @return {string[][]}
  */
 var suggestedProducts = function(products, searchWord) {
+  const trie = new Trie();
+
+  products.forEach(product => trie.insert(product));
+
+  const output = [];
+
+  let curWord = '';
+  for (let i = 0; i < searchWord.length; ++i) {
+    const letter = searchWord[i];
+    curWord += letter;
+    console.log(trie.wordsThatStartWith(curWord))
+    words = trie.wordsThatStartWith(curWord).sort((a, b) => a.localeCompare(b)).slice(0, 3);
+
+    output.push(words);
+  }
+
+  return output;
 
 };
+
+// console.log(suggestedProducts(products = ["mobile","mouse","moneypot","monitor","mousepad"], searchWord = "mouse"))
+// console.log(suggestedProducts(products = ["havana"], searchWord = "havana"))
+// console.log(suggestedProducts(products = ["bags","baggage","banner","box","cloths"], searchWord = "bags"))
+console.log(suggestedProducts(["havana"], "tatiana"))
