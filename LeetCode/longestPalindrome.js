@@ -30,4 +30,4 @@ var longestPalindrome = function(s) {
 
 console.log(longestPalindrome('abba'));
 console.log(longestPalindrome('racecar'));
-console.log(longestPalindrome('abcda'));
+console.log(longestPalindrome("abccccdd"));
