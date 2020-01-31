@@ -202,7 +202,6 @@ var suggestedProducts = function(products, searchWord) {
   for (let i = 0; i < searchWord.length; ++i) {
     const letter = searchWord[i];
     curWord += letter;
-    console.log(trie.wordsThatStartWith(curWord))
     words = trie.wordsThatStartWith(curWord).sort((a, b) => a.localeCompare(b)).slice(0, 3);
 
     output.push(words);
