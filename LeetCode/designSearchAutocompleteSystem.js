@@ -80,12 +80,158 @@ input.
 static/class variables are persisted across multiple test cases. Please see here for more details.
 */
 
+class Node {
+  constructor(letter, endOfWord) {
+    this.letter = letter;
+    this.children = new Map();
+    this.endOfWord = endOfWord;
+    this.wordOccurences = {};
+  }
+
+  getLetter() {
+    return this.letter;
+  }
+
+
+  addChild(node) {
+    this.children.set(node.getLetter(), node);
+  }
+
+  getChild(letter) {
+    return this.children.get(letter);
+  }
+}
+
+
+class Trie {
+  constructor() {
+    // Init root to an empty node.
+    this.root = new Node(null, false);
+  }
+
+  /**
+   * Inserts a word into the trie.
+   * @param {string} word
+   * @return {void}
+   */
+  insert(word) {
+    let curNode = this.root;
+
+    for (let i = 0; i < word.length; ++i) {
+      const letter = word[i];
+
+      const curNodeChild = curNode.getChild(letter);
+
+      // If there is a curNodeChild, set the curNode to that child.
+      if (curNodeChild) {
+        curNode = curNodeChild;
+
+        if (word in curNode.wordOccurences)
+          curNode.wordOccurences[word]++;
+        else
+          curNode.wordOccurences[word] = 1;
+
+        // If we are at the end of the inserted word, then we know that this new curNode is also
+        // and endOfWord.
+        if (i === word.length - 1) curNode.endOfWord = true;
+      }
+      // Else, we are going to make a new child node and set curNode to this new child node.
+      else {
+        const newChildNode = new Node(letter, i === (word.length - 1));
+        newChildNode.wordOccurences[word] = 1;
+        curNode.addChild(newChildNode);
+        curNode = newChildNode;
+      }
+    }
+  }
+  /**
+   * Returns if the word is in the trie.
+   * @param {string} word
+   * @return {boolean}
+   */
+  search(word) {
+    let curNode = this.root;
+
+    for (let i = 0; i < word.length; ++i) {
+      const letter = word[i];
+
+      const curNodeChild = curNode.getChild(letter);
+
+      if (curNodeChild) {
+        if (i === (word.length - 1) && curNodeChild.endOfWord) return true;
+        else curNode = curNodeChild;
+      }
+      else return false;
+    }
+
+    return false;
+  }
+
+  /**
+   * Returns if there is any word in the trie that starts with the given prefix.
+   * @param {string} prefix
+   * @return {boolean}
+   */
+  startsWith(prefix) {
+    // Find node for last letter of prefix.
+    let curNode = this.root;
+    for (let i = 0; i < prefix.length; ++i) {
+      const letter = prefix[i];
+
+      const curNodeChild = curNode.getChild(letter);
+      if (curNodeChild) curNode = curNodeChild;
+      else return false;
+    }
+
+    // DFS through until we find a node that is an endOfWord.
+    let stack = [curNode];
+    curNode = stack.pop();
+
+    while (curNode) {
+      if (curNode.endOfWord) return true;
+
+      curNode.children.forEach(n => stack.push(n));
+
+      curNode = stack.pop();
+    }
+
+    return false;
+  }
+}
+/**
+ * Your Trie object will be instantiated and called as such:
+ * var obj = new Trie()
+ * obj.insert(word)
+ * var param_2 = obj.search(word)
+ * var param_3 = obj.startsWith(prefix)
+ */
+
+// var trie = new Trie();
+
+// trie.insert("apple");
+// console.log(trie.search("apple"));   // returns true
+// console.log(trie.search("app"));     // returns false
+// console.log(trie.startsWith("apples")); // returns true
+// trie.insert("app");
+// console.log(trie.search("app"));     // returns true
+// trie.insert('apple');
+
+// console.log('FINAl', trie.root.children);
 /**
  * @param {string[]} sentences
  * @param {number[]} times
  */
 var AutocompleteSystem = function(sentences, times) {
+  this.trie = new Trie();
 
+  sentences.forEach((sentence, i) => {
+    for (let j = 0; j < times[i]; ++j) {
+      this.trie.insert(sentence);
+    }
+  });
+
+  this.curSentence = '';
+  this.curNode = this.trie.root;
 };
 
 /**
@@ -93,7 +239,35 @@ var AutocompleteSystem = function(sentences, times) {
  * @return {string[]}
  */
 AutocompleteSystem.prototype.input = function(c) {
+  const newCurNode = this.curNode.children.get(c);
+  if (c === '#') {
+    this.trie.insert(this.curSentence);
+    this.curNode = this.trie.root;
+    return [];
+  }
+  // else {
+    this.curSentence += c;
+    if (newCurNode) {
+      this.curNode = newCurNode;
+      return Object.keys(this.curNode.wordOccurences)
+        .sort((a, b) => {
+          const occurA = this.curNode.wordOccurences[a];
+          const occurB = this.curNode.wordOccurences[b];
 
+          if (occurA > occurB)
+            return -1;
+          else if (occurA < occurB)
+            return 1;
+          else
+            return a < b ? -1 : 1;
+
+        })
+        .slice(0, 3);
+    }
+    else {
+      return [];
+    }
+  // }
 };
 
 /**
@@ -101,3 +275,11 @@ AutocompleteSystem.prototype.input = function(c) {
  * var obj = new AutocompleteSystem(sentences, times)
  * var param_1 = obj.input(c)
  */
+
+const test = new AutocompleteSystem(["i love you", "island","ironman", "i love leetcode"], [5,3,2,2]);
+console.log(test.input('i'));
+console.log(test.input(' '));
+console.log(test.input('a'));
+console.log(test.input('#'));
+console.log()
+console.log(test.trie.root.children);
