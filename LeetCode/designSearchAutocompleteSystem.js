@@ -85,7 +85,7 @@ class Node {
     this.letter = letter;
     this.children = new Map();
     this.endOfWord = endOfWord;
-    this.wordOccurences = {};
+    this.wordOccurences = {}; // Keep track of the words possible from this node and their occurences.
   }
 
   getLetter() {
@@ -206,17 +206,7 @@ class Trie {
  * var param_3 = obj.startsWith(prefix)
  */
 
-// var trie = new Trie();
 
-// trie.insert("apple");
-// console.log(trie.search("apple"));   // returns true
-// console.log(trie.search("app"));     // returns false
-// console.log(trie.startsWith("apples")); // returns true
-// trie.insert("app");
-// console.log(trie.search("app"));     // returns true
-// trie.insert('apple');
-
-// console.log('FINAl', trie.root.children);
 /**
  * @param {string[]} sentences
  * @param {number[]} times
@@ -239,35 +229,45 @@ var AutocompleteSystem = function(sentences, times) {
  * @return {string[]}
  */
 AutocompleteSystem.prototype.input = function(c) {
-  const newCurNode = this.curNode.children.get(c);
+  // If there is no curNode, then we'll return null.
+  // Otherwise look through the children for char c and set newCurNode to that.
+  const newCurNode = this.curNode ? this.curNode.children.get(c) : null;
+
+  // The value to be returned.
+  let returnVal = [];
+
+  // If there is a newCurNode (child of curNode for c), then we'll sort and get the top occurences
+  // at this node.
+  if (newCurNode) {
+    this.curNode = newCurNode;
+    returnVal = Object.keys(this.curNode.wordOccurences)
+      .sort((a, b) => {
+        const occurA = this.curNode.wordOccurences[a];
+        const occurB = this.curNode.wordOccurences[b];
+
+        if (occurA > occurB)
+          return -1;
+        else if (occurA < occurB)
+          return 1;
+        else
+          return a < b ? -1 : 1;
+
+      })
+      .slice(0, 3);
+  }
+  else
+    this.curNode = null;
+
+  // If the character is #, insert the current sentence to the trie and reset everything.
   if (c === '#') {
     this.trie.insert(this.curSentence);
+    this.curSentence = '';
     this.curNode = this.trie.root;
-    return [];
   }
-  // else {
+  else
     this.curSentence += c;
-    if (newCurNode) {
-      this.curNode = newCurNode;
-      return Object.keys(this.curNode.wordOccurences)
-        .sort((a, b) => {
-          const occurA = this.curNode.wordOccurences[a];
-          const occurB = this.curNode.wordOccurences[b];
 
-          if (occurA > occurB)
-            return -1;
-          else if (occurA < occurB)
-            return 1;
-          else
-            return a < b ? -1 : 1;
-
-        })
-        .slice(0, 3);
-    }
-    else {
-      return [];
-    }
-  // }
+  return returnVal;
 };
 
 /**
@@ -276,10 +276,3 @@ AutocompleteSystem.prototype.input = function(c) {
  * var param_1 = obj.input(c)
  */
 
-const test = new AutocompleteSystem(["i love you", "island","ironman", "i love leetcode"], [5,3,2,2]);
-console.log(test.input('i'));
-console.log(test.input(' '));
-console.log(test.input('a'));
-console.log(test.input('#'));
-console.log()
-console.log(test.trie.root.children);
