@@ -24,6 +24,7 @@ class Node {
     this.letter = letter;
     this.children = new Map();
     this.endOfWord = endOfWord;
+    this.wordOccurences = {};
   }
 
   getLetter() {
@@ -64,6 +65,11 @@ class Trie {
       if (curNodeChild) {
         curNode = curNodeChild;
 
+        if (word in curNode.wordOccurences)
+          curNode.wordOccurences[word]++;
+        else
+          curNode.wordOccurences[word] = 1;
+
         // If we are at the end of the inserted word, then we know that this new curNode is also
         // and endOfWord.
         if (i === word.length - 1) curNode.endOfWord = true;
@@ -71,6 +77,7 @@ class Trie {
       // Else, we are going to make a new child node and set curNode to this new child node.
       else {
         const newChildNode = new Node(letter, i === (word.length - 1));
+        newChildNode.wordOccurences[word] = 1;
         curNode.addChild(newChildNode);
         curNode = newChildNode;
       }
@@ -146,9 +153,6 @@ console.log(trie.search("app"));     // returns false
 console.log(trie.startsWith("apples")); // returns true
 trie.insert("app");
 console.log(trie.search("app"));     // returns true
+trie.insert('apple');
 
-// console.log('FINAl', trie.root.children);
-
-var node = new Node('e', true);
-
-// console.log(node);
+console.log('FINAl', trie.root.children);
