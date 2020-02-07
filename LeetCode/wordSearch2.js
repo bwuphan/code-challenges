@@ -155,8 +155,47 @@ class Trie {
  */
 var findWords = function(board, words) {
   const trie = new Trie();
-  words.forEach(word => trie.insert(word));
+  const firstLetterObj = {};
+  words.forEach(word => {
+    trie.insert(word);
 
+    const firstLetter = word[0];
+    if (firstLetter in firstLetterObj)
+      firstLetterObj[firstLetter].push(word);
+    else {
+      firstLetterObj[firstLetter] = [word];
+    }
+  });
+
+  const backtrack = (i, j, word) => {
+    if (i < 0 || i >= board.length || j < 0 || j >= board[0].length)
+      return;
+
+    word += board[i][j];
+    const origLetter = board[i][j];
+    board[i][j] = '#';
+    if (trie.startsWith(word)) {
+      backtrack(i + 1, j, word);
+      backtrack(i - 1, j, word);
+      backtrack(i, j + 1, word);
+      backtrack(i, j - 1, word);
+    }
+
+    board[i][j] = origLetter;
+    if (trie.search(word))
+      solution[word] = true;;
+  }
+
+  const solution = {};
+  for (let i = 0; i < board.length; ++i) {
+    for (let j = 0; j < board[0].length; ++j) {
+      if (board[i][j] in firstLetterObj) {
+        backtrack(i, j, '');
+      }
+    }
+  }
+
+  return Object.keys(solution);
 }
 
 const board = [
