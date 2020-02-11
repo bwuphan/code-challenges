@@ -41,14 +41,19 @@ graph[i] will not contain i or duplicate values.
 The graph is undirected: if any element j is in graph[i], then i will be in graph[j].
 */
 
+var Stack = require('../Prototypes/Stack.js').Stack;
 /**
  * @param {number[][]} graph
  * @return {boolean}
  */
 var isBipartite = function(graph) {
+  let colorMap = {};
 
+  for (let i = 0; i < graph.length; ++i) {
+
+  }
 };
 
 
 console.log(isBipartite([[1,3], [0,2], [1,3], [0,2]]));
-console.log(isBipartite([[1,2,3], [0,2], [0,1,3], [0,2]]));
+// console.log(isBipartite([[1,2,3], [0,2], [0,1,3], [0,2]]));
