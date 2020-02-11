@@ -17,7 +17,21 @@ class LRUCache {
   }
 
   put(key, value) {
-
+    if (this.size === this.capacity && !this._keyNodeMap.has(key)) {
+      const removedNode = this.cache.removeHead();
+      this._keyNodeMap.delete(key);
+      this._valKeyMap.delete(removedNode.val);
+      this.size--;
+      this.put(key, value);
+    }
+    else {
+      if (this._keyNodeMap.has(key)) {
+        const node = this._keyNodeMap.get(key);
+        this.cache.removeNode(node);
+        const newTail = this.cache.append(node.val);
+        this._keyNodeMap.set()
+      }
+    }
   }
 }
 
