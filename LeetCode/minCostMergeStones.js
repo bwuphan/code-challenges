@@ -50,5 +50,56 @@ Note:
  * @return {number}
  */
 var mergeStones = function(stones, K) {
+  let cost = 0;
 
+  const merge = function(stones) {
+    if (stones.length === 1) {
+      return true;
+    }
+    if (stones.length < K) {
+      return false;
+    }
+
+
+    let curSum = stones
+      .slice(0, K)
+      .reduce((sum, num) => sum+= num, 0);
+
+    let smallestWindow = {
+      cost: curSum,
+      leftIdx: 0
+    };
+    // console.log(smallestWindow);
+    for (let leftIdx = 1, rightIdx = K; rightIdx < stones.length; leftIdx++, rightIdx++) {
+      curSum = curSum - stones[leftIdx - 1] + stones[rightIdx];
+      // console.log(stones[leftIdx - 1], stones[rightIdx])
+      // console.log(curSum);
+      if (curSum < smallestWindow.cost) {
+        smallestWindow.cost = curSum;
+        smallestWindow.leftIdx = leftIdx;
+      }
+    }
+
+    const leftStones = stones.slice(0, smallestWindow.leftIdx);
+    const rightStones = stones.slice(smallestWindow.leftIdx + K, K.length);
+
+    const mergedStones = leftStones.concat([smallestWindow.cost]).concat(rightStones);
+
+    cost += smallestWindow.cost;
+    console.log(cost);
+    console.log(smallestWindow);
+    return merge(mergedStones);
+  }
+
+  if (merge(stones)) {
+    return cost;
+  }
+  else {
+    return -1;
+  }
 };
+
+// console.log(mergeStones([3,2,4,1], 2));
+// console.log(mergeStones([3,2,4,1], 3));
+// console.log(mergeStones([3,5,1,2,6], 3));
+console.log(mergeStones([6,4,4,6], 2));
