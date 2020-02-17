@@ -39,27 +39,44 @@ function TreeNode(val) {
 
 
 var buildTree = function(inorder, postorder) {
-  const recurse = (inLeftIdx, inRightIdx) => {
+  // Create a map for the indices in the inorder array.
+  const inorderIdxMap = {};
+  inorder.forEach((val, i) => inorderIdxMap[val] = i);
+
+
+  /*
+   1. We get the current value of the new node we are creating by using the last value of the post
+      order array.
+   2. Look in the inorderIdxMap to get the index of this current value in the inorder array. With
+      this index, we can split the inorder array into the left and right side. The left side is
+      everything left of the found index but not before the inLeftIdx. The right if the opposite.
+   3. If we get to a point where the inLeftIdx is greater than the inRightIdx, we know this should
+      be null.
+   */
+  const dfs = (inLeftIdx, inRightIdx) => {
     if (inLeftIdx > inRightIdx)
       return null;
 
+    // This works because we go right first. By the time we get to the left side, the proper values
+    // will have been popped off the postorder array.
     const curVal = postorder.pop();
+
     const node = new TreeNode(curVal);
 
     // Find the current last value in the postorder array in the
     // inorder array.
-    const inorderIdx = inorder.findIndex((val) => val === curVal);
+    const inorderIdx = inorderIdxMap[curVal];
 
     // Get right indices.
-    node.right = recurse(inorderIdx + 1, inRightIdx);
+    node.right = dfs(inorderIdx + 1, inRightIdx);
 
     // Get left indices.
-    node.left = recurse(inLeftIdx, inorderIdx - 1);
+    node.left = dfs(inLeftIdx, inorderIdx - 1);
 
     return node;
   };
 
-  return recurse(0, inorder.length - 1);
+  return dfs(0, inorder.length - 1);
 };
 
 
