@@ -83,7 +83,7 @@ var findWords = function(board, words) {
 };
 
 function copy2dArray(arr) {
-  return arr.map(arr => arr.slice());
+  return arr.map(arr => new Set(arr));
 }
 
 function removeFromWords(word, words) {
@@ -114,8 +114,10 @@ const board2 = [
 ]
 const words2 = ["abcdefg","gfedcbaaa","eaabcdgfa","befa","dgc","ade"]
 
-console.log(findWords(board2, words2))
+// console.log(findWords(board2, words2))
 
 board3 = copy2dArray(board2);
-board3[0][0] = null;
-console.log(board2, board3);
+// board3[0][0] = null;
+// console.log(board2, board3);
+
+console.log(board3[0])
