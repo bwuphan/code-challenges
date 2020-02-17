@@ -67,11 +67,13 @@ var reverse = function(x) {
 
 
 const isPrime = num => {
-    const limit = Math.sqrt(num)
-    for(let i = 2; i <= limit; ++i)
-        if(num % i === 0) return false;
+  // We only need to go to the square root because if the factor is greater than the square root of
+  // num, then it is impossible to multiply it and get a number smaller or equal to num.
+  const limit = Math.sqrt(num)
+  for(let i = 2; i <= limit; ++i)
+    if(num % i === 0) return false;
 
-    return true;
+  return true;
 }
 
 /**
@@ -79,7 +81,7 @@ const isPrime = num => {
  * @return {number}
  */
 var primePalindrome = function(N) {
-  if (N === 1) N++;
+  if (N < 2) N = 2;
 
   while (true) {
     if (N === reverse(N) && isPrime(N)) {
