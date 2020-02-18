@@ -43,6 +43,9 @@ var buildTree = function(inorder, postorder) {
   const inorderIdxMap = {};
   inorder.forEach((val, i) => inorderIdxMap[val] = i);
 
+  // Keep track of the current postorderIdx. We will be changing this variable every time we create
+  // a new node.
+  let postorderIdx = postorder.length - 1;
 
   /*
    1. We get the current value of the new node we are creating by using the last value of the post
@@ -59,7 +62,8 @@ var buildTree = function(inorder, postorder) {
 
     // This works because we go right first. By the time we get to the left side, the proper values
     // will have been popped off the postorder array.
-    const curVal = postorder.pop();
+    const curVal = postorder[postorderIdx];
+    postorderIdx--;
 
     const node = new TreeNode(curVal);
 
