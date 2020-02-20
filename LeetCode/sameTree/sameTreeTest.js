@@ -1,5 +1,5 @@
 describe('sameTree', () => {
-  const arrayToTree = require('../Util/arrayToTree.js').arrayToTree;
+  const arrayToTree = require('../../Util/arrayToTree.js').arrayToTree;
   const isSameTree = require('./sameTree.js').isSameTree;
 
   it('returns true [1,2,3] [1,2,3].', () => {
