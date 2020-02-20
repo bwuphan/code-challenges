@@ -47,15 +47,6 @@ var buildTree = function(inorder, postorder) {
   // a new node.
   let postorderIdx = postorder.length - 1;
 
-  /*
-   1. We get the current value of the new node we are creating by using the last value of the post
-      order array.
-   2. Look in the inorderIdxMap to get the index of this current value in the inorder array. With
-      this index, we can split the inorder array into the left and right side. The left side is
-      everything left of the found index but not before the inLeftIdx. The right if the opposite.
-   3. If we get to a point where the inLeftIdx is greater than the inRightIdx, we know this should
-      be null.
-   */
   const dfs = (inLeftIdx, inRightIdx) => {
     if (inLeftIdx > inRightIdx)
       return null;
@@ -82,6 +73,14 @@ var buildTree = function(inorder, postorder) {
 
   return dfs(0, inorder.length - 1);
 };
-
+/*
+ 1. We get the current value of the new node we are creating by using the last value of the post
+    order array.
+ 2. Look in the inorderIdxMap to get the index of this current value in the inorder array. With
+    this index, we can split the inorder array into the left and right side. The left side is
+    everything left of the found index but not before the inLeftIdx. The right if the opposite.
+ 3. If we get to a point where the inLeftIdx is greater than the inRightIdx, we know this should
+    be null.
+ */
 
 console.log(buildTree([9,3,15,20,7], [9,15,7,20,3]))
