@@ -35,6 +35,8 @@ Input:     1         1
 Output: false
 */
 
+const Queue = require('../../Prototypes/Queue.js').Queue;
+
 /**
  * Definition for a binary tree node.
  * function TreeNode(val) {
@@ -48,8 +50,45 @@ Output: false
  * @return {boolean}
  */
 var isSameTree = function(p, q) {
+  if (!p && !q)
+    return true;
+  else if ((!p && q) || (p && !q))
+    return false;
 
+  const queue = new Queue();
+
+  queue.enqueue(p);
+  queue.enqueue(q);
+
+  while (!queue.isEmpty()) {
+    const pNode = queue.dequeue();
+    const qNode = queue.dequeue();
+    // console.log(pNode);
+    // console.log(qNode);
+    if ((pNode && !qNode) || (!pNode && qNode))
+      return false;
+    else if (!pNode && !qNode)
+      continue;
+    else if (pNode.val !== qNode.val)
+      return false;
+    else {
+      queue.enqueue(pNode.left);
+      queue.enqueue(qNode.left);
+
+      queue.enqueue(pNode.right);
+      queue.enqueue(qNode.right);
+    }
+  }
+
+  return true;
 };
+
+/**
+ * 1. Init a queue and enqueue p and q.
+ * 2. Dequeue twice every loop and compare the two dequeued nodes.
+ * 3. Enqueue the children of p and q nodes.
+ * 4. If we reach the end of the queue then we have a match.
+ */
 
 module.exports = {
   isSameTree,
