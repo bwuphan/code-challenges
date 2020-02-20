@@ -58,6 +58,7 @@ var arrayToTree = require('../../Util/arrayToTree.js').arrayToTree;
  * @return {void} Do not return anything, modify root in-place instead.
  */
 var recoverTree = function(root) {
+  // Get the nodes in order.
   const inorderArr = [];
   const inorderDfs = (node) => {
     if (!node) {
@@ -73,9 +74,12 @@ var recoverTree = function(root) {
 
   inorderDfs(root);
 
-  let node1, idxNode1, node2 = null;
 
-  let pastVal = inorderArr[0].val;
+  let node1 = null; // The first node that is out of order.
+  let idxNode1 = null; // Index of the first out of order node.
+  let node2 = null; // The second node that is out of order.
+
+  // Find the first node that is out of order.
   for (let i = 0; i < inorderArr.length; ++i) {
     const curNode = inorderArr[i];
 
@@ -85,12 +89,14 @@ var recoverTree = function(root) {
       idxNode1 = i;
       break;
     }
-
   }
 
+
+  // Find the second node that is out of order.
   for (let i = idxNode1 + 1; i < inorderArr.length; ++i) {
     const curNode = inorderArr[i];
 
+    // For the node right next to node1.
     if (i === idxNode1 + 1) {
       if ((!inorderArr[i + 1] && curNode.val < node1.val) ||
           (curNode.val <= node1.val && node1.val <= inorderArr[i + 1].val)) {
@@ -99,11 +105,14 @@ var recoverTree = function(root) {
           break;
       }
     }
+    // For all the nodes after.
     else if (curNode.val < inorderArr[i - 1].val) {
       node2 = curNode;
       break;
     }
   }
+
+  // If we found both a node1 and node2 that's out of order, switch their values.
   if (node1 && node2) {
     let tempVal = node1.val;
     node1.val = node2.val;
@@ -112,6 +121,15 @@ var recoverTree = function(root) {
 
   return root;
 };
+
+/**
+ * Solution
+ * 1. Traverse using inorder DFS to get the nodes in ascending order.
+ * 2. Find the 2 nodes that are out of order.
+ * 3. Switch the two nodes' values.
+ */
+
+
  function TreeNode(val) {
      this.val = val;
      this.left = this.right = null;
