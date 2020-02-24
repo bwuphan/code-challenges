@@ -4,6 +4,6 @@ describe('verticalOrderTraversalOfBinaryTree', () => {
 
   it('passes test case for [3,9,20,null,null,15,7].', () => {
     const tree = arrayToTree([3,9,20,null,null,15,7]);
-    expect(verticalTraversal(tree)).toBe([[9],[3,15],[20],[7]]);
+    expect(verticalTraversal(tree)).toEqual([[9],[3,15],[20],[7]]);
   });
 });

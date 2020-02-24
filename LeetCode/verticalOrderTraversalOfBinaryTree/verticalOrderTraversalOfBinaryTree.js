@@ -60,3 +60,7 @@ Each node's value will be between 0 and 1000.
 var verticalTraversal = function(root) {
 
 };
+
+module.exports = {
+  verticalTraversal
+}
