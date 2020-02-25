@@ -46,6 +46,7 @@ The tree will have between 1 and 1000 nodes.
 Each node's value will be between 0 and 1000.
 */
 
+const Queue = require('../../Prototypes/Queue').Queue;
 /**
  * Definition for a binary tree node.
  * function TreeNode(val) {
@@ -58,7 +59,78 @@ Each node's value will be between 0 and 1000.
  * @return {number[][]}
  */
 var verticalTraversal = function(root) {
+  if (!root)
+    return [];
 
+  const queue = new Queue();
+  queue.enqueue({ node: root, y: 0, depth: 0 });
+
+  const storage = new Map();
+
+  let lowestY = 0;
+  let highestY = 0;
+
+  while (!queue.isEmpty()) {
+    const item = queue.dequeue();
+
+    if (!item.node)
+      continue;
+
+    if (storage.has(item.y)) {
+      const storageArray =  storage.get(item.y);
+      const lastItem = storageArray[storageArray.length - 1];
+      if (lastItem.depth === item.depth) {
+      console.log('ITEM', item, lastItem);
+        let insertionIdx = storageArray.length - 1;
+        for (let i = insertionIdx; i >= 0; i--) {
+          if (storageArray[i].depth !== lastItem.depth) {
+            insertionIdx = i + 1;
+            break;
+          }
+          else if (storageArray[i].val > item.val && storageArray[i].depth === item.depth){
+            insertionIdx = i;
+            break;
+          }
+          else if (storageArray[i].val < item.val) {
+            insertionIdx = i + 1;
+            break;
+          }
+        }
+        console.log('INSERTIONIDX', insertionIdx, storageArray);
+        storageArray.splice(insertionIdx, 0, { val: item.node.val, depth: item.depth })
+        console.log('NEW ARRA', storageArray);
+      }
+      else
+        storageArray.push({ val: item.node.val, depth: item.depth });
+    }
+    else
+      storage.set(item.y, [{ val: item.node.val, depth: item.depth }]);
+
+    if (item.y && item.y < lowestY)
+      lowestY = item.y;
+    if (item.y && item.y > highestY)
+      highestY = item.y;
+
+    queue.enqueue({
+      node: item.node.left,
+      y: item.y - 1 ,
+      depth: item.depth + 1,
+    });
+
+    queue.enqueue({
+      node: item.node.right,
+      y: item.y + 1,
+      depth: item.depth + 1
+    });
+  }
+  console.log(storage);
+  const results = [];
+  for (let i = lowestY; i <= highestY; ++i) {
+    const result = storage.get(i).map(item => item.val);
+    results.push(result);
+  }
+
+  return results;
 };
 
 module.exports = {
