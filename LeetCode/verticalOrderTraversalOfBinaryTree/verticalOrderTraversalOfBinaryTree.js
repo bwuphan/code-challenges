@@ -80,25 +80,25 @@ var verticalTraversal = function(root) {
       const storageArray =  storage.get(item.y);
       const lastItem = storageArray[storageArray.length - 1];
       if (lastItem.depth === item.depth) {
-      console.log('ITEM', item, lastItem);
-        let insertionIdx = storageArray.length - 1;
-        for (let i = insertionIdx; i >= 0; i--) {
-          if (storageArray[i].depth !== lastItem.depth) {
-            insertionIdx = i + 1;
-            break;
+        if (lastItem.val < item.node.val)
+          storageArray.push({ val: item.node.val, depth: item.depth });
+        else {
+          let insertionIdx = storageArray.length - 1;
+          for (let i = insertionIdx; i >= 0; i--) {
+            if (storageArray[i].depth !== item.depth) {
+              insertionIdx = i + 1;
+              break;
+            }
+            else {
+              if (!storageArray[i - 1] || (item.node.val < storageArray[i].val && item.node.val >= storageArray[i - 1].val)) {
+                insertionIdx = i;
+                break;
+              }
+            }
+
           }
-          else if (storageArray[i].val > item.val && storageArray[i].depth === item.depth){
-            insertionIdx = i;
-            break;
-          }
-          else if (storageArray[i].val < item.val) {
-            insertionIdx = i + 1;
-            break;
-          }
+          storageArray.splice(insertionIdx, 0, { val: item.node.val, depth: item.depth })
         }
-        console.log('INSERTIONIDX', insertionIdx, storageArray);
-        storageArray.splice(insertionIdx, 0, { val: item.node.val, depth: item.depth })
-        console.log('NEW ARRA', storageArray);
       }
       else
         storageArray.push({ val: item.node.val, depth: item.depth });
@@ -123,7 +123,7 @@ var verticalTraversal = function(root) {
       depth: item.depth + 1
     });
   }
-  console.log(storage);
+
   const results = [];
   for (let i = lowestY; i <= highestY; ++i) {
     const result = storage.get(i).map(item => item.val);
