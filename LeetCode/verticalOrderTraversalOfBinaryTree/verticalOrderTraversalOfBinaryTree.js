@@ -65,8 +65,9 @@ var verticalTraversal = function(root) {
   const queue = new Queue();
   queue.enqueue({ node: root, y: 0, depth: 0 });
 
-  const storage = new Map();
+  const storageMap = new Map();
 
+  // lowestY and highestY to keep track of low/high vals for iterating through at the end.
   let lowestY = 0;
   let highestY = 0;
 
@@ -76,36 +77,48 @@ var verticalTraversal = function(root) {
     if (!item.node)
       continue;
 
-    if (storage.has(item.y)) {
-      const storageArray =  storage.get(item.y);
-      const lastItem = storageArray[storageArray.length - 1];
-      if (lastItem.depth === item.depth) {
-        if (lastItem.val < item.node.val)
-          storageArray.push({ val: item.node.val, depth: item.depth });
+    // New element for the yArray.
+    const newElement = { val: item.node.val, depth: item.depth };
+
+    // If we already have an existing list for a y key.
+    if (storageMap.has(item.y)) {
+      const yArray =  storageMap.get(item.y);
+      const lastElement = yArray[yArray.length - 1];
+
+      // If the last item in the array matches the depth of the item we are pushing,
+      if (lastElement.depth === item.depth) {
+        // If the last element value is smaller, we know this new element should be pushed instead
+        // of being spliced into the yArray.
+        if (lastElement.val < item.node.val)
+          yArray.push(newElement);
+        // Else, we have to find a spot to splice in the element.
         else {
-          let insertionIdx = storageArray.length - 1;
+          // Init the insertionIdx to the last element.
+          let insertionIdx = yArray.length - 1;
           for (let i = insertionIdx; i >= 0; i--) {
-            if (storageArray[i].depth !== item.depth) {
+            // If we reached a different depth, then we should insert the new element after the
+            // current one.
+            if (yArray[i].depth !== item.depth) {
               insertionIdx = i + 1;
               break;
             }
-            else {
-              if (!storageArray[i - 1] || (item.node.val < storageArray[i].val && item.node.val >= storageArray[i - 1].val)) {
-                insertionIdx = i;
-                break;
-              }
+            // Else if the elBefore <= new element < current element than we found the right spot.
+            else if (!yArray[i - 1] || (item.node.val < yArray[i].val && item.node.val >= yArray[i - 1].val)) {
+              insertionIdx = i;
+              break;
             }
-
           }
-          storageArray.splice(insertionIdx, 0, { val: item.node.val, depth: item.depth })
+          // Splice in the element.
+          yArray.splice(insertionIdx, 0, newElement);
         }
       }
       else
-        storageArray.push({ val: item.node.val, depth: item.depth });
+        yArray.push(newElement); // If the last element does not have a matching depth, just push.
     }
     else
-      storage.set(item.y, [{ val: item.node.val, depth: item.depth }]);
+      storageMap.set(item.y, [newElement]);
 
+    // See if we need to set a new lowestY or highestY.
     if (item.y && item.y < lowestY)
       lowestY = item.y;
     if (item.y && item.y > highestY)
@@ -124,14 +137,28 @@ var verticalTraversal = function(root) {
     });
   }
 
+  // Map the results to get only the val instead of the object.
   const results = [];
   for (let i = lowestY; i <= highestY; ++i) {
-    const result = storage.get(i).map(item => item.val);
+    const result = storageMap.get(i).map(item => item.val);
     results.push(result);
   }
 
   return results;
 };
+
+
+/*
+  Solution:
+  Create a map to store each node at its appropriate y value. For example, the root has a y of 0
+  and its left node has a y value of -1.
+  BFS through placing each node in the appropriate array for its y value. We have to also save the
+  depth because order matters if multiple nodes share the same depth and y value. We have to order
+  those ascending.
+  Keep track of the lowest y value and highest y value so we can loop through in the end and remap
+  the arrays to return only the value instead of an object containing the value and the depth.
+
+*/
 
 module.exports = {
   verticalTraversal
