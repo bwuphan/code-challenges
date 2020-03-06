@@ -39,7 +39,7 @@ For C programmers, try to solve it in-place in O(1) extra space.
  * @return {string}
  */
 var reverseWords = function(s) {
-
+  return s.trim().split(' ').filter(word => word !== '').map(word => word.trim()).reverse().join(' ');
 };
 
 module.exports = {
