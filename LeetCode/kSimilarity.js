@@ -53,11 +53,18 @@ var kSimilarity = function(A, B) {
     const charA = A[i];
     const charB = B[i];
     if (charA !== charB) {
+      if (occurObjA[charB].has(i)) {
 
+      }
+      else {
+
+      }
     }
   }
 
 };
+
+function swap()
 
 console.log(kSimilarity("abc", "bca"));
 // console.log(kSimilarity("abac", "baca"));

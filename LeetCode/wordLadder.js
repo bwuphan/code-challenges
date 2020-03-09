@@ -1,7 +1,8 @@
 /*
 https://leetcode.com/problems/word-ladder/
 
-Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation sequence from beginWord to endWord, such that:
+Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest
+transformation sequence from beginWord to endWord, such that:
 
 Only one letter can be changed at a time.
 Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
@@ -41,42 +42,29 @@ const Queue = require('../Prototypes/Queue.js').Queue;
  * @return {number}
  */
 var ladderLength = function(beginWord, endWord, wordList) {
+  // BFS
   let queue = new Queue();
-  let item = {word: beginWord, num: 1, wordList };
-  queue.enqueue(item);
-  let solutions = [];
+  queue.enqueue({ word: beginWord, moves: 1, wordList });
 
-  while(!queue.isEmpty()) {
-    item = queue.dequeue();
+  while (!queue.isEmpty()) {
+    let item = queue.dequeue();
 
-    // If the item word is the same as the endWord, we found a solution.
-    if (item.word === endWord) {
-      solutions.push(item);
-      break;
-    }
+    // If the current word is equal to the endWord, we have reached a solution. Return the number
+    // of moves it took to get there.
+    if (item.word === endWord)
+      return item.moves;
 
-    // Iterate through possible next words.
+    // Otherwise, iterate through the wordList and see if the diff between two words is only 1.
     wordList.forEach(word => {
-      // If the number of differences between words is 1, then we found a possible path.
       if (numDifferences(item.word, word) === 1) {
-        // Filter out the word out of the wordList.
+        // Filter out the used word out of the new wordList.
         wordList = wordList.filter(w => w !== word);
-
-        // Add item to the queue.
-        queue.enqueue({ word, num: item.num + 1, wordList});
+        queue.enqueue({ word, moves: item.moves + 1, wordList });
       }
     });
   }
 
-  let minNum = null;
-  solutions.forEach(item => {
-    // If minNum is null or the items num is less than minNum, we have a new minNum.
-    if (!minNum || item.num < minNum) {
-      minNum = item.num;
-    }
-  });
-
-  return minNum || 0;
+  return 0;
 };
 
 function numDifferences(str1, str2) {

@@ -195,7 +195,23 @@ var findWords = function(board, words) {
     }
   }
 
+<<<<<<< HEAD
   return Object.keys(solution);
+=======
+function copy2dArray(arr) {
+  return arr.map(arr => new Set(arr));
+}
+
+function removeFromWords(word, words) {
+  let idx = null;
+  for (let i = 0; i < words.length; ++i) {
+    if (word === words[i]) {
+      idx = i;
+      break;
+    }
+  }
+  words.splice(idx, 1);
+>>>>>>> a76114f837804aee351674fd1cc6eec6f0522b10
 }
 
 const board = [
@@ -206,3 +222,23 @@ const board = [
 ];
 
 console.log(findWords(board, ["oath","pea","eat","rain"]))
+
+const words = ["oath","pea","eat","rain"]
+
+// console.log(findWords(board, words));
+
+const board2 = [
+  ["a","b","c"],
+  ["a","e","d"],
+  ["a","f","g"]
+]
+const words2 = ["abcdefg","gfedcbaaa","eaabcdgfa","befa","dgc","ade"]
+
+// console.log(findWords(board2, words2))
+
+board3 = copy2dArray(board2);
+// board3[0][0] = null;
+// console.log(board2, board3);
+
+console.log(board3[0])
+>>>>>>> a76114f837804aee351674fd1cc6eec6f0522b10

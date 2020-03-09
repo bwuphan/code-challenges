@@ -39,22 +39,42 @@ deserialize algorithms should be stateless.
  * @param {TreeNode} root
  * @return {string}
  */
+
+const arrayToTree = require('../Util/arrayToTree.js').arrayToTree;
+const Queue = require('../Prototypes/Queue.js').Queue;
+function TreeNode(val) {
+  this.val = val;
+  this.left = this.right = null;
+}
+
 var serialize = function(root) {
-  let serString = '';
+  if (!root) return '';
 
-  const preOrder = function(node) {
-    if (!node) {
-      serString += 'e,';
-      return;
+  const result = [];
+
+  const queue = new Queue();
+  queue.enqueue(root);
+
+  while (!queue.isEmpty()) {
+    const node = queue.dequeue();
+
+    if (!node)
+      result.push(node);
+    else {
+      result.push(node.val);
+      queue.enqueue(node.left);
+      queue.enqueue(node.right);
     }
-
-    serString += node.val + ',';
-    preOrder(node.left);
-    preOrder(node.right);
   }
 
-  preOrder(root);
-  return serString;
+  for (let i = result.length - 1; i >= 0; i--) {
+    if (result[i])
+      break;
+
+    if (!result[i])
+      result.pop();
+  }
+  return result.toString();
 };
 
 /**
@@ -64,29 +84,47 @@ var serialize = function(root) {
  * @return {TreeNode}
  */
 var deserialize = function(data) {
+  if (data === '[]')
+    return null;
   let dataArr = data.split(',');
+  if (dataArr.length <= 1 && !dataArr[0])
+    return null;
 
-  const deserializeArr = function() {
-    const val = dataArr.shift();
-    console.log(val);
-    if (val !== 'e') {
-      var newNode = new TreeNode(dataArr.shift());
+  const queue = new Queue();
+  const root = new TreeNode(dataArr[0]);
+  queue.enqueue(root);
 
-      newNode.left = deserializeArr();
-      newNode.right = deserializeArr();
-      return newNode;
+  let idx = 1;
 
+  while (idx < dataArr.length) {
+    const node = queue.dequeue();
+    if (!node) {
+      continue;
     }
-    else {
-      return null;
-    }
 
+    const leftNode = dataArr[idx] ? new TreeNode(dataArr[idx]) : null;
+    idx++
+
+    const rightNode = dataArr[idx] ? new TreeNode(dataArr[idx]) : null;
+    idx++;
+
+    node.left = leftNode;
+    node.right = rightNode;
+
+    queue.enqueue(leftNode);
+
+    queue.enqueue(rightNode);
   }
-
-  return deserializeArr();
+  return root;
 };
 
 /**
  * Your functions will be called as such:
  * deserialize(serialize(root));
  */
+
+
+const testTree = arrayToTree([]);
+// console.log(testTree)
+// console.log(deserialize(serialize(testTree)))
+console.log(deserialize('[]'))

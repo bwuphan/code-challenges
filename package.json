@@ -1,0 +1,22 @@
+{
+  "name": "code-challenges",
+  "version": "1.0.0",
+  "description": "A repo of code challenges",
+  "dependencies": {
+    "jasmine": "^3.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bwuphan/code-challenges.git"
+  },
+  "author": "Bobby Phan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bwuphan/code-challenges/issues"
+  },
+  "homepage": "https://github.com/bwuphan/code-challenges#readme"
+}
