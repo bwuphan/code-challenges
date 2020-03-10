@@ -29,29 +29,36 @@ Output: [1,2,3,4,8,12,11,10,9,5,6,7]
  * @return {number[]}
  */
 var spiralOrder = function(matrix) {
+  if (matrix.length === 0)
+    return [];
+
   let startCol = 0;
   let endCol = matrix[0].length - 1;
   let startRow = 0;
   let endRow = matrix.length - 1;
   let results = [];
   while (startCol <= endCol && startRow <= endRow) {
-    for (let i = startCol; i < endCol; i++) {
+    for (let i = startCol; i <= endCol; i++)
       results.push(matrix[startRow][i])
-    }
-    for (let i = startRow; i < endRow; i++) {
-      results.push(matrix[i][endRow]);
-    }
-    for (let i = endCol; i >= startCol; i--) {
-      results.push(matrix[endRow][i]);
-    }
-    endCol--;
+
     startRow++;
+
+    for (let i = startRow; i <= endRow; i++)
+      results.push(matrix[i][endCol]);
+
+    endCol--;
+
+    if (startRow <= endRow)
+      for (let i = endCol; i >= startCol; i--)
+        results.push(matrix[endRow][i]);
+
     endRow--;
-    for (let i = endRow; i >= startRow; i--) {
-      results.push(matrix[i][startCol]);
-    }
+
+    if (startCol <= endCol)
+      for (let i = endRow; i >= startRow; i--)
+        results.push(matrix[i][startCol]);
+
     startCol++;
-    // console.log(results);
   }
 
   return results;
@@ -72,3 +79,8 @@ const input2 = [
 ];
 
 console.log(spiralOrder(input2));
+
+const input3 = [
+  [1,2,3,4]
+]
+console.log(spiralOrder(input3));
