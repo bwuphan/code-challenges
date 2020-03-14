@@ -24,5 +24,25 @@ You may assume that you have an infinite number of each kind of coin.
  * @return {number}
  */
 var coinChange = function(coins, amount) {
+  let numMoves = 0;
+  coins = coins.sort((a, b) => b - a);
+  let coinIdx = 0;
+  console.log('COINS', coins);
+  while (amount > 0 && coinIdx < coins.length) {
+    console.log(amount, coinIdx, numMoves);
+    const curCoin = coins[coinIdx];
+    if (curCoin <= amount) {
+      amount -= curCoin;
+      numMoves++;
+    }
+    else {
+      coinIdx++;
+    }
+  }
 
+  return amount === 0 ? numMoves : -1;
 };
+
+module.exports = {
+  coinChange
+}
