@@ -27,5 +27,44 @@ Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
  * @return {void} Do not return anything, modify head in-place instead.
  */
 var reorderList = function(head) {
+  if (!head) return;
 
+  const listMap = new Map();
+
+  let curNode = head;
+  let key = 0;
+
+  while (curNode) {
+    listMap.set(key, curNode);
+
+    key++;
+    curNode = curNode.next;
+  }
+
+  curNode = head;
+  let leftPointer = 1;
+  let rightPointer = listMap.size - 1;
+
+  while (leftPointer <= rightPointer) {
+    curNode.next = listMap.get(rightPointer);
+    rightPointer--;
+    curNode = curNode.next;
+    curNode.next = null;
+
+    curNode.next = listMap.get(leftPointer);
+    leftPointer++;
+    curNode = curNode.next;
+    curNode.next = null;
+  }
 };
+
+const linkedListToArray = require('../../Util/linkedListToArray.js').linkedListToArray;
+const arrayToLinkedList = require('../../Util/arrayToLinkedList.js').arrayToLinkedList;
+
+const linkedListOne = arrayToLinkedList([1,2,3,4]);
+reorderList(linkedListOne);
+console.log(linkedListToArray(linkedListOne));
+
+const linkedListTwo = arrayToLinkedList([1,2,3,4,5]);
+reorderList(linkedListTwo);
+console.log(linkedListToArray(linkedListTwo));
