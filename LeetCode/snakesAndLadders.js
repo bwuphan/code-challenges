@@ -56,9 +56,6 @@ var Queue = require('../Prototypes/Queue.js').Queue;
  * @return {number}
  */
 
-// var queue = new LinkedList();
-// queue.enqueue = queue.addToTail;
-// queue.dequeue = queue.removeFromHead;
 
 var snakesAndLadders = function(board) {
   /* Turn board to 2D, then find moves by BFS. */
