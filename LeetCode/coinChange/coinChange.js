@@ -28,22 +28,22 @@ var coinChange = function(coins, amount) {
     return 0;
 
   coins = coins.sort((a, b) => b - a);
-  let fewestMoves = null;
 
-  const movesObj = {};
+  let fewestMoves;
+
+  const amountMovesObj = {};
+
   const recurse = (amount, moves) => {
-    if (amount < 0 || movesObj[amount] === false)
+    if (amount < 0 || amountMovesObj[amount] === false)
       return false;
 
-    if (amount === 0) {
-      if (fewestMoves === null || moves < fewestMoves)
-        fewestMoves = moves;
-      return moves;
+    if (amountMovesObj[amount]) {
+      moves = moves + amountMovesObj[amount];
+      amount = 0;
     }
 
-    if (movesObj[amount] || amount === 0) {
-      moves = moves + movesObj[amount];
-      if (fewestMoves === null || moves < fewestMoves)
+    if (amount === 0) {
+      if (!fewestMoves || moves < fewestMoves)
         fewestMoves = moves;
       return moves;
     }
@@ -59,14 +59,20 @@ var coinChange = function(coins, amount) {
     });
 
     if (minMoves)
-      movesObj[amount] = minMoves;
+      amountMovesObj[amount] = minMoves;
     else
-      movesObj[amount] = false;
+      amountMovesObj[amount] = false;
   }
 
   recurse(amount, 0);
   return fewestMoves ? fewestMoves : -1;
 };
+
+/*
+Solution:
+bottom up DP.
+
+*/
 
 module.exports = {
   coinChange

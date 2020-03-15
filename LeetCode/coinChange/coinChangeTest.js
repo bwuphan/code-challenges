@@ -16,4 +16,8 @@ describe('coinChange', () => {
   it('passes test case 4.', () => {
     expect(coinChange([37,233,253,483], 7163)).toBe(19);
   })
+
+  it('passes test case 5.', () => {
+    expect(coinChange([3,7,405,436], 8839)).toBe(25)
+  })
 });
