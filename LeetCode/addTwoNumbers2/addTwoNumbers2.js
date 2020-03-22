@@ -15,6 +15,13 @@ Example:
 Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
 Output: 7 -> 8 -> 0 -> 7
 */
+const arrayToLinkedList = require('../../Util/arrayToLinkedList.js').arrayToLinkedList;
+const linkedListToArray = require('../../Util/linkedListToArray.js').linkedListToArray;
+
+function ListNode(val) {
+    this.val = val;
+    this.next = null;
+}
 
 /**
  * Definition for singly-linked list.
@@ -29,5 +36,65 @@ Output: 7 -> 8 -> 0 -> 7
  * @return {ListNode}
  */
 var addTwoNumbers = function(l1, l2) {
+  const reverseLinkedList = (head) => {
+    let cur = head;
+    let prev = null;
+    while (cur) {
+      const tempNext = cur.next;
+      cur.next = prev;
+      prev = cur;
+      cur = tempNext;
+    }
+    return prev;
+  }
+  l1 = reverseLinkedList(l1);
+  l2 = reverseLinkedList(l2);
 
+  let curL1 = l1;
+  let curL2 = l2;
+
+  let val = (curL1 ? curL1.val : 0) + (curL2 ? curL2.val : 0);
+  let carry = 0;
+  if (val >= 10) {
+    carry = 1;
+    val = val - 10;
+  }
+  let newHead = new ListNode(val);
+  let cur = newHead;
+
+  curL1 = curL1.next;
+  curL2 = curL2.next;
+  while (curL1 || curL2 || carry) {
+    const oneVal = curL1 ? curL1.val : 0;
+    const twoVal = curL2 ? curL2.val : 0;
+
+    val = oneVal + twoVal + carry;
+    if (val >= 10) {
+      carry = 1;
+      val = val - 10;
+    }
+    else {
+      carry = 0;
+    }
+
+    cur.next = new ListNode(val);
+    if (cur.next) {
+      cur = cur.next;
+    }
+    else {
+      cur = null;
+    }
+
+    curL1 = curL1 ? curL1.next : null;
+    curL2 = curL2 ? curL2.next : null;
+  }
+
+  return reverseLinkedList(newHead);
 };
+
+const one = arrayToLinkedList([7,2,4,3]);
+const two = arrayToLinkedList([5,6,4]);
+addTwoNumbers(one, two)
+module.exports = {
+  addTwoNumbers
+}
