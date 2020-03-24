@@ -47,18 +47,22 @@ var addTwoNumbers = function(l1, l2) {
     }
     return prev;
   }
+  // Reverse the two linked lists.
   l1 = reverseLinkedList(l1);
   l2 = reverseLinkedList(l2);
 
+
+  // Create the first head node.
   let curL1 = l1;
   let curL2 = l2;
-
   let val = (curL1 ? curL1.val : 0) + (curL2 ? curL2.val : 0);
   let carry = 0;
+
   if (val >= 10) {
     carry = 1;
     val = val - 10;
   }
+
   let newHead = new ListNode(val);
   let cur = newHead;
 
@@ -73,17 +77,14 @@ var addTwoNumbers = function(l1, l2) {
       carry = 1;
       val = val - 10;
     }
-    else {
+    else
       carry = 0;
-    }
 
     cur.next = new ListNode(val);
-    if (cur.next) {
+    if (cur.next)
       cur = cur.next;
-    }
-    else {
+    else
       cur = null;
-    }
 
     curL1 = curL1 ? curL1.next : null;
     curL2 = curL2 ? curL2.next : null;
@@ -91,6 +92,13 @@ var addTwoNumbers = function(l1, l2) {
 
   return reverseLinkedList(newHead);
 };
+
+/*
+Solution:
+1. Reverse both linked lists.
+2. Add the numbers from one linked list node to another while carrying the carry.
+3. Reverse the newly made linked list.
+*/
 
 const one = arrayToLinkedList([7,2,4,3]);
 const two = arrayToLinkedList([5,6,4]);
