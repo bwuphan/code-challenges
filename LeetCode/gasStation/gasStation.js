@@ -55,3 +55,7 @@ Therefore, you can't travel around the circuit once no matter where you start.
 var canCompleteCircuit = function(gas, cost) {
 
 };
+
+const cost = [3,4,5,1,2];
+const gas  = [1,2,3,4,5];
+console.log(canCompleteCircuit(cost, gas))
