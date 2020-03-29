@@ -38,11 +38,47 @@ Constraints:
 0 <= start < arr.length
 */
 
+const Queue = require('../Prototypes/Queue').Queue;
 /**
  * @param {number[]} arr
  * @param {number} start
  * @return {boolean}
  */
 var canReach = function(arr, start) {
+  const visited = new Set();
+  const queue = new Queue();
+  queue.enqueue(start);
 
+  while (!queue.isEmpty()) {
+    const curIdx = queue.dequeue();
+    const curVisit = arr[curIdx];
+
+    visited.add(curIdx);
+
+    if (curVisit === 0)
+      return true;
+
+    const leftIdx = curIdx - curVisit;
+    if (leftIdx >= 0 && !visited.has(leftIdx))
+      queue.enqueue(leftIdx);
+
+    const rightIdx = curIdx + curVisit;
+    if (rightIdx < arr.length && !visited.has(rightIdx))
+      queue.enqueue(rightIdx);
+  }
+
+  return false;
 };
+
+/*
+Solution:
+1. Create a visited set to keep track of visited indices.
+2. Create a queue to see which idx to visit next.
+3. BFS through but don't revisit indices that are in the visited set and stay in bounds.
+4. If we land on 0, return true. If we reach the end of the queue, return false.
+
+*/
+
+console.log(canReach(arr = [4,2,3,0,3,1,2], start = 5))
+console.log(canReach(arr = [4,2,3,0,3,1,2], start = 0))
+console.log(canReach(arr = [3,0,2,1,2], start = 2))
