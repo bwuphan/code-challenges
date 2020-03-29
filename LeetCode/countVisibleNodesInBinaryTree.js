@@ -30,13 +30,37 @@ Explanation: Visible nodes are -10 and -1.
 
 
 const countVisibleNodes = (root) => {
+  if (!root) return [];
 
+  const results = [root.val];
+
+  const dfs = (node, curMax) => {
+    if (!node) return;
+
+    if (node.val > curMax) {
+      curMax = node.val;
+      results.push(node.val);
+    }
+
+    dfs(node.left, curMax);
+    dfs(node.right, curMax);
+  };
+
+  dfs(root, root.val);
+
+  return results;
 }
 
-const arrayToTree = require('../../Util/arrayToTree').arrayToTree;
+/*
+Solution: DFS and keep track of the current in the route. If the node has a higher current max,
+add to results.
+
+*/
+
+const arrayToTree = require('../Util/arrayToTree').arrayToTree;
 
 const ex1 = arrayToTree([5,3,10,20,21,1,null]);
 console.log(countVisibleNodes(ex1));
 
-const ex2 = arrayToTree([-10,-15,-1]);
+const ex2 = arrayToTree([-10,null,-15,null,null-1]);
 console.log(countVisibleNodes(ex2));
