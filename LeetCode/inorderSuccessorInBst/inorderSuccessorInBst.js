@@ -40,5 +40,20 @@ It's guaranteed that the values of the tree are unique.
  * @return {TreeNode}
  */
 var inorderSuccessor = function(root, p) {
+  let candidate = null;
+  let curNode = root;
 
+  while (curNode) {
+    if (curNode.val > p.val) {
+      candidate = curNode;
+      curNode = curNode.left;
+    }
+    else {
+      curNode = curNode.right;
+    }
+  }
+
+  return candidate;
 };
+var arrayToTree = require('../../Util/arrayToTree').arrayToTree;
+const testOneTree = arrayToTree
