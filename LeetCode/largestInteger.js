@@ -17,5 +17,36 @@ Output: 0
 */
 
 const largestInteger = (numbers) => {
+  numbers = numbers.sort((a, b) => a - b);
 
+  let leftPointer = 0;
+  let rightPointer = numbers.length - 1;
+
+  while (leftPointer < rightPointer && numbers[leftPointer] < 0 && numbers[rightPointer] > 0) {
+    const negative = numbers[leftPointer];
+    const positive = numbers[rightPointer];
+
+    const posNegative = negative * -1;
+    if (posNegative === positive)
+      return numbers[rightPointer];
+
+    if (posNegative > positive)
+      leftPointer++;
+    else
+      rightPointer--;
+  }
+
+  return 0;
 }
+
+
+/*
+Solution:
+Sort the array. Set left and right pointers and move pointers to the bounds of the array and move
+them in until we find 2 matching opposite numbers.
+
+*/
+
+console.log(largestInteger([3, 2, -2, 5, -3]));
+
+console.log(largestInteger([1,2,3,-4]))
