@@ -52,74 +52,7 @@ The number of nodes in the given tree is less than 4096.
  * };
  */
 
-var Node = function(val) {
-  this.val = val;
-
-  this.next = null;
-}
-
-class Queue {
-  constructor() {
-    this._first = null;
-    this._last = null;
-
-    this._size = 0;
-  }
-
-  enqueue(val) {
-    const node = new Node(val);
-    if (!this._first) {
-      this._first = node;
-      this._last = this._first;
-    }
-    else {
-      this._last.next = node;
-      this._last = node;
-    }
-
-    this._size++;
-  }
-
-  dequeue() {
-    if (!this._first) return null;
-
-    const dequeued = this._first;
-
-    if (this._first === this._last) {
-      this._first = null;
-      this._tail = null;
-    }
-    else {
-      this._first = dequeued.next;
-    }
-
-    this._size--;
-
-    return dequeued.val;
-  }
-
-  peek() {
-    if (!this._first) return null;
-
-    return this._first.val;
-  }
-
-  isEmpty() {
-    return this._first === null;
-  }
-
-  log() {
-    let curNode = this._first;
-
-    let qString = '';
-    while (curNode) {
-      qString += `${curNode.val}, `;
-      curNode = curNode.next;
-    }
-
-    console.log(`Queue: ${qString}`);
-  }
-}
+const Queue = require('../Prototypes/Queue').Queue;
 
 
 /**
@@ -129,30 +62,41 @@ class Queue {
 var connect = function(root) {
   if (!root)
     return null;
+
   const queue = new Queue();
   queue.enqueue({ node: root, depth: 0 });
 
   let prevItem = null;
   while (!queue.isEmpty()) {
-    let curItem = queue.dequeue();
-    let curNode = curItem.node;
-    let curDepth = curItem.depth;
+    const curItem = queue.dequeue();
+    const curNode = curItem.node;
+    const curDepth = curItem.depth;
 
-    if (prevItem && prevItem.depth === curDepth) {
+    // If the depth stays the same, set next node to previous node.
+    if (prevItem && prevItem.depth === curDepth)
       curNode.next = prevItem.node;
-    }
-    else {
+    // Else, set the next node to null.
+    else
       curNode.next = null;
-    }
 
     if (curNode)
       prevItem = curItem;
 
     if (curNode.right)
-      queue.enqueue({ node: curNode.right, depth: curItem.depth + 1 });
+      queue.enqueue({ node: curNode.right, depth: curDepth + 1 });
     if (curNode.left)
-      queue.enqueue({ node: curNode.left, depth: curItem.depth + 1 });
+      queue.enqueue({ node: curNode.left, depth: curDepth + 1 });
   }
 
   return root;
 };
+
+/*
+Solution:
+
+BFS.
+Keep track of the previous traveled node and travel nodes from right to left as opposed to usual
+left to right.
+If the depth changes, we know the next node should be null.
+Otherwise, set next to the previous traveled node.
+*/
