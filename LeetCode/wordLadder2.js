@@ -37,7 +37,7 @@ Output: []
 Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
 */
 
-
+const Queue = require('../Prototypes/Queue.js').Queue;
 /**
  * @param {string} beginWord
  * @param {string} endWord
@@ -45,5 +45,26 @@ Explanation: The endWord "cog" is not in wordList, therefore no possible transfo
  * @return {string[][]}
  */
 var findLadders = function(beginWord, endWord, wordList) {
+  const map = {};
+
 
 };
+
+
+
+function numDifferences(str1, str2) {
+  let numDifferences = 0;
+  for (let i = 0; i < str1.length; ++i) {
+    const char1 = str1[i];
+    const char2 = str2[i];
+
+    if (char1 !== char2) {
+      numDifferences++;
+    }
+  }
+  return numDifferences;
+}
+
+console.log(findLadders(beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]))
