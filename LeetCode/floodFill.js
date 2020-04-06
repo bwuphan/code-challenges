@@ -40,5 +40,32 @@ The value of each color in image[i][j] and newColor will be an integer in [0, 65
  * @return {number[][]}
  */
 var floodFill = function(image, sr, sc, newColor) {
+  const curColor = image[sr][sc];
 
+  // If the current color is the same as the new color, don't do anything and return.
+  if (curColor === newColor)
+    return image;
+
+  const changeColor = (r, c) => {
+    // If out of bounds, return.
+    if (r < 0 || r > image.length - 1 || c < 0 || c > image[0].length)
+      return;
+
+    // If the current element is not the same as the current color, return.
+    if (image[r][c] !== curColor)
+      return;
+
+    image[r][c] = newColor;
+
+    changeColor(r - 1, c);
+    changeColor(r + 1, c);
+    changeColor(r, c - 1);
+    changeColor(r, c + 1);
+  }
+
+  changeColor(sr, sc);
+
+  return image;
 };
+
+console.log(floodFill(image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, newColor = 2))
