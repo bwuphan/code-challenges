@@ -26,7 +26,6 @@ Google: 90% of our engineers use the software you wrote (Homebrew), but you canâ
 tree on a whiteboard so f*** off.
 */
 
-const Queue = require('../../Prototypes/Queue').Queue;
 
 /**
  * Definition for a binary tree node.
@@ -40,5 +39,23 @@ const Queue = require('../../Prototypes/Queue').Queue;
  * @return {TreeNode}
  */
 var invertTree = function(root) {
+  if (!root)
+    return null;
 
+  invertTree(root.left);
+  invertTree(root.right);
+
+  const temp = root.left;
+  root.left = root.right;
+  root.right = temp;
+
+  return root;
 };
+
+/*
+  Solution: DFS.
+*/
+
+module.exports = {
+  invertTree
+}
