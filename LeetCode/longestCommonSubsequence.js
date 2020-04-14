@@ -45,5 +45,25 @@ The input strings consist of lowercase English characters only.
  * @return {number}
  */
 var longestCommonSubsequence = function(text1, text2) {
+  const cache = [new Array(text2.length + 1).fill(0)];
+  for (let i = 1; i < text1.length + 1; ++i) {
+    cache.push([0].concat(new Array(text2.length)));
+  }
 
+  for (let i = 1; i < cache.length; ++i) {
+    for (let j = 1; j < cache[0].length; ++j) {
+      if (text1[i - 1] === text2[j - 1])
+        cache[i][j] = cache[i][j] = cache[i - 1][j - 1] + 1;
+      else
+        cache[i][j] = Math.max(cache[i - 1][j], cache[i][j - 1]);
+    }
+  }
+  return cache[text1.length][text2.length];
 };
+
+
+
+console.log(longestCommonSubsequence(text1 = "abcde", text2 = "ace") === 3);
+console.log(longestCommonSubsequence(text1 = "abc", text2 = "abc") === 3);
+console.log(longestCommonSubsequence(text1 = "abc", text2 = "def") === 0);
+console.log(longestCommonSubsequence("bsbininm", "jmjkbkjkv") === 1);
