@@ -33,3 +33,39 @@ Note:
 All of the nodes' values will be unique.
 p and q are different and both values will exist in the BST.
 */
+
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {TreeNode}
+ */
+var lowestCommonAncestor = function(root, p, q) {
+  let lca = null;
+  const dfs = (node) => {
+    if (!node)
+      return false;
+
+    const left = dfs(node.left);
+    const right = dfs(node.right);
+
+    if ((node === p || node === q) && (left || right))
+      lca = node;
+    else if (left && right && !lca)
+      lca = node;
+
+    if (node === p || node === q || left || right)
+      return true;
+  }
+
+  dfs(root);
+  return lca;
+};
