@@ -33,5 +33,28 @@ Explanation: All root-to-leaf paths are: 1->2->5, 1->3
  * @return {string[]}
  */
 var binaryTreePaths = function(root) {
+  if (!root)
+    return [];
 
+  if (!root.left && !root.right)
+    return [`${root.val}`];
+
+  const results = [];
+  const dfs = (node, curPath) => {
+    if (!node)
+      return;
+
+    curPath = `${curPath}->${node.val}`;
+
+    if (!node.left && !node.right)
+      results.push(curPath);
+
+    dfs(node.left, curPath);
+    dfs(node.right, curPath);
+  }
+
+  dfs(root.left, `${root.val}`);
+  dfs(root.right, `${root.val}`);
+
+  return results;
 };
