@@ -40,6 +40,7 @@ Please do not use the built-in HashMap library.
 class MyHashMap {
   constructor() {
     this.hashModulo = 2068;
+    this.storage = [];
   }
 
   /**
@@ -49,7 +50,19 @@ class MyHashMap {
    * @return {void}
    */
   put(key, value) {
-
+    const idx = key % this.hashModulo;
+    if (this.storage[idx]) {
+      const bucket = this.storage[idx];
+      // Find if there already is the key in the bucket.
+      const foundPair = bucket.find(pair => pair.key === key);
+      if (foundPair)
+        foundPair.value = value;
+      else
+        bucket.push({ key, value });
+    }
+    else {
+      this.storage[idx] = [{ key, value }];
+    }
   };
 
   /**
@@ -58,7 +71,14 @@ class MyHashMap {
    * @return {number}
    */
   get(key) {
+    const bucket = this.storage[key % this.hashModulo];
+    if (!bucket) return -1;
 
+    const foundPair = bucket.find(pair => pair.key === key);
+
+    if (foundPair)
+      return foundPair.value;
+    else return -1;
   };
 
   /**
@@ -67,7 +87,14 @@ class MyHashMap {
    * @return {void}
    */
   remove(key) {
-
+    console.log('in remove');
+    const bucket = this.storage[key % this.hashModulo];
+    if (bucket) {
+      const idx = bucket.findIndex(pair => pair.key === key);
+      console.log(idx);
+      if (idx > -1)
+        bucket.splice(idx, 1);
+    }
   };
 }
 
@@ -87,4 +114,5 @@ console.log(hashMap.get(3) === -1);            // returns -1 (not found)
 hashMap.put(2, 1);          // update the existing value
 console.log(hashMap.get(2) === 1);            // returns 1
 hashMap.remove(2);          // remove the mapping for 2
+console.log(hashMap.storage);
 console.log(hashMap.get(2) === -1);            // returns -1 (not found)
