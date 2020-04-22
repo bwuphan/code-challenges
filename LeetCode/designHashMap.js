@@ -87,11 +87,9 @@ class MyHashMap {
    * @return {void}
    */
   remove(key) {
-    console.log('in remove');
     const bucket = this.storage[key % this.hashModulo];
     if (bucket) {
       const idx = bucket.findIndex(pair => pair.key === key);
-      console.log(idx);
       if (idx > -1)
         bucket.splice(idx, 1);
     }
