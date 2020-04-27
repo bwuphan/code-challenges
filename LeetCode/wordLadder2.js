@@ -1,3 +1,4 @@
+
 /*
 https://leetcode.com/problems/word-ladder-ii/
 
@@ -45,9 +46,35 @@ const Queue = require('../Prototypes/Queue.js').Queue;
  * @return {string[][]}
  */
 var findLadders = function(beginWord, endWord, wordList) {
-  const map = {};
+  if (wordList.indexOf(endWord) === -1 && wordList.indexOf(beginWord) === -1)
+    return [];
 
+  let queue = new Queue();
+  queue.enqueue({ word: beginWord, moves: 1, usedWords: new Set(), path: beginWord });
 
+  const solutions = [];
+  let minMoves = null;
+  while (!queue.isEmpty()) {
+    const item = queue.dequeue();
+
+    if (item.word === endWord) {
+      if (!minMoves || item.moves <= minMoves) {
+        solutions.push(item.path.split(','));
+        minMoves = item.moves;
+      }
+    }
+    else {
+      wordList.forEach(word => {
+        if (!item.usedWords.has(word) && numDifferences(item.word, word) === 1) {
+          const usedWords = new Set(item.usedWords);
+          usedWords.add(word);
+          queue.enqueue({ word, moves: item.moves + 1, usedWords, path: `${item.path},${word}`});
+        }
+      });
+    }
+  }
+
+  return solutions.filter(solution => solution.length === minMoves);
 };
 
 
@@ -65,6 +92,15 @@ function numDifferences(str1, str2) {
   return numDifferences;
 }
 
-console.log(findLadders(beginWord = "hit",
-endWord = "cog",
-wordList = ["hot","dot","dog","lot","log","cog"]))
+// console.log(findLadders(beginWord = "hit",
+// endWord = "cog",
+// wordList = ["hot","dot","dog","lot","log","cog"]))
+
+
+// console.log(findLadders(beginWord = "hit",
+// endWord = "cog",
+// wordList = ["hot","dot","dog","lot","log"]))
+
+console.log(findLadders("qa",
+"sq",
+["si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"]))
