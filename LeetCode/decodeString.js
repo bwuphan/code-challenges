@@ -23,63 +23,46 @@ s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
  * @param {string} s
  * @return {string}
  */
-var decodeString = function(s) {
-  let result = '';
-  let curDigits = null;
-  let curSubstring = null;
-  for (let i = 0; i < s.length; ++i) {
-    if (!curDigits) {
-      let endOfSubstring;
-      for (let j = i; j < s.length; ++j) {
-        if (s[j] === ']') {
-          endOfSubstring = j;
-          break;
-        }
-      }
-      const string = s.slice(i, endOfSubstring + 1);
-      const match = string.match(/(\d+)\[(\w+)\]/);
-      const k = +match[1];
-      const encode = match[2];
-      for (let j = 0; j < k; j++) {
-        result += encode;
-      }
-      i = endOfSubstring;
-    }
-  }
-
-  return result;
-};
-
 const decodeString = (s) => {
+  let decodedString = '';
+
   for (let i = 0; i < s.length; ++i) {
-    if (!isNaN(s[i])) {
-      let haveSeenLeftBracket = false;
-      for (let j = i; j < s.length; ++j) {
-        if (s[j] === '[') {
-          haveSeenLeftBracket = true;
-        }
-        else if (haveSeenLeftBracket && !isNaN(s[j])) {
-          const sub = decodeString(s.slice(j));
-          s = s
-        }
-        if (s[j] === ']') {
-          break;
-        }
+    const c = s[i];
+
+    if (!isNaN(c)) {
+      let digitBegin = i;
+      // Get digits.
+      while (s[i] !== '[')
+        i++;
+      // K is the number of times we're going to repeat.
+      const k = s.slice(digitBegin, i);
+      // Count the first left bracket as 1. string begins after the bracket.
+      const stringBegin = i + 1;
+      i++;
+      // Keep a count so we can know when we have equal number of opening and closing brackets.
+      let count = 1;
+
+      // Get end of encoded string.
+      while (count !== 0) {
+        if (s[i] === '[')
+          count++;
+        else if (s[i] === ']')
+          count--;
+        i++;
       }
-    }
-  }
-}
+      // Decrement i to bring it back to the last character, a ].
+      i--;
+      const recurseDecoded = decodeString(s.slice(stringBegin, i));
 
-function spliceSlice(str, index, count, add) {
-  // We cannot pass negative indexes directly to the 2nd slicing operation.
-  if (index < 0) {
-    index = str.length + index;
-    if (index < 0) {
-      index = 0;
+      // Repeat the adding of the recursedDecoded string by the number of K times.
+      for (let j = 0; j < +k; ++j)
+        decodedString += recurseDecoded;
     }
+    else
+      decodedString += c;
   }
 
-  return str.slice(0, index) + (add || "") + str.slice(index + count);
+  return decodedString;
 }
 
 console.log(decodeString("3[a]2[bc]") === 'aaabcbc');
