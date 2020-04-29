@@ -38,7 +38,8 @@ Follow up:
 Could you solve it in-place? Remember that the board needs to be updated at the same time: You
 cannot update some cells first and then use their updated values to update other cells.
 In this question, we represent the board using a 2D array. In principle, the board is infinite,
-which would cause problems when the active area encroaches the border of the array. How would you address these problems?
+which would cause problems when the active area encroaches the border of the array. How would you
+address these problems?
 */
 
 /**
@@ -46,5 +47,65 @@ which would cause problems when the active area encroaches the border of the arr
  * @return {void} Do not return anything, modify board in-place instead.
  */
 var gameOfLife = function(board) {
+  const updateCell = (row, col) => {
+    let neighborCount = 0;
 
+    for (let i = -1; i < 2; i++) {
+      for (let j = -1; j < 2; j++) {
+        if (i === 0 && j === 0)
+          continue;
+        const rowIdx = row + i;
+        const colIdx = col + j;
+        if (rowIdx >= 0 && rowIdx < board.length && colIdx >= 0 && colIdx < board[0].length) {
+          if (board[rowIdx][colIdx] === 1 || board[rowIdx][colIdx] === -1) {
+            neighborCount++;
+          }
+        }
+      }
+    }
+    const originalCell = board[row][col];
+    if ((neighborCount < 2 || neighborCount > 3) && originalCell === 1) {
+      board[row][col] = -1;
+    }
+    else if ((neighborCount === 3) && originalCell === 0) {
+      board[row][col] = 2;
+    }
+  }
+
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      updateCell(i, j);
+    }
+  }
+
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      if (board[i][j] === -1)
+        board[i][j] = 0;
+      else if (board[i][j] === 2)
+        board[i][j] = 1;
+    }
+  }
+
+  return board;
 };
+
+
+var test = [
+  [0,1,0],
+  [0,0,1],
+  [1,1,1],
+  [0,0,0]
+];
+
+var testAnswer = [
+  [0,0,0],
+  [1,0,1],
+  [0,1,1],
+  [0,1,0]
+]
+
+assert(gameOfLife(test), testAnswer);
+function assert(one, two) {
+  console.log(JSON.stringify(one) === JSON.stringify(two));
+}
