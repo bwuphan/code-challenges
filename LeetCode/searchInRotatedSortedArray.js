@@ -28,37 +28,35 @@ Output: -1
  * @return {number}
  */
 var search = function(nums, target) {
-  // Find lowest number.
+  // Find the pivot idx.
   let left = 0;
   let right = nums.length - 1;
 
   let pivotIdx = null;
   while (left <= right) {
     let middle = Math.floor((right + left) / 2);
-    if (nums[middle] > nums[middle + 1] || nums[middle] < nums[middle - 1]) {
+    if (nums[middle] > nums[middle + 1]) {
       pivotIdx = middle + 1;
       break;
     }
+    else if (nums[middle] < nums[middle - 1]) {
+      pivotIdx = middle;
+      break;
+    }
     else {
-      if (nums[middle] > nums[left]) {
+      if (nums[middle] > nums[left])
         left = middle + 1;
-      }
-      else {
+      else
         right = middle - 1;
-      }
     }
   }
-  if (!pivotIdx)
-    pivotIdx = 0;
-  console.log(pivotIdx);
-  if (target === nums[pivotIdx])
-    return pivotIdx;
 
-  if (target === nums[pivotIdx - 1])
-    return pivotIdx - 1;
-  if (target === nums[pivotIdx + 1])
-    return pivotIdx + 1;
+  // If there is no pivot index, it must be the first element.
+  if (!pivotIdx) pivotIdx = 0;
+  // If the target is at the pivot index, return the pivot index.
+  if (target === nums[pivotIdx]) return pivotIdx;
 
+  // Set new left and right boundaries.
   if (target >= nums[pivotIdx] && target <= nums[nums.length - 1]) {
     left = pivotIdx + 1;
     right = nums.length - 1;
@@ -68,20 +66,18 @@ var search = function(nums, target) {
     right = pivotIdx - 1;
   }
 
+  // Binary search until we find the target.
   while (left <= right) {
     let middle = Math.floor((right + left) / 2);
     if (nums[middle] === target)
       return middle;
-    else if (target < nums[middle]) {
+    else if (target < nums[middle])
       right = middle - 1;
-    }
-    else if (target > nums[middle]) {
+    else if (target > nums[middle])
       left = middle + 1;
-    }
   }
 
-  if (nums[left] !== target)
-    return -1;
+  if (nums[left] !== target) return -1;
 };
 
 
@@ -95,3 +91,4 @@ console.log(search([8,9,2,3,4], 9) === 1);
 console.log(search([3,5,1], 3) === 0)
 console.log(search([15,16,19,20,25,1,3,4,5,7,10,14], 25) === 4);
 console.log(search([1,3], 2) === -1);
+console.log(search([5,1,3],1) === 1);
