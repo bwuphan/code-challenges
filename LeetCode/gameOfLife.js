@@ -91,6 +91,18 @@ var gameOfLife = function(board) {
 };
 
 
+/*
+Solution:
+Update in place by adding 2 new options for the cells.
+If the cell was alive and is newly dead they are -1.
+If the cell was dead but is now alive, they are 2.
+Go through and count the neighbors for each cell.
+Alive cells are either 1 or -1 (were alive but now dead)
+Loop through matrix and change the cells back to 1 or 0.
+
+*/
+
+
 var test = [
   [0,1,0],
   [0,0,1],
