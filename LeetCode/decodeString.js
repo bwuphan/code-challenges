@@ -1,4 +1,5 @@
 /*
+https://leetcode.com/problems/decode-string/
 
 Given an encoded string, return its decoded string.
 
@@ -35,7 +36,7 @@ const decodeString = (s) => {
       while (s[i] !== '[')
         i++;
       // K is the number of times we're going to repeat.
-      const k = s.slice(digitBegin, i);
+      const k = +s.slice(digitBegin, i);
       // Count the first left bracket as 1. string begins after the bracket.
       const stringBegin = i + 1;
       i++;
@@ -55,7 +56,7 @@ const decodeString = (s) => {
       const recurseDecoded = decodeString(s.slice(stringBegin, i));
 
       // Repeat the adding of the recursedDecoded string by the number of K times.
-      for (let j = 0; j < +k; ++j)
+      for (let j = 0; j < k; ++j)
         decodedString += recurseDecoded;
     }
     else
@@ -64,6 +65,8 @@ const decodeString = (s) => {
 
   return decodedString;
 }
+
+
 
 console.log(decodeString("3[a]2[bc]") === 'aaabcbc');
 console.log(decodeString("3[a2[c]]") === "accaccacc");
