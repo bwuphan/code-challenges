@@ -48,23 +48,29 @@ Output:
  */
 var wordBreak = function(s, wordDict) {
   const memo = {};
+  const wordDictSet = new Set();
+  wordDict.forEach(word => wordDictSet.add(word));
 
   const recurse = (str) => {
-    console.log('begin recurse', str);
+    const strArray = [];
+
     if (str.length === 0)
       return [];
 
-    const strArray = [];
+    if (str in memo)
+      return memo[str];
+
+    if (wordDictSet.has(str)) {
+      if (!memo[str])
+        memo[str] = [str];
+      strArray.push(str);
+    }
+
     wordDict.forEach(word => {
-      console.log(str.slice(word.length, str.length));
       if (str.indexOf(word) === 0) {
         const slicedStr = str.slice(word.length, str.length);
-        if (slicedStr.length === word)
-          strArray.push(word);
         recurse(slicedStr)
-          .forEach(subStr => {
-            strArray.push(`${word} ${subStr}`);
-          });
+          .forEach(subStr => strArray.push(`${word} ${subStr}`));
       }
     });
     memo[str] = strArray;
@@ -72,7 +78,11 @@ var wordBreak = function(s, wordDict) {
   }
 
   recurse(s);
-  return memo;
+  return memo[s] ? memo[s] : [];
 };
 
-console.log(wordBreak(s = "catsanddog", wordDict = ["cat", "cats", "and", "sand", "dog"]));
+// console.log(wordBreak(s = "catsanddog", wordDict = ["cat", "cats", "and", "sand", "dog"]));
+// console.log(wordBreak(s = "pineapplepenapple", wordDict = ["apple", "pen", "applepen", "pine", "pineapple"]));
+// console.log(wordBreak(s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]));
+// console.log(wordBreak("a", ["a"]))
+console.log(wordBreak("aaaaaaa",["aaaa","aa","a"]))
