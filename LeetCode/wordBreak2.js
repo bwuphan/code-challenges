@@ -47,5 +47,32 @@ Output:
  * @return {string[]}
  */
 var wordBreak = function(s, wordDict) {
+  const memo = {};
 
+  const recurse = (str) => {
+    console.log('begin recurse', str);
+    if (str.length === 0)
+      return [];
+
+    const strArray = [];
+    wordDict.forEach(word => {
+      console.log(str.slice(word.length, str.length));
+      if (str.indexOf(word) === 0) {
+        const slicedStr = str.slice(word.length, str.length);
+        if (slicedStr.length === word)
+          strArray.push(word);
+        recurse(slicedStr)
+          .forEach(subStr => {
+            strArray.push(`${word} ${subStr}`);
+          });
+      }
+    });
+    memo[str] = strArray;
+    return strArray;
+  }
+
+  recurse(s);
+  return memo;
 };
+
+console.log(wordBreak(s = "catsanddog", wordDict = ["cat", "cats", "and", "sand", "dog"]));
