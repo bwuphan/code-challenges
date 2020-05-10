@@ -47,40 +47,57 @@ Output:
  * @return {string[]}
  */
 var wordBreak = function(s, wordDict) {
-  const memo = {};
+  // Dynamic programming Memoization obj to keep track of past results.
+  const dpObj = {};
+
+  // Create a set to find a word in O(1) time in the wordDict.
   const wordDictSet = new Set();
   wordDict.forEach(word => wordDictSet.add(word));
 
-  const recurse = (str) => {
-    const strArray = [];
+  // Populate the dp obj.
+  const populateDp = (subStr) => {
+    const breakdownSubStr = [];
 
-    if (str.length === 0)
-      return [];
+    // If there is no more substr, return the empty array.
+    if (subStr.length === 0)
+      return breakdownSubStr;
 
-    if (str in memo)
-      return memo[str];
+    // If we have already computed the sub problem, return the computed result.
+    if (subStr in dpObj)
+      return dpObj[subStr];
 
-    if (wordDictSet.has(str)) {
-      if (!memo[str])
-        memo[str] = [str];
-      strArray.push(str);
-    }
+    // If the subStr is contained in wordDictSet push to the array but don't return
+    // because of cases where subStr = 'aaaa' and we have 'a' and 'aaaa' in the dict.
+    // We need to keep breaking it down.
+    if (wordDictSet.has(subStr))
+      breakdownSubStr.push(subStr);
 
+    // Loop through wordDict.
     wordDict.forEach(word => {
-      if (str.indexOf(word) === 0) {
-        const slicedStr = str.slice(word.length, str.length);
-        recurse(slicedStr)
-          .forEach(subStr => strArray.push(`${word} ${subStr}`));
+      // If the first part of the subStr contains the word.
+      if (subStr.indexOf(word) === 0) {
+        // Slice out the word out of the beginning of the subStr.
+        const slicedStr = subStr.slice(word.length, subStr.length);
+        // Get the results of the breakdown of the sliced string.
+        populateDp(slicedStr)
+          // Loop through and add the word to the beginning of the broken down subStr array.
+          .forEach(subStr => breakdownSubStr.push(`${word} ${subStr}`));
       }
     });
-    memo[str] = strArray;
-    return strArray;
+    dpObj[subStr] = breakdownSubStr;
+    return breakdownSubStr;
   }
 
-  recurse(s);
-  return memo[s] ? memo[s] : [];
+  populateDp(s);
+  return dpObj[s] ? dpObj[s] : [];
 };
 
+
+/*
+  Solution:
+  We are going to dp bottom up by recursing to the bottom and solving the bottom subproblems.
+  Along the way, we populate the dpObj until we have the answer for s in the dpObj.
+*/
 // console.log(wordBreak(s = "catsanddog", wordDict = ["cat", "cats", "and", "sand", "dog"]));
 // console.log(wordBreak(s = "pineapplepenapple", wordDict = ["apple", "pen", "applepen", "pine", "pineapple"]));
 // console.log(wordBreak(s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]));
