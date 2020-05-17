@@ -31,9 +31,9 @@ Explanation: Another possible reconstruction is ["JFK","SFO","ATL","JFK","ATL","
  * @return {string[]}
  */
 var findItinerary = function(tickets) {
+  // Create an object where the key is the airport and the key is an array
+  // of tickets that start in that airport sorted by alphabetical order.
   const flights = {};
-  const visited = new Set();
-  const totPlaces = tickets.length + 1;
   tickets.forEach((ticket, i) => {
     const start = ticket[0];
     const end = ticket[1];
@@ -50,20 +50,37 @@ var findItinerary = function(tickets) {
       flights[start] = [i];
   });
 
+  // Create a set to keep track of already visited tickets.
+  const visited = new Set();
+  // Total number of places in the final array.
+  const totPlaces = tickets.length + 1;
   let results = null;
+
   const dfs = (ticketIdx, curItinerary, length) => {
+    // If we already have a result, return out to avoid doing extra calculations
+    // we don't need.
+    if (results)
+      return;
+
     const ticket = tickets[ticketIdx];
     if (!ticket)
       return;
     else {
+      // Add the next destination to the itin.
       curItinerary = `${curItinerary},${ticket[1]}`;
+
+      // If we have the length that matches total places, we are done.
       if (length + 1 === totPlaces) {
         if (!results)
           results = curItinerary;
         return;
       }
+
+      // Add the current ticket to visited.
       visited.add(ticketIdx);
+
       if (flights[ticket[1]]) {
+        // Loop through the airport array and recurse.
         flights[ticket[1]].forEach(idx => {
           if (!visited.has(idx) && !results)
             dfs(idx, curItinerary, length + 1);
@@ -74,6 +91,7 @@ var findItinerary = function(tickets) {
     }
   }
 
+
   for (let i = 0; i < flights.JFK.length; ++i) {
     dfs(flights.JFK[i], 'JFK', 1);
     if (results) {
@@ -81,6 +99,13 @@ var findItinerary = function(tickets) {
     }
   }
 };
+
+
+/*
+  Solution:
+  Create a object that maps airports as keys and tickets associated as key.
+  We're going to loop through to find a solution by backtracking and dfs.
+*/
 
 
 // console.log(findItinerary([["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]));
