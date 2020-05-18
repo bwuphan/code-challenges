@@ -39,5 +39,76 @@ You may assume that there are no duplicate edges in the input prerequisites.
  * @return {number[]}
  */
 var findOrder = function(numCourses, prerequisites) {
+  if (!numCourses)
+    return [];
 
+  if (prerequisites[0] && !Array.isArray(prerequisites[0]))
+    prerequisites = [prerequisites];
+
+  // Create a graph.
+  const graph = new Map();
+  prerequisites.forEach(tuple => {
+    const course = tuple[0];
+    const prereq = tuple[1];
+    if (graph.has(prereq))
+      graph.get(prereq).push(course);
+    else
+      graph.set(prereq, [course]);
+  });
+  // Create entries in the graph for courses that don't have pre-reqs.
+  for (let i = 0; i < numCourses; ++i) {
+    if (!graph.has(i))
+      graph.set(i, []);
+  }
+
+  // doneCourses if the final set of visited courses.
+  const doneCourses = new Set();
+  // curVisiting keeps track of visited nodes during a dfs. Used to see if there is a cycle.
+  const curVisiting = new Set();
+
+  const orderedCourses = [];
+  let hasCycle = false;
+
+  const dfs = (course) => {
+    // If we have visited this course on the current dfs, we have a cycle.
+    if (curVisiting.has(course)) {
+      hasCycle = true;
+      return;
+    }
+
+    // If we have visited this coures before, return.
+    if (doneCourses.has(course)) return;
+
+    curVisiting.add(course);
+
+    // Loop through courses this course is a pre-req for.
+    graph.get(course).forEach(c =>  dfs(c));
+
+    doneCourses.add(course);
+
+    orderedCourses.push(course);
+
+    curVisiting.delete(course);
+  }
+
+  Array.from(graph.keys()).forEach(course => {
+    if (!doneCourses.has(course))
+      dfs(course);
+  });
+
+  // If there is a cycle, return an empty array. Otherwise reverse.
+  return hasCycle ? [] : orderedCourses.reverse();
 };
+
+/*
+Solution:
+Create graph to keep track of pre reqs. Each key-value pair represents a course
+and the classes it is a pre-req for.
+
+Then use topological sourt
+*/
+
+// console.log(findOrder(2, [1,0]));
+// console.log(findOrder(4, [[1,0],[2,0],[3,1],[3,2]]));
+// console.log(findOrder(1, []));
+console.log(findOrder(2,[[0,1],[1,0]]))
