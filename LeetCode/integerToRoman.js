@@ -86,9 +86,9 @@ var intToRoman = function(num) {
       result += letter;
       remainder -= value;
     }
-    else {
+    else
       oIdx++;
-    }
+
     recurse(remainder);
   }
 
