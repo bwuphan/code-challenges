@@ -38,29 +38,37 @@ var combinationSum = function(candidates, target) {
   if (!candidates || candidates.length === 0)
     return [];
 
+  // Make sure the candidates are sorted from largest to smallest.
   candidates.sort((a, b) => b - a);
-  const candidateSet = new Set(candidates);
 
-
+  // Use a set for results so we don't get duplicates.
   const results = new Set();
 
+  // Dfs and find solutions.
   const dfs = (sum, numString, maxNumIdx) => {
+    // We found a solution.
     if (sum === target) {
       results.add(numString.slice(1, numString.length));
       return;
     }
+    // candidate sums should be positive.
     if (sum < 0)
       return;
 
     const diff = target - sum;
 
-    while (diff < candidates[maxNumIdx]) {
+    // Increment the place in the candidates array until we found a number
+    // that is larger than the difference.
+    while (diff < candidates[maxNumIdx])
       maxNumIdx++;
-    }
+
     for (let i = maxNumIdx; i < candidates.length; ++i) {
       const candidate = candidates[i];
       const newNumString = `${numString},${candidate}`;
-      if (!candidateSet.has(newNumString))
+
+      // If the new num string is not already in the solution set,
+      // dfs.
+      if (!results.has(newNumString))
         dfs(sum + candidate, `${numString},${candidate}`, i);
     }
   }
@@ -71,55 +79,6 @@ var combinationSum = function(candidates, target) {
 };
 
 
-/**
- * @param {number[]} candidates
- * @param {number} target
- * @return {number[][]}
- */
-var combinationSum = function(candidates, target) {
-  if (!candidates || candidates.length === 0)
-    return [];
-
-  candidates.sort((a, b) => b - a);
-  const candidateSet = new Set(candidates);
-
-
-  const results = new Set();
-
-  const dfs = (sum, numString, maxNumIdx) => {
-    if (sum === target) {
-      results.add(numString);
-      return;
-    }
-    if (sum < 0)
-      return;
-
-    const diff = target - sum;
-
-    if (candidateSet.has(diff)) {
-      const newNumString = numString.length > 0 ? `${numString},${diff}` : `${diff}`;
-      results.add(newNumString)
-    }
-    else {
-      while (diff < candidates[maxNumIdx]) {
-        maxNumIdx++;
-      }
-
-
-      for (let i = maxNumIdx; i < candidates.length; ++i) {
-        const candidate = candidates[i];
-        const newNumString = numString.length > 0 ? `${numString},${candidate}` : `${candidate}`;
-        if (!candidateSet.has(newNumString))
-          dfs(sum + candidate, newNumString, i);
-      }
-    }
-
-  }
-
-  dfs(0, '', 0);
-  return Array.from(results)
-    .map(sol => sol.split(','));
-};
 
 
 console.log(combinationSum(candidates = [2,3,6,7], target = 7));
