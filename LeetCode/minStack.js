@@ -35,20 +35,37 @@ var MinStack = function() {
  * @return {void}
  */
 MinStack.prototype.push = function(x) {
-  return this._storage.push(x);
+  let min = null;
+  const top = this.topTuple();
+  if (!top)
+    min = x;
+  else if (x < top[1])
+    min = x;
+  else
+    min = top[1];
+
+
+  return this._storage.push([x, min]);
 };
 
 /**
  * @return {void}
  */
 MinStack.prototype.pop = function() {
-  return this._storage.pop();
+  return this._storage.pop()[1];
 };
 
 /**
  * @return {number}
  */
 MinStack.prototype.top = function() {
+  return this._storage[this._storage.length - 1] ? this._storage[this._storage.length - 1][0] : null;
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.topTuple = function() {
   return this._storage[this._storage.length - 1] || null;
 };
 
@@ -56,8 +73,7 @@ MinStack.prototype.top = function() {
  * @return {number}
  */
 MinStack.prototype.getMin = function() {
-  const sorted = [...this._storage].sort((a, b) => a - b);
-  return sorted[0] || null;
+  return this.topTuple()[1];
 };
 
 /**
@@ -68,3 +84,19 @@ MinStack.prototype.getMin = function() {
  * var param_3 = obj.top()
  * var param_4 = obj.getMin()
  */
+
+
+/*
+Solution:
+
+Insert as pairs [value, min at the time of insert].
+*/
+
+var minStack = new MinStack();
+console.log(minStack.push(-2));
+console.log(minStack.push(0));
+console.log(minStack.push(-3));
+console.log(minStack.getMin()); // return -3
+console.log(minStack.pop());
+console.log(minStack.top());    // return 0
+console.log(minStack.getMin()); // return -2
