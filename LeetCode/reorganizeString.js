@@ -29,7 +29,7 @@ class MaxHeap {
     }
   }
 
-  insert(val) {
+  insert(occurObj) {
     /*
       Push the new val to the heap.
       Set current idx to the last pushed index and get the parent index.
@@ -37,14 +37,14 @@ class MaxHeap {
       Otherwise keep swapping until we find the right spot. The inserted val has to be greater
       than its parent.
      */
-    this._heap.push(val);
+    this._heap.push(occurObj);
 
     let thisIdx = this._heap.length - 1;
     let parentIdx = this.getParentIdx(thisIdx);
 
-    if (parentIdx === null) return val;
+    if (parentIdx === null) return occurObj;
 
-    while (parentIdx !== null && this._heap[thisIdx] > this._heap[parentIdx]) {
+    while (parentIdx !== null && this._heap[thisIdx].occurences > this._heap[parentIdx].occurences) {
       this.swap(parentIdx, thisIdx);
       thisIdx = parentIdx;
       parentIdx = this.getParentIdx(thisIdx);
@@ -104,14 +104,14 @@ class MaxHeap {
 
       largerIdx = null;
 
-      if (rightChildIdx === null || this._heap[leftChildIdx] > this._heap[rightChildIdx]) {
+      if (rightChildIdx === null || this._heap[leftChildIdx].occurences > this._heap[rightChildIdx].occurences) {
         largerIdx = leftChildIdx;
       }
       else {
         largerIdx = rightChildIdx;
       }
 
-      if (this._heap[curIdx] < this._heap[largerIdx]) {
+      if (this._heap[curIdx] && this._heap[largerIdx] && this._heap[curIdx].occurences < this._heap[largerIdx].occurences) {
         this.swap(curIdx, largerIdx);
         curIdx = largerIdx;
         continue;
@@ -135,8 +135,8 @@ class MaxHeap {
  * @return {string}
  */
 var reorganizeString = function(S) {
-  const occurObj = {};
-  let numLetters = 0;
+  let numLetters = 0; // The number of total unique letters in the string.
+  const occurObj = {}; // Key: letter, Val: num of occurences.
   for (let i = 0; i < S.length; ++i) {
     const letter = S[i];
     if (letter in occurObj)
@@ -147,34 +147,49 @@ var reorganizeString = function(S) {
     }
   }
 
-  const occurArr = [];
-  for (let letter in occurObj) {
-    occurArr.push({ letter, occurences: occurObj[letter] });
-  }
+  // Insert into heap / priority queue.
+  const heap = new MaxHeap();
+  for (let letter in occurObj)
+    heap.insert({ letter, occurences: occurObj[letter] });
 
-  occurArr.sort((a, b) => b.occurences - a.occurences);
-
-  if (occurArr[0].occurences > ((S.length + 1) / 2))
+  // If top occuring is greater than (n + 1) / 2, it is impossible, return ''.
+  if (heap.peek().occurences > ((S.length + 1) / 2))
     return '';
 
   let returnStr = '';
   while (numLetters > 0) {
-    for (let i = 0; i < occurArr.length; ++i) {
-      const item = occurArr[i];
-      if (item.occurences) {
-        returnStr += item.letter;
-        item.occurences--;
-      }
+    // Remove top two occurences and place them next to each other.
+    const first = heap.remove();
+    const second = heap.remove();
 
-      if (item.occurences <= 0) {
+    if (first && first.occurences) {
+      returnStr += first.letter;
+      first.occurences--;
+      if (first.occurences > 0)
+        heap.insert(first);
+      else
         numLetters--;
-        occurArr.splice(i, 1);
-      }
+    }
+
+    if (second && second.occurences) {
+      returnStr += second.letter;
+      second.occurences--;
+      if (second.occurences > 0)
+        heap.insert(second);
+      else
+        numLetters--;
     }
   }
 
   return returnStr;
 };
 
+/*
+Solution: Going to use a priority queue to pull off top two occurences every time.
+If the highest occuring letter is greater than (n + 1) / 2, it is an impossible task.
+
+*/
+
 console.log(reorganizeString('aaabccc'));
 console.log(reorganizeString('aaab'));
+console.log(reorganizeString("blflxll"))
