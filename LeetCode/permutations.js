@@ -28,15 +28,15 @@ var permute = function(nums) {
   let permutations = [];
 
   const visited = new Set();
-  const dfs = (numArr) => {
+  const dfs = (numStr) => {
     if (visited.size === nums.length) {
-      permutations.push(numArr);
+      permutations.push(numStr);
       return;
     }
 
     nums.forEach(n => {
       if (!visited.has(n)) {
-        numArrCopy = [...numArr];
+        const numArrCopy = [...numStr];
         numArrCopy.push(n);
         visited.add(n);
         dfs(numArrCopy);
@@ -46,33 +46,12 @@ var permute = function(nums) {
 
   }
   dfs('');
-  // const dfs = function(startArr, resultArr) {
-  //   // If there is nothing left in the startArr, we know we have a result.
-  //   if (startArr.length === 0) {
-  //     permutations.push(resultArr);
-  //   }
 
-  //   // Loop through the startArr.
-  //   for (let i = 0; i < startArr.length; ++i) {
-  //     // Make copies to avoid side effects.
-  //     let resultArrCpy = [...resultArr];
-  //     let startArrCpy = [...startArr];
-
-  //     // Push the next element onto the result array copy.
-  //     resultArrCpy.push(startArr[i]);
-
-  //     // Take the element out of the start array copy.
-  //     startArrCpy.splice(i, 1);
-
-  //     // Recurse.
-  //     dfs(startArrCpy, resultArrCpy);
-  //   }
-  // }
-
-  // dfs(nums, []);
   return permutations;
 };
 
-
+/*
+Solution: Use backtracking to keep track of visited numbers.
+*/
 console.log(permute([1,2,3]));
 // console.log(permute([1]));
