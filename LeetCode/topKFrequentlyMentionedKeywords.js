@@ -85,13 +85,14 @@ const topKKeywords = (k, keywords, reviews) => {
     .slice(0, k);
 }
 
-console.log(topKKeywords(k = 2,
-keywords = ["betacellular", "cetracular", "deltacellular", "eurocell", "anacell"],
-reviews = [
-  "I love anacell Best services; Best services provided by anacell",
-  "betacellular has great services",
-  "deltacellular provides much better services than betacellular",
-  "cetracular is worse than anacell",
-  "Betacellular is better than deltacellular.",
-]
+console.log(topKKeywords(
+  k = 2,
+  keywords = ["betacellular", "cetracular", "deltacellular", "eurocell", "anacell"],
+  reviews = [
+    "I love anacell Best services; Best services provided by anacell",
+    "betacellular has great services",
+    "deltacellular provides much better services than betacellular",
+    "cetracular is worse than anacell",
+    "Betacellular is better than deltacellular.",
+  ]
 ));
