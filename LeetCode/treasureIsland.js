@@ -24,3 +24,51 @@ Output: 5
 Explanation: Route is (0, 0), (0, 1), (1, 1), (2, 1), (2, 0), (3, 0) The minimum route takes 5 steps.
 */
 
+const Queue = require('../Prototypes/Queue.js').Queue;
+
+const findSteps = (board) => {
+  const checkBounds = (row, col) => {
+    if (row < 0 || row >= board.length || col < 0 || col >= board[0].length)
+      return false;
+    return true;
+  }
+
+  const visited = board.map(row => new Array(board[0].length));
+
+  const queue = new Queue();
+  queue.enqueue({ row: 0, col: 0, steps: 0 });
+  let steps = 0;
+
+  while (!queue.isEmpty()) {
+    const coordinates = queue.dequeue();
+
+    const row = coordinates.row;
+    const col = coordinates.col;
+    let steps = coordinates.steps;
+
+    if (!checkBounds(row, col) || visited[row][col] || board[row][col] === 'D')
+      continue;
+
+    if (board[row][col] === 'X')
+      return steps;
+
+    steps++;
+    visited[row][col] = true;
+    queue.enqueue({ row: row - 1, col, steps });
+    queue.enqueue({ row, col: col - 1, steps });
+    queue.enqueue({ row: row + 1, col, steps });
+    queue.enqueue({ row, col: col + 1, steps });
+  }
+}
+
+
+/*
+Solution: BFS
+*/
+
+console.log(findSteps(
+[['O', 'O', 'O', 'O'],
+ ['D', 'O', 'D', 'O'],
+ ['O', 'O', 'O', 'O'],
+ ['X', 'D', 'D', 'O']]
+))
