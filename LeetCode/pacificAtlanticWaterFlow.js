@@ -41,27 +41,32 @@ Return:
 var pacificAtlantic = function(matrix) {
   const results = [];
   let done, p, a, visited;
+
   const dfs = (row, col) => {
+    // Stop if we've already found both sides row it's out of bounds.
     if (done || row < 0 || row >= matrix.length || col < 0 || col >= matrix[0].length || visited[row][col])
       return false;
 
+    // Mark visited.
     visited[row][col] = true;
 
-    if ((row === 0 || col === 0) && !p) {
+    // If we're at the pacific and we haven't been to the pacific yet.
+    if ((row === 0 || col === 0) && !p)
       p = true;
-    }
 
-    if ((row === matrix.length - 1 || col === matrix[0].length - 1) && !a) {
+    // If we're at the atlantic and we haven't been to the atlantic yet.
+    if ((row === matrix.length - 1 || col === matrix[0].length - 1) && !a)
       a = true;
-    }
 
+    // If we can reach both, we're done.
     if (a && p) {
       done = true;
       return true;
     }
 
-    const cur = matrix[row][col];
+    const cur = matrix[row][col]; // Mark cur to the current value.
 
+    // dfs if the cur value is greater than the value we're going to.
     if ((row + 1) < matrix.length && cur >= matrix[row + 1][col])
       dfs(row + 1, col);
 
@@ -74,6 +79,7 @@ var pacificAtlantic = function(matrix) {
     if ((col - 1) >= 0 && cur >= matrix[row][col - 1])
       dfs(row, col - 1);
 
+    // Unmark visited.
     visited[row][col] = false;
   };
 
@@ -92,6 +98,11 @@ var pacificAtlantic = function(matrix) {
 
   return results;
 };
+
+
+/*
+Solution: DFS to find solutions.
+*/
 
 console.log(pacificAtlantic([
   [1,2,2,3,5],
