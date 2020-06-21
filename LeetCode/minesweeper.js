@@ -86,5 +86,58 @@ game or flag any squares.
  * @return {character[][]}
  */
 var updateBoard = function(board, click) {
+  if (board[click[0]][click[1]] === 'M') {
+    board[click[0]][click[1]] = 'X';
+    return board;
+  }
 
+  const reveal = (row, col) => {
+    // If the spot is out of bounds or revealed, return.
+    if (row < 0 || row >= board.length || col < 0 || col >= board[0].length || board[row][col] !== 'E')
+      return;
+
+    // Count adjacent mines.
+    let numMines = 0;
+    for (let i = -1; i < 2; ++i) {
+      for (let j = -1; j < 2; ++j) {
+        const checkRow = row + i;
+        const checkCol = col + j;
+
+        if (board[checkRow] && board[checkRow][checkCol] && board[checkRow][checkCol] === 'M')
+          numMines++;
+      }
+    }
+
+    // If numMines is a non zero number, set current spot to the number of adjacent mines.
+    if (numMines)
+      board[row][col] = numMines.toString();
+    // Else,set the current spot to 'B' for blank and recursively reveal adjacent spots.
+    else {
+      board[row][col] = 'B';
+      for (let i = -1; i < 2; ++i) {
+        for (let j = -1; j < 2; ++j) {
+          const recurseRow = row + i;
+          const recurseCol = col + j;
+          reveal(recurseRow, recurseCol);
+        }
+      }
+    }
+  }
+
+  reveal(click[0], click[1]);
+
+  return board;
 };
+
+/*
+Solution: DFS by recursively revealing elements of the board.
+Count the adjacent mines before recursing to see what the spot should be.
+*/
+
+console.log(updateBoard(
+[['E', 'E', 'E', 'E', 'E'],
+ ['E', 'E', 'M', 'E', 'E'],
+ ['E', 'E', 'E', 'E', 'E'],
+ ['E', 'E', 'E', 'E', 'E']],
+ [3,0]
+))
