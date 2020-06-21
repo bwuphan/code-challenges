@@ -23,68 +23,66 @@ If there is such window, you are guaranteed that there will always be only one u
  * @return {string}
  */
 var minWindow = function(s, t) {
-  let left, right = 0;
+  if (s.length === 0 || t.length === 0)
+    return '';
 
-  const solutionDict = {};
-  const actionDict = {};
+  let l = 0, r = 0;
+  let answerMap = new Map();
+  const windowCount = {};
   for (let i = 0; i < t.length; ++i) {
-    const c = t[i];
-    if (!(c in actionDict))
-      actionDict[c] = 0;
-
-    if (!(c in solutionDict))
-      solutionDict[c] = 1;
+    const char = t[i];
+    const num = answerMap.get(char);
+    if (num)
+      answerMap.set(char, num + 1);
     else
-      solutionDict[c]++;
+      answerMap.set(char, 1);
+
+    windowCount[char] = 0;
   }
 
-  let missingLetter = null;
-  let smallestStr = null;
-  for (left = 0, right = 0; right < s.length; ++right) {
-    const char = s[right];
-    if (char in actionDict)
-      actionDict[char]++;
+  const required = answerMap.size;
+  let formed = 0;
 
-    if (char === missingLetter || checkSolution(actionDict, solutionDict)) {
-      missingLetter = null;
-      while (!missingLetter) {
-        const leftChar = s[left];
-        if (leftChar in solutionDict)
-          missingLetter = leftChar;
-        left++;
-      }
-      if (smallestStr === null || (right - left) < smallestStr.length)
-        smallestStr = s.slice(left - 1, right + 1)
-      actionDict[missingLetter]--;
+  let answerL = null;
+  let answerR = null;
+  let hasAnswer = false;
+
+  while (r < s.length) {
+    const char = s[r];
+    if (char in windowCount) {
+      windowCount[char]++;
+      if (windowCount[char] === answerMap.get(char))
+        formed++;
     }
-  }
-  left--;
-  actionDict[s[left]]++;
-  console.log(actionDict);
-  while (left < right) {
-    console.log(left);
-    const leftChar = s[left];
-    if (leftChar in actionDict)
-      actionDict[leftChar]--;
-    console.log(actionDict);
-    if (checkSolution(actionDict, solutionDict))
-      left++;
-    else
-      break;
+
+    if (formed === required) {
+      hasAnswer = true;
+      if (answerL === null && answerR === null) {
+        answerL = l;
+        answerR = r;
+      }
+      while (l <= r && formed === required) {
+        if ((r - l) < (answerR - answerL)) {
+          answerL = l;
+          answerR = r;
+        }
+        const lChar = s[l];
+        if (lChar in windowCount) {
+          windowCount[lChar]--;
+          if (windowCount[lChar] < answerMap.get(lChar))
+            formed--;
+        }
+        l++;
+      }
+    }
+    r++;
   }
 
-  return s.slice(left, right);
+  return hasAnswer ? s.slice(answerL, answerR + 1) : '';
 };
 
-function checkSolution(actionDict, solutionDict) {
-  for (let key in solutionDict) {
-    if (actionDict[key] < solutionDict[key])
-      return false;
-  }
-
-  return true;
-}
 
 
 console.log(minWindow(s = "ADOBECODEBANC", t = "ABC"));
-console.log(minWindow(s = "BBA", t = "AB"));
+console.log(minWindow(s = "BBA", t = "BA"));
+console.log(minWindow(s = "A", t = "A"));

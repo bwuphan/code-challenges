@@ -42,8 +42,9 @@ var nextPermutation = function(nums) {
   for (let i = decIdx + 1; i < nums.length; ++i) {
     const nextNum = nums[i + 1];
 
-    // If the next number is less than the decIdx or is undefined, then we found the right spot.
-    if (nextNum < nums[decIdx] || nextNum === undefined) {
+    // If the next number is less than or equal to the decIdx or is undefined, then we found the right spot.
+    // We do less than or equals to because if next num is equal then the cur num is the next largest.
+    if (nextNum <= nums[decIdx] || nextNum === undefined) {
       // Swap elements and break.
       incIdx = i;
       let temp = nums[decIdx];
@@ -55,18 +56,27 @@ var nextPermutation = function(nums) {
 
   // Sort from the dexIdx to the end.
   if (incIdx !== null) {
-    return nums.slice(0, decIdx + 1).concat(nums.slice(decIdx + 1, nums.length).sort((a, b) => a - b));
+    const lastSegment = nums.slice(decIdx + 1, nums.length).sort((a, b) => a - b);
+    nums.splice(decIdx + 1, nums.length - decIdx);
+    lastSegment.forEach(n => nums.push(n));
   }
-
-  return nums;
+  console.log(nums);
 };
+/*
+We find the first num to swap by going from the right and finding the first num that is decreasing.
+[1,5,8,4,7,6,5,3,1] In this case, it would be 4 because it is the first decreasing from the right.
+Next, we go from that number we just found and find the next biggest number from that one.
+ie find the next number after 4. In this case, that would be 5.
+Then, we swap 1 and 5 so it looks like this [1,5,8,5,7,6,4,3,1].
+Last, we sort the numbers after the swap. [1,5,8,5,7,6,4,1,3]
 
+*/
 // assert(nextPermutation([1,2,3]), [1,3,2]);
 // assert(nextPermutation([3,2,1]), [1,2,3]);
 // assert(nextPermutation([1,1,5]), [1,5,1]);
 // assert(nextPermutation([1,2]), [2,1]);
 assert(nextPermutation([1,3,2]), [2,1,3]);
-
+assert(nextPermutation([1,5,1]), [2,1,3]);
 function assert(one, two) {
   console.log(JSON.stringify(one) === JSON.stringify(two));
 }
