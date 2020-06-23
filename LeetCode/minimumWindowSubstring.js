@@ -83,6 +83,76 @@ var minWindow = function(s, t) {
 
 
 
-// console.log(minWindow(s = "ADOBECODEBANC", t = "ABC"));
-// console.log(minWindow(s = "BBA", t = "BA"));
+
+
+
+
+
+minWindow = (s, t) => {
+  if (s.length === 0 || t.length === 0)
+    return '';
+
+  let l = 0, r = 0;
+
+  const solDict = new Map();
+  const actDict = {};
+  for (let i = 0; i < t.length; ++i) {
+    const char = t[i];
+    const num = solDict.get(char);
+
+    if (num)
+      solDict.set(char, num + 1);
+    else
+      solDict.set(char, 1);
+
+    actDict[char] = 0;
+  }
+
+  let formed = 0;
+  const required = solDict.size;
+
+  let idxL = null;
+  let idxR = null;
+
+  while (r < s.length) {
+    const rChar = s[r];
+    if (rChar in actDict) {
+      actDict[rChar]++;
+
+      if (actDict[rChar] === solDict.get(rChar))
+        formed++;
+      console.log(formed, actDict, solDict);
+      if (formed === required) {
+        if (idxL === null && idxR === null) {
+          idxR = r;
+          idxL = l;
+        }
+
+        while (l < r && formed === required) {
+          const lChar = s[l];
+          if ((r - l) < (idxR - idxL)) {
+            idxL = l;
+            idxR = r;
+          }
+          if (lChar in actDict && actDict[lChar] > 0) {
+            actDict[lChar]--;
+            if (actDict[lChar] < solDict.get(lChar))
+              formed--;
+          }
+
+          l++;
+        }
+      }
+    }
+
+    r++;
+  }
+
+  console.log(idxL, idxR);
+
+  return s.slice(idxL, idxR + 1);
+}
+
+console.log(minWindow(s = "ADOBECODEBANC", t = "ABC"));
+console.log(minWindow(s = "BBA", t = "BA"));
 console.log(minWindow(s = "A", t = "A"));
