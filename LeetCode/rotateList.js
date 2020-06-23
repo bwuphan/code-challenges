@@ -35,5 +35,51 @@ rotate 4 steps to the right: 2->0->1->NULL
  * @return {ListNode}
  */
 var rotateRight = function(head, k) {
+  if (!head)
+    return null;
 
+  if (!head.next)
+    return head;
+
+  // Does one rotation.
+  const rotate = (head) => {
+    let curNode = head;
+    let prevNode = null;
+
+    while (true) {
+      if (curNode.next) {
+        prevNode = curNode;
+        curNode = curNode.next;
+      }
+      else break;
+    }
+
+    // If there is a previous node, set prevNode as the new tail.
+    // Set the old tail as the head and return that node.
+    if (prevNode) {
+      prevNode.next = null;
+      curNode.next = head;
+      return curNode;
+    }
+    // Else, return as is.
+    return head;
+  }
+
+
+  // Get length of linked list.
+  let curNode = head;
+  let length = 0;
+  while (curNode) {
+    length++;
+    curNode = curNode.next;
+  }
+
+  // Use this to cut down repeats. We don't need to rotate more than the length.
+  k = k % length;
+
+  // Do the rotations.
+  for (let i = 0; i < k; ++i)
+    head = rotate(head)
+
+  return head;
 };
