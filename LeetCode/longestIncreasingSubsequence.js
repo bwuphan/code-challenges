@@ -24,7 +24,7 @@ var lengthOfLIS = function(nums) {
   const dp = new Array(nums.length);
   dp[0] = 1;
 
-  let max = 0;
+  let max = 1;
   for (let i = 1; i < nums.length; ++i) {
     let curMax = 1;
     for (let j = 0; j < i; ++j) {
@@ -38,7 +38,7 @@ var lengthOfLIS = function(nums) {
       max = curMax;
   }
 
-  return nums.length ? dp[nums.length - 1] : 0;
+  return nums.length ? max : 0;
 };
 
 
