@@ -39,7 +39,45 @@ Output: 4
  * @return {number}
  */
 var maxNumberOfFamilies = function(n, reservedSeats) {
+  const map = {};
+  reservedSeats.forEach(seat => {
+    const row = seat[0];
+    const col = seat[1];
+    if (!(row in map))
+      map[row] = new Set();
+    map[row].add(col);
+  });
 
+  let numFam = 0;
+
+  const checkAvailability = (row, seats) => {
+    if (seats.every(num => !map[row].has(num))) {
+      numFam++;
+      return true;
+    }
+    return false;
+  }
+
+  for (let i = 1; i <= n; ++i) {
+    if (map[i]) {
+
+      // Check left most possibility.
+      const left = checkAvailability(i, [2,3,4,5]);
+      if (!left)
+        checkAvailability(i, [4,5,6,7]);
+
+      checkAvailability(i, [6,7,8,9]);
+    }
+    else {
+      numFam += 2;
+    }
+
+  }
+
+  return numFam;
 };
 
-console.log(maxNumberOfFamilies(n = 3, reservedSeats = [[1,2],[1,3],[1,8],[2,6],[3,1],[3,10]]));
+console.log(maxNumberOfFamilies(n = 3, reservedSeats = [[1,2],[1,3],[1,8],[2,6],[3,1],[3,10]]) === 4);
+console.log(maxNumberOfFamilies(n = 2, reservedSeats = [[2,1],[1,8],[2,6]]) === 2);
+console.log(maxNumberOfFamilies(n = 4, reservedSeats = [[4,3],[1,4],[4,6],[1,7]]) === 4);
+console.log(maxNumberOfFamilies(2, [[1,6],[1,8],[1,3],[2,3],[1,10],[1,2],[1,5],[2,2],[2,4],[2,10],[1,7],[2,5]]) === 1);
