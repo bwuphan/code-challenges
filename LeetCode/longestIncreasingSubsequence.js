@@ -28,14 +28,13 @@ var lengthOfLIS = function(nums) {
   for (let i = 1; i < nums.length; ++i) {
     let curMax = 1;
     for (let j = 0; j < i; ++j) {
-      if (nums[i] > nums[j] && dp[j] >= curMax) {
-        curMax = dp[j] + 1;
+      if (nums[i] > nums[j]) {
+        curMax = Math.max(curMax, dp[j]);
       }
     }
-    dp[i] = curMax;
+    dp[i] = curMax + 1;
 
-    if (max < curMax)
-      max = curMax;
+    max = Math.max(max, dp[i]);
   }
 
   return nums.length ? max : 0;
