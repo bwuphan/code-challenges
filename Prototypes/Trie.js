@@ -126,5 +126,6 @@ class Trie {
 
 
 module.exports = {
-  Trie
+  Trie,
+  Node
 }
