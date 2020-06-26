@@ -184,6 +184,7 @@ WordDictionary.prototype.search = function(word) {
 
   let hasMatch = false;
   const dfs = function(node, curWord) {
+    console.log('Node', node.letter, curWord);
     if (hasMatch || visited.has(node)) return;
 
     visited.add(node);
@@ -191,19 +192,23 @@ WordDictionary.prototype.search = function(word) {
 
     const newWord = curWord.slice(1, curWord.length);
 
-    // console.log(' HERE', newWord, curLetter)
+    console.log(' HERE', newWord, curLetter)
 
     if (!newWord.length && node.endOfWord && (curLetter === node.letter || curLetter === '.')) {
       hasMatch = true;
     }
-    else if (curLetter === '.' || curLetter === node.letter) {
+    else if (curLetter === '.') {
       node.children.forEach(node => {
         dfs(node, newWord);
       });
     }
+    else if (curLetter === node.letter && node.children.has(newWord[0])) {
+      dfs(node.getChild(newWord[0]), newWord);
+    }
 
     return;
   }
+
 
   this.trie.root.children.forEach(node => dfs(node, word));
   // console.log(hasMatch)
@@ -254,12 +259,14 @@ WordDictionary.prototype.search = function(word) {
  * var param_2 = obj.search(word)
  */
 
+// const test = new WordDictionary();
+
 const test = new WordDictionary();
 test.addWord("bad")
 test.addWord("dad")
 test.addWord("mad")
-console.log(test.search("pad"))
-console.log(test.search("bad"))
-console.log(test.search(".ad"))
+// console.log(test.search("pad"))
+// console.log(test.search("bad"))
+// console.log(test.search(".ad"))
 console.log(test.search("b.."))
-console.log(test.search("b.m"))
+// console.log(test.search("b.m"))
