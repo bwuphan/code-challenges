@@ -26,42 +26,43 @@ Given word = "ABCB", return false.
  * @return {boolean}
  */
 var exist = function(board, word) {
-  let exists = false;
-  const traverse = function(board, idx, y, x) {
-    if (y < 0 || y >= board.length || x < 0 || x >= board[0].length || board[y][x] === null || exists === true) {
+  const visited = board.map(row => new Array(board[0].length));
+
+  let hasSolution = false;
+  const traverse = (letterIdx, row, col) => {
+    if (hasSolution || row < 0 || row >= board.length || col < 0 || col >= board[0].length || board[row][col] !== word[letterIdx] || visited[row][col])
       return;
-    }
 
-    if (board[y][x] === word[idx]) {
-      if (idx === word.length - 1) {
-        exists = true;
-        return;
-      }
-      board = JSON.parse(JSON.stringify(board));
-      board[y][x] = null;
-      idx++;
+    if (letterIdx >= word.length - 1)
+      hasSolution = true;
 
-      traverse(board, idx, y + 1, x);
-      traverse(board, idx, y - 1, x);
-      traverse(board, idx, y, x + 1);
-      traverse(board, idx, y, x - 1);
+    letterIdx++;
+    visited[row][col] = true;
 
-    }
+    traverse(letterIdx, row + 1, col);
+    traverse(letterIdx, row - 1, col);
+    traverse(letterIdx, row, col + 1);
+    traverse(letterIdx, row, col - 1);
+
+    visited[row][col] = false;
+    letterIdx--;
   }
+
+  letterIdx = 0;
 
   for (let i = 0; i < board.length; ++i) {
     for (let j = 0; j < board[0].length; ++j) {
-      const curLetter = board[i][j];
-      if (curLetter === word[0]) {
-        traverse(board, 0, i, j);
-      }
+      const letter = board[i][j];
+      if (!hasSolution && letter === word[0])
+        traverse(0, i, j);
     }
   }
-
-  return exists;
-
-
+  return hasSolution;
 };
+
+/*
+Solution: Use backtracking and keep track of current word index and visited squares.
+*/
 
 var board = [
   ['A','B','C','E'],
