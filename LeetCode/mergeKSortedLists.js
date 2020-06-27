@@ -75,27 +75,25 @@ var mergeKLists = function(lists) {
   const addNumsFromList = function(node) {
     if (!node) return;
 
-    numArr.push(node.val);
+    numArr.push(node);
 
     addNumsFromList(node.next);
   }
 
+  // Create a list of nodes sorted by val.
   lists.forEach(list => addNumsFromList(list));
 
-  numArr.sort((a, b) => a - b);
+  numArr.sort((a, b) => a.val - b.val);
 
-
-  const createNode = function(idx) {
-    if (idx >= numArr.length)
-      return null;
-
-    let newNode = new ListNode(numArr[idx++]);
-    newNode.next = createNode(idx);
-
-    return newNode;
+  // Put together the head from the sorted list.
+  let head = numArr[0];
+  let curNode = head;
+  for (let i = 1; i < numArr.length; ++i) {
+    curNode.next = numArr[i];
+    curNode = curNode.next;
   }
 
-  return createNode(0);
+  return head || null;
 };
 
 var test = [
@@ -104,11 +102,11 @@ var test = [
   {val: 2, next: {val: 6, next: null}}
 ]
 
-var test = [
-  null,
-  {val: -1, next: {val: 5, next: { val: 11, next: null}}},
-  null,
-  {val: 6, next: {val: 10, next: null}}
-]
+// var test = [
+//   null,
+//   {val: -1, next: {val: 5, next: { val: 11, next: null}}},
+//   null,
+//   {val: 6, next: {val: 10, next: null}}
+// ]
 
 console.log(JSON.stringify(mergeKLists(test)))
