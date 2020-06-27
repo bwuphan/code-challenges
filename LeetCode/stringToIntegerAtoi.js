@@ -59,5 +59,56 @@ Explanation: The number "-91283472332" is out of the range of a 32-bit signed in
  * @return {number}
  */
 var myAtoi = function(str) {
+  let i = 0;
+  while (str[i] === ' ')
+    i++;
 
+  let isNegative = false;
+  if (str[i] === '+' || str[i] === '-') {
+    isNegative = str[i] === '-' ? true : false;
+    i++;
+  }
+
+  if (str.charCodeAt(i) < 48 || str.charCodeAt(i) > 57)
+    return 0;
+
+  let result = 0;
+  for (; i < str.length; ++i) {
+    const ascii = str.charCodeAt(i);
+    if (ascii >= 48 && ascii <= 57) {
+      const digitVal = str[i] - '0';
+      result = result * 10 + digitVal;
+    }
+    else
+      break;
+  }
+
+  if (isNegative) {
+    result *= -1;
+    return result >= -2147483648 ? result : -2147483648;
+  }
+  else return result <= 2147483647 ? result : 2147483647;
 };
+
+
+/*
+Solution:
+Find the start index by trimming the whitespace from the beginning first.
+
+Then we find whether it's negative or positive.
+
+If the first character left is not an integer return 0 because we can't operate on it.
+
+Then we loop through and start adding to the result. If the current char is not a digit,
+stop right there.
+Else, cast to a digit and multiple the result by 10 and add the new digit.
+
+Figure out if the number is out of bounds and if it is, return the max instead.
+*/
+
+console.log(myAtoi("   -42") === -42);
+console.log(myAtoi("4193 with words") === 4193);
+console.log(myAtoi("words and 987") === 0);
+console.log(myAtoi("-91283472332") === -2147483648);
+console.log(myAtoi("3.14159") === 3)
+console.log(myAtoi("  -0012a42") === -12)
