@@ -55,39 +55,38 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
  * @return {number}
  */
 
-var DIGIT_VALUES = {
-  I: 1,
-  V: 5,
-  X: 10,
-  L: 50,
-  C: 100,
-  D: 500,
-  M: 1000
-};
 
+const romanToInt = function(s) {
+  const DIGIT_VALUES = {
+    I: 1,
+    V: 5,
+    X: 10,
+    L: 50,
+    C: 100,
+    D: 500,
+    M: 1000
+  };
 
-var romanToInt = function(s) {
   let total = 0;
   for (let i = 0; i < s.length; ++i) {
-    // console.log(s[i]);
-    if ((i + 1) >= s.length) {
+    // If the value of the next numeral is greater than the current one,
+    // we know this is a case where we need to subtract the current numeral
+    // from the next numeral ie IX.
+    if (DIGIT_VALUES[s[i + 1]] > DIGIT_VALUES[s[i]]) {
+      total += (DIGIT_VALUES[s[i + 1]] - DIGIT_VALUES[s[i]]);
+      i++;
+    }
+    // Else, simply add the current numeral value.
+    else
       total += DIGIT_VALUES[s[i]];
-    }
-    else {
-      if (DIGIT_VALUES[s[i + 1]] > DIGIT_VALUES[s[i]]) {
-        // console.log('asdf', DIGIT_VALUES[s[i + 1]], DIGIT_VALUES[s[i]]);
-        total += (DIGIT_VALUES[s[i + 1]] - DIGIT_VALUES[s[i]]);
-        i++;
-      }
-      else {
-        total += DIGIT_VALUES[s[i]];
-        // console.log(total);
-      }
-    }
   }
   return total;
 };
 
+/*
+Solution:
+Simply count from left to right. Use the hashmap to get unique numerals.
+*/
 
 // console.log(romanToInt("III"));
 // console.log(romanToInt("IV"));
