@@ -62,6 +62,12 @@ var findMedianSortedArrays = function(nums1, nums2) {
   }
 };
 
+/*
+Solution
+We create a combined array that will add items from both arrays in order until the stop index (the median point).
+If the array is even, we need the last two elements of the array and halve them.
+If the array is not even, we just need the last element of the combined array.
+*/
 
 console.log(findMedianSortedArrays([1,3],[2]));
 console.log(findMedianSortedArrays([1,2],[3,4]));
