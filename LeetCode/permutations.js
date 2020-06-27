@@ -28,24 +28,26 @@ var permute = function(nums) {
   let permutations = [];
 
   const visited = new Set();
-  const dfs = (numStr) => {
+  const dfs = (numArr) => {
     if (visited.size === nums.length) {
-      permutations.push(numStr);
+      permutations.push([...numArr]);
       return;
     }
 
     nums.forEach(n => {
       if (!visited.has(n)) {
-        const numArrCopy = [...numStr];
-        numArrCopy.push(n);
+        numArr.push(n);
         visited.add(n);
-        dfs(numArrCopy);
+
+        dfs(numArr);
+
+        numArr.pop();
         visited.delete(n);
       }
     });
-
   }
-  dfs('');
+
+  dfs([]);
 
   return permutations;
 };
