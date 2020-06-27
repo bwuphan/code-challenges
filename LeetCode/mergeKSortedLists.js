@@ -27,10 +27,47 @@ Output: 1->1->2->3->4->4->5->6
  * @return {ListNode}
  */
 
+
+
+// I have two ways of doing this. FIrst solution time complexity is O(kN), second is NlogN
 function ListNode(val) {
   this.val = val;
   this.next = null;
 }
+
+var mergeKLists = function(lists) {
+  if (!lists.length)
+    return null;
+
+  let remainList = 0;
+  lists.forEach(node => {
+    if (node)
+      remainList++;
+  });
+
+  const head = new ListNode(0);
+  let curNode = head;
+  while (remainList) {
+    let smallestNodeIdx = null;
+    lists.forEach((node, i) => {
+      if (node && (smallestNodeIdx === null || node.val < lists[smallestNodeIdx].val)) {
+        smallestNodeIdx = i;
+      }
+    });
+
+    curNode.next = lists[smallestNodeIdx];
+    curNode = lists[smallestNodeIdx];
+    lists[smallestNodeIdx] = lists[smallestNodeIdx].next;
+
+    if (!lists[smallestNodeIdx])
+      remainList--;
+  }
+
+  return head.next;
+};
+
+
+
 
 var mergeKLists = function(lists) {
   let numArr = [];
@@ -43,17 +80,14 @@ var mergeKLists = function(lists) {
     addNumsFromList(node.next);
   }
 
-  lists.forEach(list => {
-    addNumsFromList(list);
-  });
+  lists.forEach(list => addNumsFromList(list));
 
   numArr.sort((a, b) => a - b);
 
 
   const createNode = function(idx) {
-    if (idx >= numArr.length) {
+    if (idx >= numArr.length)
       return null;
-    }
 
     let newNode = new ListNode(numArr[idx++]);
     newNode.next = createNode(idx);
@@ -64,11 +98,11 @@ var mergeKLists = function(lists) {
   return createNode(0);
 };
 
-// var test = [
-//   {val: 1, next: {val: 4, next: { val: 5, next: null}}},
-//   {val: 1, next: {val: 3, next: { val: 4, next: null}}},
-//   {val: 2, next: {val: 6, next: null}}
-// ]
+var test = [
+  {val: 1, next: {val: 4, next: { val: 5, next: null}}},
+  {val: 1, next: {val: 3, next: { val: 4, next: null}}},
+  {val: 2, next: {val: 6, next: null}}
+]
 
 var test = [
   null,
