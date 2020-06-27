@@ -51,17 +51,17 @@ var combinationSum = function(candidates, target) {
       results.add(numString.slice(1, numString.length));
       return;
     }
-    // candidate sums should be positive.
-    if (sum < 0)
-      return;
 
     const diff = target - sum;
 
     // Increment the place in the candidates array until we found a number
     // that is larger than the difference.
+    // If there is no candidate larger than the diff, then we know there is no
+    // solution currently.
     while (diff < candidates[maxNumIdx])
       maxNumIdx++;
 
+    // This only loops if we found a maxNumIdx.
     for (let i = maxNumIdx; i < candidates.length; ++i) {
       const candidate = candidates[i];
       const newNumString = `${numString},${candidate}`;
@@ -82,4 +82,4 @@ var combinationSum = function(candidates, target) {
 
 
 console.log(combinationSum(candidates = [2,3,6,7], target = 7));
-console.log(combinationSum(candidates = [2,3,5], target = 8));
+// console.log(combinationSum(candidates = [2,3,5], target = 8));
