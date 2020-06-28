@@ -23,32 +23,45 @@ get new method signature.
  */
 var merge = function(intervals) {
   intervals = intervals.sort((a, b) => a[0] - b[0]);
+
   let mergedArr = [];
   let curInterval = null;
   for (let i = 0; i < intervals.length; ++i) {
-    if (!curInterval) {
+    if (!curInterval)
       curInterval = intervals[i];
-    }
+
     const nextInterval = intervals[i + 1] || null;
 
+    // If there is no next interval or the last el of the current interval is greater than the
+    // first el of the next interval, we know there is no merge necessary so we can just push the
+    // current interval.
     if (!nextInterval || curInterval[1] < nextInterval[0]) {
       mergedArr.push(curInterval);
       curInterval = null;
     }
-    // If the next interval exists and both the first el of the current interval is greater than
-    // both elements of the nextInterval, merge the first el of the curInterval to the next interval
-    else if (nextInterval && curInterval[0] > nextInterval[0] && curInterval[0] > nextInterval[1]) {
-      curInterval[0] = nextInterval[0];
-    }
     // If the last element of the current interval is less than the last element of the next interval,
     // merge last element.
-    else if (curInterval[1] < nextInterval[1]){
+    else if (curInterval[1] < nextInterval[1])
       curInterval[1] = nextInterval[1];
-    }
   }
+
   return mergedArr;
 };
 
+/*
+Solution:
+We sort the intervals lowest first num to highest first num.
 
-console.log(merge([[2,3],[0,1],[1,2],[3,4],[4,5],[1,1],[0,1],[4,6],[5,7],[1,1],[3,5]]));
-console.log(merge([[1,4],[0,0]]))
+Loop through the intervals.
+  The current interval will potentially be mutated as we keep the first number the same but we may
+  need to change the second number to be the highest interval with that same first number.
+
+  If we get to a spot where the last digit of the current interval is less than the first of the
+  last, we're ok to just add to the array and continue.
+*/
+
+
+// console.log(merge([[2,3],[0,1],[1,2],[3,4],[4,5],[1,1],[0,1],[4,6],[5,7],[1,1],[3,5]]));
+// console.log(merge([[1,4],[0,0]]))
+// console.log(merge([[1,4],[4,5]]))
+console.log(merge([[1,3],[2,6],[8,10],[15,18]]))
