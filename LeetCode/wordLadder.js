@@ -42,10 +42,26 @@ const Queue = require('../Prototypes/Queue.js').Queue;
  * @return {number}
  */
 var ladderLength = function(beginWord, endWord, wordList) {
-  // BFS
-  let queue = new Queue();
-  queue.enqueue({ word: beginWord, moves: 1, wordList });
+  // Create a dictionary where the keys are possible words but with one letter starred and the keys are
+  // the words in the wordList that can match up with that word.
+  // ie   *ot': Set { 'hot', 'dot', 'lot' }
+  // This allows us to quickly access the words we can add to the queue.
+  const dict = {};
+  wordList.forEach(word => {
+    for (let i = 0; i < beginWord.length; ++i) {
+      const newWord = word.slice(0, i) + '*' + word.slice(i + 1, beginWord.length);
+      if (!dict[newWord])
+        dict[newWord] = new Set();
 
+      dict[newWord].add(word);
+    }
+  });
+
+
+  let queue = new Queue();
+  queue.enqueue({ word: beginWord, moves: 1 });
+
+  const visited = new Set(beginWord);
   while (!queue.isEmpty()) {
     let item = queue.dequeue();
 
@@ -55,30 +71,34 @@ var ladderLength = function(beginWord, endWord, wordList) {
       return item.moves;
 
     // Otherwise, iterate through the wordList and see if the diff between two words is only 1.
-    wordList.forEach(word => {
-      if (numDifferences(item.word, word) === 1) {
-        // Filter out the used word out of the new wordList.
-        wordList = wordList.filter(w => w !== word);
-        queue.enqueue({ word, moves: item.moves + 1, wordList });
-      }
-    });
+    const words = new Set();
+    for (let i = 0; i < beginWord.length; ++i) {
+      const key = item.word.slice(0, i) + '*' + item.word.slice(i + 1, beginWord.length);
+      const dictSet = dict[key];
+
+      if (dictSet)
+        dictSet.forEach(w => {
+          if (!visited.has(w)) {
+            queue.enqueue({ word: w, moves: item.moves + 1 });
+            visited.add(w);
+          }
+        });
+    }
   }
 
   return 0;
 };
 
-function numDifferences(str1, str2) {
-  let numDifferences = 0;
-  for (let i = 0; i < str1.length; ++i) {
-    const char1 = str1[i];
-    const char2 = str2[i];
 
-    if (char1 !== char2) {
-      numDifferences++;
-    }
-  }
-  return numDifferences;
-}
+/*
+Solution:
+Create a dictionary where the keys are possible words but with one letter starred and the keys are
+the words in the wordList that can match up with that word.
+ie   *ot': Set { 'hot', 'dot', 'lot' }
+This allows us to quickly access the words we can add to the queue.
+
+BFS through using the dict. Use a visited set to mark off visited words.
+*/
 
 // console.log(numDifferences('doc','cog'))
 console.log(ladderLength('hit', 'cog', ["hot","dot","dog","lot","log","cog"]))
