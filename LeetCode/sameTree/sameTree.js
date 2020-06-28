@@ -35,13 +35,12 @@ Input:     1         1
 Output: false
 */
 
-const Queue = require('../../Prototypes/Queue.js').Queue;
-
 /**
  * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
  * }
  */
 /**
@@ -50,37 +49,12 @@ const Queue = require('../../Prototypes/Queue.js').Queue;
  * @return {boolean}
  */
 var isSameTree = function(p, q) {
-  if (!p && !q)
+  if (p === null && q === null)
     return true;
-  else if ((!p && q) || (p && !q))
+  if (p === null || q === null || p.val !== q.val)
     return false;
 
-  const queue = new Queue();
-
-  queue.enqueue(p);
-  queue.enqueue(q);
-
-  while (!queue.isEmpty()) {
-    const pNode = queue.dequeue();
-    const qNode = queue.dequeue();
-    // console.log(pNode);
-    // console.log(qNode);
-    if ((pNode && !qNode) || (!pNode && qNode))
-      return false;
-    else if (!pNode && !qNode)
-      continue;
-    else if (pNode.val !== qNode.val)
-      return false;
-    else {
-      queue.enqueue(pNode.left);
-      queue.enqueue(qNode.left);
-
-      queue.enqueue(pNode.right);
-      queue.enqueue(qNode.right);
-    }
-  }
-
-  return true;
+  return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
 };
 
 /**
