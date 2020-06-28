@@ -46,52 +46,91 @@ const Queue = require('../Prototypes/Queue.js').Queue;
  * @return {string[][]}
  */
 var findLadders = function(beginWord, endWord, wordList) {
-  if (wordList.indexOf(endWord) === -1 && wordList.indexOf(beginWord) === -1)
-    return [];
+    const wordSet = new Set(wordList);
+    wordSet.add(beginWord);
 
-  let queue = new Queue();
-  queue.enqueue({ word: beginWord, moves: 1, usedWords: new Set(), path: beginWord });
+    if (!wordSet.has(endWord)) return [];
 
-  const solutions = [];
-  let minMoves = null;
-  while (!queue.isEmpty()) {
-    const item = queue.dequeue();
+    const distanceMap = new Map();
+    const wordMap = new Map();
 
-    if (item.word === endWord) {
-      if (!minMoves || item.moves <= minMoves) {
-        solutions.push(item.path.split(','));
-        minMoves = item.moves;
-      }
-    }
-    else {
-      wordList.forEach(word => {
-        if (!item.usedWords.has(word) && numDifferences(item.word, word) === 1) {
-          const usedWords = new Set(item.usedWords);
-          usedWords.add(word);
-          queue.enqueue({ word, moves: item.moves + 1, usedWords, path: `${item.path},${word}`});
+    // 1. BFS construct distanceMap and wordMap from end to start
+    const queue = [];
+    const visited = new Set();
+
+    // Flag to check if we can reach start from end
+    let reached = false;
+
+    queue.push(endWord);
+    visited.add(endWord);
+    let distance = 0;
+    distanceMap.set(endWord, distance);
+    while(queue.length !== 0) {
+        let size = queue.length;
+        distance++;
+        for(let i = 0; i < size; i++) {
+            const word = queue.shift();
+            for(let w of getNextWords(word, wordSet)) {
+                // push into wordMap from start to end
+                // we need to push here before visited check
+                if (!wordMap.has(w)) wordMap.set(w, []);
+                wordMap.get(w).push(word);
+
+                if (visited.has(w)) continue;
+                if (w === beginWord) reached = true;
+
+                // put into distance map
+                distanceMap.set(w, distance);
+
+                queue.push(w);
+                visited.add(w);
+            }
         }
-      });
     }
-  }
 
-  return solutions.filter(solution => solution.length === minMoves);
+    // short circuit if can not reach
+    if (!reached) return [];
+
+    // 2. DFS find path where distance - 1
+    const result = [];
+    dfs(result, [beginWord], beginWord, endWord, wordMap, distanceMap);
+
+    return result;
 };
 
-
-
-function numDifferences(str1, str2) {
-  let numDifferences = 0;
-  for (let i = 0; i < str1.length; ++i) {
-    const char1 = str1[i];
-    const char2 = str2[i];
-
-    if (char1 !== char2) {
-      numDifferences++;
+var dfs = function(result, tmpPath, word, endWord, wordMap, distanceMap) {
+    if (word === endWord) {
+        result.push([...tmpPath]);
+        return;
     }
-  }
-  return numDifferences;
+
+    for (let nextWord of wordMap.get(word)) {
+        if (distanceMap.get(word) === distanceMap.get(nextWord) + 1) {
+            tmpPath.push(nextWord);
+            dfs(result, tmpPath, nextWord, endWord, wordMap, distanceMap);
+            tmpPath.pop();
+        }
+    }
 }
 
+var getNextWords = function(word, wordSet) {
+    const result = [];
+    for (let i = 0; i < word.length; i++) {
+        let currentCode = word.charCodeAt(i);
+        for (let c = 97; c <= 122; c++) {
+            if (c !== currentCode) {
+                const chars = word.split('');
+                chars[i] = String.fromCharCode(c);
+                let newWord = chars.join('');
+                if (wordSet.has(newWord)) {
+                    result.push(newWord);
+                }
+            }
+        }
+    }
+
+    return result;
+}
 // console.log(findLadders(beginWord = "hit",
 // endWord = "cog",
 // wordList = ["hot","dot","dog","lot","log","cog"]))
