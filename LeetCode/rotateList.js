@@ -41,45 +41,27 @@ var rotateRight = function(head, k) {
   if (!head.next)
     return head;
 
-  // Does one rotation.
-  const rotate = (head) => {
-    let curNode = head;
-    let prevNode = null;
-
-    while (true) {
-      if (curNode.next) {
-        prevNode = curNode;
-        curNode = curNode.next;
-      }
-      else break;
-    }
-
-    // If there is a previous node, set prevNode as the new tail.
-    // Set the old tail as the head and return that node.
-    if (prevNode) {
-      prevNode.next = null;
-      curNode.next = head;
-      return curNode;
-    }
-    // Else, return as is.
-    return head;
-  }
-
-
-  // Get length of linked list.
-  let curNode = head;
-  let length = 0;
-  while (curNode) {
+  // Get the length of list and get the old tail so we can complete the link
+  // for now.
+  let length = 1;
+  let oldTail = head;
+  while (oldTail.next) {
     length++;
-    curNode = curNode.next;
+    oldTail = oldTail.next;
   }
+  oldTail.next = head;
 
-  // Use this to cut down repeats. We don't need to rotate more than the length.
-  k = k % length;
+  // Get the index of the new tail.
+  // We use modulo so we don't do extra iterations we don't need.
+  // ie for a list size of 3, rotating 1 and 4 times is the same thing.
+  const newTailIdx = length - k % length - 1;
 
-  // Do the rotations.
-  for (let i = 0; i < k; ++i)
-    head = rotate(head)
+  let curNode = head;
+  for (let i = 0; i <= newTailIdx - 1; ++i)
+    curNode = curNode.next;
 
+  // Break the chain at the new tail and return the new head.
+  head = curNode.next;
+  curNode.next = null;
   return head;
 };
