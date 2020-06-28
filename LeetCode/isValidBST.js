@@ -48,9 +48,18 @@ var isValidBST = function(root) {
 
     const val = node.val;
 
+    // It is invalid if the current val is less than or equal to the lower limit
+    // or if the current val is greater than or equal to the upper one.
+    // We add = because by definition if they are equal it is invalid.
     if ((lowerLimit !== null && val <= lowerLimit) || (upperLimit !== null && val >= upperLimit)) return false;
 
     return !traverseTree(node.right, val, upperLimit) || !traverseTree(node.left, lowerLimit, val) ? false : true;
   }
+
+
   return traverseTree(root, null, null);
 };
+
+/*
+SOlution: Use recursion
+*/
