@@ -33,60 +33,54 @@ You may assume that there are no duplicate edges in the input prerequisites.
  * @return {boolean}
  */
 var canFinish = function(numCourses, prerequisites) {
-  if (prerequisites.length === 0) return true;
+  if (!prerequisites.length)
+    return false;
 
-  // Create graph of prerequisites.
-  let graph = {};
+  const graph = new Map();
+  let numNodes = 0;
+
   prerequisites.forEach(prereq => {
-    const val = prereq.shift();
-    if (val in graph) {
-      graph[val] = graph[val].concat(prereq);
-    }
-    else {
-      graph[val] = prereq;
-    }
+    const node = prereq[0];
+    const dest = prereq[1];
+
+    if (graph.has(node))
+      graph.get(node).push(dest);
+    else
+      graph.set(node, [dest]);
   });
 
-  // The unvisited nodes.
-  let unvisited = { ...graph };
-
-  /* The nodes that are currently being visited. If we meet a node in here while we are traversing
-     this node, there is a cycle */
-  let visiting = {};
-
-  // These are the nodes that are done being visited.
-  let done = {};
+  const visited = new Set();
+  const visiting = new Set();
+  const order = [];
 
   let hasCycle = false;
-  const dfs = function(courseNum) {
-    if (courseNum in visiting) {
+  const sort = (node) => {
+    if (visiting.has(node)) {
       hasCycle = true;
       return;
     }
+    if (hasCycle || visited.has(node))
+      return;
 
-    if (!hasCycle) {
-      visiting[courseNum] = true;
 
-      delete unvisited[courseNum];
 
-      if (graph[courseNum] !== undefined) {
-        graph[courseNum].forEach(num => {
-          dfs(num);
-        });
-      }
-      delete visiting[courseNum];
+    graph.get(node).forEach(dest => {
+      visiting.add(dest);
+      sort(dest);
+      visiting.delete(dest);
+    });
 
-      done[courseNum] = true;
-    }
+    order.push(node);
+    visited.add(node);
   }
 
-  for (let key in graph) {
-    dfs(key);
+  for (let node in graph) {
+    dfs(node);
 
-    if (hasCycle) {
+    if (hasCycle)
       return false;
-    }
   }
+
   return true;
 };
 
