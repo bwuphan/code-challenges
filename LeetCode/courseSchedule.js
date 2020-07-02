@@ -62,21 +62,20 @@ var canFinish = function(numCourses, prerequisites) {
     if (hasCycle || visited.has(node))
       return;
 
-
-
+      visiting.add(node);
+    if (graph.has(node)) {
     graph.get(node).forEach(dest => {
-      visiting.add(dest);
       sort(dest);
-      visiting.delete(dest);
+      // visiting.delete(dest);
     });
-
+    }
+    visiting.delete(node);
     order.push(node);
     visited.add(node);
   }
 
-  for (let node in graph) {
-    dfs(node);
-
+  for (let i = 0; i < numCourses; ++i) {
+    sort(i);
     if (hasCycle)
       return false;
   }
@@ -85,7 +84,7 @@ var canFinish = function(numCourses, prerequisites) {
 };
 
 
-// console.log(canFinish(2, [[1,0]]));
-// console.log(canFinish(2, [[1,0],[0,1]]));
-// console.log(canFinish(3, [[1,0],[1,2],[0,1]]));
+console.log(canFinish(2, [[1,0]]));
+console.log(canFinish(2, [[1,0],[0,1]]));
+console.log(canFinish(3, [[1,0],[1,2],[0,1]]));
 console.log(canFinish(4, [[2,0],[1,0],[3,1],[3,2],[1,3]]));
