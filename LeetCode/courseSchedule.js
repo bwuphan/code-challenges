@@ -33,49 +33,46 @@ You may assume that there are no duplicate edges in the input prerequisites.
  * @return {boolean}
  */
 var canFinish = function(numCourses, prerequisites) {
+  // If there are no prereqs, we know there is a solution.
   if (!prerequisites.length)
-    return false;
+    return true;
 
+  // Create a graph to keep track of courses and their destinations.
   const graph = new Map();
-  let numNodes = 0;
 
   prerequisites.forEach(prereq => {
-    const node = prereq[0];
+    const course = prereq[0];
     const dest = prereq[1];
 
-    if (graph.has(node))
-      graph.get(node).push(dest);
+    if (graph.has(course))
+      graph.get(course).push(dest);
     else
-      graph.set(node, [dest]);
+      graph.set(course, [dest]);
   });
 
   const visited = new Set();
   const visiting = new Set();
-  const order = [];
 
   let hasCycle = false;
-  const sort = (node) => {
-    if (visiting.has(node)) {
+
+  const dfs = (course) => {
+    if (visiting.has(course))
       hasCycle = true;
+
+    if (hasCycle || visited.has(course))
       return;
-    }
-    if (hasCycle || visited.has(node))
-      return;
 
+    visiting.add(course);
 
+    if (graph.has(course))
+      graph.get(course).forEach(dest => dfs(dest));
 
-    graph.get(node).forEach(dest => {
-      visiting.add(dest);
-      sort(dest);
-      visiting.delete(dest);
-    });
-
-    order.push(node);
-    visited.add(node);
+    visiting.delete(course);
+    visited.add(course);
   }
 
-  for (let node in graph) {
-    dfs(node);
+  for (let i = 0; i < numCourses; ++i) {
+    dfs(i);
 
     if (hasCycle)
       return false;
@@ -85,7 +82,19 @@ var canFinish = function(numCourses, prerequisites) {
 };
 
 
-// console.log(canFinish(2, [[1,0]]));
-// console.log(canFinish(2, [[1,0],[0,1]]));
-// console.log(canFinish(3, [[1,0],[1,2],[0,1]]));
+/*
+Solution:
+Create a graph and then topological sort.
+
+Keep track of visited courses so we don't traverse traveled paths.
+
+Keep track of visiting courses. If we reach a course that we are currently visiting,
+we have a cycle and it is not possible so we return false.
+
+*/
+
+
+console.log(canFinish(2, [[1,0]]));
+console.log(canFinish(2, [[1,0],[0,1]]));
+console.log(canFinish(3, [[1,0],[1,2],[0,1]]));
 console.log(canFinish(4, [[2,0],[1,0],[3,1],[3,2],[1,3]]));
