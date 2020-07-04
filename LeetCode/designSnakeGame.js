@@ -56,6 +56,143 @@ snake.move("L"); -> Returns 2 (Snake eats the second food)
 snake.move("U"); -> Returns -1 (Game over because snake collides with border)
 */
 
+var Node = function(val) {
+  this.val = val;
+  this.next = null;
+  this.prev = null;
+}
+
+
+var LinkedList = function() {
+  this.head = null;
+  this.tail = null;
+}
+
+LinkedList.prototype.addToTail = function(val) {
+  const newNode = new Node(val);
+  // If there is no head, make this the new head.
+  if (!this.head) {
+    this.head = newNode;
+  }
+  // Else, add to tail.
+  else {
+    const oldTail = this.tail;
+    // If there is no tail, add tail to head.
+    if (!this.tail) {
+      this.head.next = newNode;
+      newNode.prev = this.head;
+    }
+    // Else, add to previous tail.
+    else {
+      newNode.prev = oldTail;
+      oldTail.next = newNode;
+    }
+
+    // Set tail to newest node.
+    this.tail = newNode;
+  }
+
+  return newNode;
+}
+
+LinkedList.prototype.addToHead = function(val) {
+  const newNode = new Node(val);
+
+  if (!this.head)
+    this.head = newNode;
+  else {
+    newNode.next = this.head;
+    this.head = newNode;
+  }
+
+  return newNode;
+}
+
+LinkedList.prototype.removeFromHead = function() {
+  // Only remove if a head exists.
+  if (this.head) {
+    const curHead = this.head;
+    this.head = this.head.next;
+
+    // If the head and tail are the same, this is the only node and we need to null out this.tail.
+    if (this.head === this.tail) {
+      this.tail = null;
+    }
+
+    return curHead;
+  }
+  return null;
+}
+
+LinkedList.prototype.removeFromTail = function() {
+  // Only remove if a tail exists.
+  if (this.tail) {
+    const oldTail = this.tail;
+    this.tail = this.tail.prev;
+    this.tail.next = null;
+    return oldTail;
+  }
+}
+
+LinkedList.prototype.removeNode = function(node) {
+  if (this.head === node) {
+    this.removeFromHead();
+  }
+  else if (this.tail === node) {
+    this.removeFromTail();
+  }
+  else {
+    // Connect previous node to next node.
+    node.prev.next = node.next;
+    node.next.prev = node.prev;
+  }
+}
+
+LinkedList.prototype.moveToTail = function(node) {
+  this.removeNode(node);
+  return this.addToTail(node.val);
+}
+
+LinkedList.prototype.removeDuplicates = function() {
+  let valObj = {};
+
+  let curNode = this.head;
+  while(curNode !== null) {
+    const nextNode = curNode.next;
+    // If the current node value is in valObj, remove the node.
+    if (curNode.val in valObj) {
+      this.removeNode(curNode);
+    }
+    // Else, set current node value in valObj.
+    else {
+      valObj[curNode.val] = true;
+    }
+
+    curNode = nextNode;
+  }
+}
+
+LinkedList.prototype.outputVals = function() {
+  let curNode = this.head;
+  while (curNode !== null) {
+    console.log(curNode.val);
+    curNode = curNode.next;
+  }
+}
+
+LinkedList.prototype.returnKthFromTail = function(k) {
+  let i = 0;
+  let curNode = this.tail;
+  while (curNode !== null) {
+    if (i === k) {
+      return curNode;
+    }
+    i++;
+    curNode = curNode.prev;
+  }
+  return null;
+}
+
 /**
  * Initialize your data structure here.
         @param width - screen width
@@ -67,7 +204,17 @@ snake.move("U"); -> Returns -1 (Game over because snake collides with border)
  * @param {number[][]} food
  */
 var SnakeGame = function(width, height, food) {
+  this.width = width;
+  this.height = height;
+  this.snakeOccupiedSet = new Set(['0,0']);
+  this.snake = new LinkedList();
+  this.snake.addToTail('0,0');
+  if (food && food.length) {
+    this.curFood = food.shift().join(',');
+    this.nextFoods = new Set(food.map(f => f.join(',')));
 
+  }
+  this.score = 0;
 };
 
 /**
@@ -79,7 +226,51 @@ var SnakeGame = function(width, height, food) {
  * @return {number}
  */
 SnakeGame.prototype.move = function(direction) {
+  const coordinates = this.snake.head.val.split(',').map(num => +num);
+  switch(direction) {
+    case 'R':
+      coordinates[1]++;
+      break;
+    case 'D':
+      coordinates[0]++;
+      break;
+    case 'L':
+      coordinates[1]--;
+      break;
+    case 'U':
+      coordinates[0]--;
+      break;
+  }
 
+  // console.log(coordinates, this.curFood, this.snakeOccupiedSet);
+  if (coordinates[0] < 0 || coordinates[0] >= this.height || coordinates[1] < 0 || coordinates[1] >= this.width)
+    return -1;
+
+  const newCoordinatesStr = coordinates.join(',');
+
+
+  if (this.curFood === newCoordinatesStr) {
+    this.score++;
+    this.nextFoods.forEach(coord => {
+      if (!this.snakeOccupiedSet.has(coord)) {
+        this.curFood = coord;
+        this.nextFoods.delete(coord);
+      }
+    });
+  }
+  else {
+    let removed = null;
+    if (this.snake.tail)
+      removed = this.snake.removeFromTail();
+    else
+      removed = this.snake.removeFromHead();
+
+    // console.log(removed);
+    this.snakeOccupiedSet.delete(removed.val);
+  }
+  this.snake.addToHead(newCoordinatesStr);
+  this.snakeOccupiedSet.add(newCoordinatesStr);
+  return this.score;
 };
 
 /**
@@ -87,3 +278,27 @@ SnakeGame.prototype.move = function(direction) {
  * var obj = new SnakeGame(width, height, food)
  * var param_1 = obj.move(direction)
  */
+
+
+
+// const snake = new SnakeGame(width = 3, height = 2, food = [[1,2],[0,1]]);
+// console.log(snake.move('R'));
+// console.log(snake.move('D'));
+// console.log(snake.move('R'));
+// console.log(snake.move('U'));
+// console.log(snake.move('L'));
+// console.log(snake.move('U'));
+
+// const snake2 = new SnakeGame(2,2,[[1,1],[0,0]]);
+// console.log(snake2.move('R'));
+// console.log(snake2.move('D'));
+// console.log(snake2.move('L'));
+// console.log(snake2.move('U'));
+// console.log(snake2.move('R'));
+
+const snake3 = new SnakeGame(2,2,[[1,1],[0,0],[0,1]]);
+console.log(snake3.move('R'));
+console.log(snake3.move('D'));
+console.log(snake3.move('L'));
+console.log(snake3.move('U'));
+console.log(snake3.move('R'));
