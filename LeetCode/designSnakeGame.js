@@ -218,9 +218,8 @@ var SnakeGame = function(width, height, food) {
   this.snake.addToTail('0,0');
   this.snakeOccupiedSet = new Set(['0,0']);
   if (food && food.length) {
-    this.curFood = food.shift().join(',');
-    this.nextFoods = food;
-
+    this.nextFoods = food.reverse();
+    this.curFood = this.nextFoods.pop().join(',');
   }
   this.score = 0;
 };
@@ -234,54 +233,54 @@ var SnakeGame = function(width, height, food) {
  * @return {number}
  */
 SnakeGame.prototype.move = function(direction) {
-  const coordinates = this.snake.head.val.split(',').map(num => +num);
+  const coord = this.snake.head.val.split(',');
+  let row = +coord[0];
+  let col = +coord[1];
   switch(direction) {
     case 'R':
-      coordinates[1]++;
+      col++;
       break;
     case 'D':
-      coordinates[0]++;
+      row++;
       break;
     case 'L':
-      coordinates[1]--;
+      col--;
       break;
     case 'U':
-      coordinates[0]--;
+      row--;
       break;
   }
 
-  // console.log(coordinates, this.curFood, this.snakeOccupiedSet);
-  const newCoordinatesStr = coordinates.join(',');
-  console.log(newCoordinatesStr, this.snakeOccupiedSet, direction, this.curFood);
-  if (coordinates[0] < 0 || coordinates[0] >= this.height || coordinates[1] < 0 || coordinates[1] >= this.width)
+  const newCoordStr = `${row},${col}`;
+
+  if (this.snake.tail)
+    this.snakeOccupiedSet.delete(this.snake.tail.val);
+
+  if (row < 0 || row >= this.height || col < 0 || col >= this.width || this.snakeOccupiedSet.has(newCoordStr))
     return -1;
 
-  if (this.curFood === newCoordinatesStr) {
+  if (this.curFood === newCoordStr) {
     this.score++;
 
-    if (this.nextFoods.length >= 1)
-      this.curFood = this.nextFoods.shift().join(',');
+    if (this.nextFoods.length >= 1) {
+      const popped = this.nextFoods.pop();
+      this.curFood = `${popped[0]},${popped[1]}`
+    }
     else
       this.curFood = null;
   }
   else {
     let removed = null;
-    // console.log('TAIL');
-    // this.snake.outputVals();
+
     if (this.snake.tail)
       removed = this.snake.removeFromTail();
     else
       removed = this.snake.removeFromHead();
-    // console.log('REMOVED', removed.val);
     this.snakeOccupiedSet.delete(removed.val);
-    // console.log(removed);
   }
 
-  if (this.snakeOccupiedSet.has(newCoordinatesStr))
-    return -1;
-
-  this.snake.addToHead(newCoordinatesStr);
-  this.snakeOccupiedSet.add(newCoordinatesStr);
+  this.snake.addToHead(newCoordStr);
+  this.snakeOccupiedSet.add(newCoordStr);
   return this.score;
 };
 
@@ -329,24 +328,24 @@ SnakeGame.prototype.move = function(direction) {
 // console.log(snake4.move('L'));
 // console.log(snake4.move('D'));
 
-const snake5 = new SnakeGame(3,3,[[0,1],[0,2],[1,2],[2,2],[2,1],[2,0],[1,0]])
+// const snake5 = new SnakeGame(3,3,[[0,1],[0,2],[1,2],[2,2],[2,1],[2,0],[1,0]])
 
-console.log(snake5.move("R"));
-console.log(snake5.move("R"));
-console.log(snake5.move("D"));
-console.log(snake5.move("D"));
-console.log(snake5.move("L"));
-console.log(snake5.move("L"));
-console.log(snake5.move("U"));
-console.log(snake5.move("U"));
-console.log(snake5.move("R"));
-console.log(snake5.move("R"));
-console.log(snake5.move("D"));
-console.log(snake5.move("D"));
-console.log(snake5.move("L"));
-console.log(snake5.move("L"));
-console.log(snake5.move("U"));
-console.log(snake5.move("R"));
-console.log(snake5.move("U"));
-console.log(snake5.move("L"));
-console.log(snake5.move("D"));
+// console.log(snake5.move("R"));
+// console.log(snake5.move("R"));
+// console.log(snake5.move("D"));
+// console.log(snake5.move("D"));
+// console.log(snake5.move("L"));
+// console.log(snake5.move("L"));
+// console.log(snake5.move("U"));
+// console.log(snake5.move("U"));
+// console.log(snake5.move("R"));
+// console.log(snake5.move("R"));
+// console.log(snake5.move("D"));
+// console.log(snake5.move("D"));
+// console.log(snake5.move("L"));
+// console.log(snake5.move("L"));
+// console.log(snake5.move("U"));
+// console.log(snake5.move("R"));
+// console.log(snake5.move("U"));
+// console.log(snake5.move("L"));
+// console.log(snake5.move("D"));
