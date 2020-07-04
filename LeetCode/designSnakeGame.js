@@ -215,11 +215,13 @@ var SnakeGame = function(width, height, food) {
   this.width = width;
   this.height = height;
   this.snake = new LinkedList();
-  this.snake.addToTail('0,0');
-  this.snakeOccupiedSet = new Set(['0,0']);
+  this.snake.addToHead('0,0'); //Init snake's head.
+  this.snakeOccupiedSet = new Set(['0,0']); // Set of coordinates the snake occupies.
+
+  // If food is passed in.
   if (food && food.length) {
-    this.nextFoods = food.reverse();
-    this.curFood = this.nextFoods.pop().join(',');
+    this.nextFoods = food.reverse(); // Reverse so we can pull stuff off the stack in constant time.
+    this.curFood = this.nextFoods.pop().join(','); // Set the current food.
   }
   this.score = 0;
 };
@@ -233,9 +235,12 @@ var SnakeGame = function(width, height, food) {
  * @return {number}
  */
 SnakeGame.prototype.move = function(direction) {
+  // Get the current snake head coordinates.
   const coord = this.snake.head.val.split(',');
   let row = +coord[0];
   let col = +coord[1];
+
+  // Get the coordinates of where the new head is going to be.
   switch(direction) {
     case 'R':
       col++;
@@ -250,18 +255,22 @@ SnakeGame.prototype.move = function(direction) {
       row--;
       break;
   }
-
   const newCoordStr = `${row},${col}`;
 
+  // If there is a tail, delete it out of the set because we are increasing the head and decreasing the tail.
+  // We need to delete just in case the new head runs into the old tail.
   if (this.snake.tail)
     this.snakeOccupiedSet.delete(this.snake.tail.val);
 
+  // If out of bounds or the snake occupies this space already, return -1.
   if (row < 0 || row >= this.height || col < 0 || col >= this.width || this.snakeOccupiedSet.has(newCoordStr))
     return -1;
 
+  // If we found food.
   if (this.curFood === newCoordStr) {
     this.score++;
 
+    // Set new current food.
     if (this.nextFoods.length >= 1) {
       const popped = this.nextFoods.pop();
       this.curFood = `${popped[0]},${popped[1]}`
@@ -270,6 +279,7 @@ SnakeGame.prototype.move = function(direction) {
       this.curFood = null;
   }
   else {
+    // If there is no food found, we need to remove a piece of the snake before we add to the head.
     let removed = null;
 
     if (this.snake.tail)
@@ -279,8 +289,10 @@ SnakeGame.prototype.move = function(direction) {
     this.snakeOccupiedSet.delete(removed.val);
   }
 
+  // Add the new part of the snake to the head and add to the occupied set as well.
   this.snake.addToHead(newCoordStr);
   this.snakeOccupiedSet.add(newCoordStr);
+
   return this.score;
 };
 
@@ -328,24 +340,24 @@ SnakeGame.prototype.move = function(direction) {
 // console.log(snake4.move('L'));
 // console.log(snake4.move('D'));
 
-// const snake5 = new SnakeGame(3,3,[[0,1],[0,2],[1,2],[2,2],[2,1],[2,0],[1,0]])
+const snake5 = new SnakeGame(3,3,[[0,1],[0,2],[1,2],[2,2],[2,1],[2,0],[1,0]])
 
-// console.log(snake5.move("R"));
-// console.log(snake5.move("R"));
-// console.log(snake5.move("D"));
-// console.log(snake5.move("D"));
-// console.log(snake5.move("L"));
-// console.log(snake5.move("L"));
-// console.log(snake5.move("U"));
-// console.log(snake5.move("U"));
-// console.log(snake5.move("R"));
-// console.log(snake5.move("R"));
-// console.log(snake5.move("D"));
-// console.log(snake5.move("D"));
-// console.log(snake5.move("L"));
-// console.log(snake5.move("L"));
-// console.log(snake5.move("U"));
-// console.log(snake5.move("R"));
-// console.log(snake5.move("U"));
-// console.log(snake5.move("L"));
-// console.log(snake5.move("D"));
+console.log(snake5.move("R"));
+console.log(snake5.move("R"));
+console.log(snake5.move("D"));
+console.log(snake5.move("D"));
+console.log(snake5.move("L"));
+console.log(snake5.move("L"));
+console.log(snake5.move("U"));
+console.log(snake5.move("U"));
+console.log(snake5.move("R"));
+console.log(snake5.move("R"));
+console.log(snake5.move("D"));
+console.log(snake5.move("D"));
+console.log(snake5.move("L"));
+console.log(snake5.move("L"));
+console.log(snake5.move("U"));
+console.log(snake5.move("R"));
+console.log(snake5.move("U"));
+console.log(snake5.move("L"));
+console.log(snake5.move("D"));
