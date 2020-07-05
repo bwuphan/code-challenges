@@ -45,10 +45,99 @@ names won't exist in the same directory.
 
 */
 
+class Directory {
+  constructor(name) {
+    this.name = name;
+    this.files = new Map();
+    this.subDirectories = new Map();
+  }
+
+  getSubDirectory(dirName) {
+    return this.subDirectories.get(dirName);
+  }
+
+  getFile(fileName) {
+    return this.files.get(fileName);
+  }
+
+  // getFiles() {
+  //   return this.letter;
+  // }
+
+
+  // addChild(node) {
+  //   this.children.set(node.getLetter(), node);
+  // }
+
+  // getChild(letter) {
+  //   return this.children.get(letter);
+  // }
+}
+
+class Trie {
+  constructor() {
+    this.root = new Directory('/');
+  }
+
+  insert(path, fileContent) {
+    let fileName = null;
+    // If fileContent is truthy or a blank string, we are adding a new file.
+    if (fileContent || fileContent === '') {
+      path = path.split('/');
+      fileName = path.pop();
+      path = path.reverse();
+    }
+    else
+      path = path.split('/').reverse();
+
+    let curDir = this.root;
+
+    for (let i = path.length - 1; i >= 0; --i) {
+      const dir = path[i];
+      if (dir) {
+        const nextDir = curDir.getSubDirectory(dir);
+
+        if (nextDir)
+          curDir = nextDir;
+        else {
+          curDir.subDirectories.set(dir, new Directory(dir));
+          curDir = curDir.subDirectories.get(dir);
+        }
+      }
+    }
+
+    if (fileName) {
+      if (curDir.files.has(fileName)) {
+        curDir.files.set(fileName, curDir.files.get(fileName) + fileContent);
+      }
+      else {
+        curDir.files.set(fileName, fileContent);
+      }
+    }
+  }
+
+  getDirectory(path) {
+    path = path.split('/').reverse();
+
+    let curDir = this.root;
+
+    for (let i = path.length - 1; i >= 0; --i) {
+      const dir = path[i];
+      if (dir)
+        curDir = curDir.getSubDirectory(dir);
+    }
+
+    return curDir;
+  }
+
+  getFile(path, fileName) {
+    return this.getDirectory(path).getFile(fileName);
+  }
+}
 
 
 var FileSystem = function() {
-
+  this.fs = new Trie();
 };
 
 /**
@@ -56,7 +145,21 @@ var FileSystem = function() {
  * @return {string[]}
  */
 FileSystem.prototype.ls = function(path) {
-
+  const dir = this.fs.getDirectory(path);
+  if (!dir) {
+    path = path.split('/');
+    let fileName = null;
+    while (!fileName) {
+      fileName = path.pop();
+    }
+    const file = this.fs.getFile(path.join('/'), fileName);
+    if (file)
+      return [fileName];
+    else
+      return [];
+  }
+  else
+    return Array.from(dir.subDirectories.keys()).concat(Array.from(dir.files.keys())).sort();
 };
 
 /**
@@ -64,7 +167,7 @@ FileSystem.prototype.ls = function(path) {
  * @return {void}
  */
 FileSystem.prototype.mkdir = function(path) {
-
+  this.fs.insert(path);
 };
 
 /**
@@ -73,7 +176,7 @@ FileSystem.prototype.mkdir = function(path) {
  * @return {void}
  */
 FileSystem.prototype.addContentToFile = function(filePath, content) {
-
+  this.fs.insert(filePath, content);
 };
 
 /**
@@ -81,7 +184,9 @@ FileSystem.prototype.addContentToFile = function(filePath, content) {
  * @return {string}
  */
 FileSystem.prototype.readContentFromFile = function(filePath) {
-
+  const path = filePath.split('/');
+  const fileName = path.pop();
+  return this.fs.getFile(path.join('/'), fileName);
 };
 
 /**
@@ -92,3 +197,26 @@ FileSystem.prototype.readContentFromFile = function(filePath) {
  * obj.addContentToFile(filePath,content)
  * var param_4 = obj.readContentFromFile(filePath)
  */
+
+// let fs = new FileSystem();
+// console.log(fs.ls('/'));
+// console.log(fs.mkdir("/a/b/c"));
+// console.log(fs.addContentToFile("/a/b/c/d","hello"));
+// console.log(fs.ls('/'));
+// console.log(fs.readContentFromFile("/a/b/c/d"));
+
+
+["FileSystem","mkdir","ls","ls","mkdir","ls","ls","addContentToFile","ls","ls","ls"]
+[[],["/goowmfn"],["/goowmfn"],["/"],["/z"],["/"],["/"],["/goowmfn/c","shetopcy"],["/z"],["/goowmfn/c"],["/goowmfn"]]
+
+let fs2 = new FileSystem();
+console.log(fs2.mkdir('/goowmfn'));
+console.log(fs2.ls('/goowmfn'));
+console.log(fs2.ls('/'))
+console.log(fs2.mkdir('/z/'));
+console.log(fs2.ls('/'));
+console.log(fs2.ls('/'));
+console.log(fs2.addContentToFile("/goowmfn/c","shetopcy"))
+console.log(fs2.ls('/z'))
+console.log(fs2.ls('/goowmfn/c/'));
+console.log(fs2.ls('/goowmfn'));
