@@ -90,15 +90,19 @@ class Trie {
     else
       path = path.split('/').reverse();
 
+    // Loop through path, create a directory there if one doesn't exist.
     let curDir = this.root;
-
     for (let i = path.length - 1; i >= 0; --i) {
       const dir = path[i];
+
+      // If dir is a not an empty string.
       if (dir) {
         const nextDir = curDir.getSubDirectory(dir);
 
+        // If the next dir is found, set curDir to it.
         if (nextDir)
           curDir = nextDir;
+        // Else, create a new directory and set curDir to the newly created dir.
         else {
           curDir.subDirectories.set(dir, new Directory(dir));
           curDir = curDir.subDirectories.get(dir);
@@ -106,6 +110,7 @@ class Trie {
       }
     }
 
+    // If we're suppose to create a new file, create one or append to an existing.
     if (fileName) {
       if (curDir.files.has(fileName)) {
         curDir.files.set(fileName, curDir.files.get(fileName) + fileContent);
@@ -116,6 +121,7 @@ class Trie {
     }
   }
 
+  // Gets the directory for a path.
   getDirectory(path) {
     path = path.split('/').reverse();
 
@@ -130,6 +136,7 @@ class Trie {
     return curDir;
   }
 
+  // Gets the file contents for a path and fileName.
   getFile(path, fileName) {
     return this.getDirectory(path).getFile(fileName);
   }
@@ -146,13 +153,18 @@ var FileSystem = function() {
  */
 FileSystem.prototype.ls = function(path) {
   const dir = this.fs.getDirectory(path);
+
+  // If there is no directory for the path, check to see if the path includes the file name.
   if (!dir) {
     path = path.split('/');
     let fileName = null;
-    while (!fileName) {
+    while (!fileName)
       fileName = path.pop();
-    }
+
+    // Get the file for the path.
     const file = this.fs.getFile(path.join('/'), fileName);
+
+    // If a file is found, return the file, else return an empty array.
     if (file)
       return [fileName];
     else
