@@ -27,6 +27,44 @@ Output: false
 */
 
 
+// /**
+//  * @param {string} s
+//  * @param {string[]} wordDict
+//  * @return {boolean}
+//  */
+// var wordBreak = function(s, wordDict) {
+//   if (wordDict.length === 0) return false;
+//   if (wordDict.length === 1) return s === wordDict[0];
+
+//   let queue = ['']; // Create a queue to determine what to evaluate.
+//   let memo = new Map(); // Memo to tell if a word has already been processed.
+//   while (queue.length > 0) {
+//     const val = queue.shift(); // Pop it off the queue.
+
+//     // Loop through word dictionary.
+//     for (let word of wordDict) {
+//       // Search word is the popped off val plus the current selected word.
+//       // Ex: val = 'applepen', word = 'apple' so searchWord = 'applepenapple'
+//       const searchWord = `${val}${word}`;
+
+//       // startsWith is a boolean seeing if s starts with the current searchWord.
+//       const startsWith = s.indexOf(searchWord) === 0;
+
+//       // If searchWord and s are the same, we are done and we return true.
+//       if (searchWord === s) return true;
+
+//       // If startsWith is true and also the searchWord has yet to be processed, set to memo
+//       // and push to queue.
+//       else if (!memo.has(searchWord) && startsWith) {
+//         memo.set(searchWord, true);
+//         queue.push(searchWord);
+//       }
+//     }
+//   }
+
+//   return false;
+// };
+
 /**
  * @param {string} s
  * @param {string[]} wordDict
@@ -36,34 +74,35 @@ var wordBreak = function(s, wordDict) {
   if (wordDict.length === 0) return false;
   if (wordDict.length === 1) return s === wordDict[0];
 
-  let queue = ['']; // Create a queue to determine what to evaluate.
-  let memo = new Map(); // Memo to tell if a word has already been processed.
-  while (queue.length > 0) {
-    const val = queue.shift(); // Pop it off the queue.
+  const dp = {};
+  const wordDictSet = new Set(wordDict);
 
-    // Loop through word dictionary.
-    for (let word of wordDict) {
-      // Search word is the popped off val plus the current selected word.
-      // Ex: val = 'applepen', word = 'apple' so searchWord = 'applepenapple'
-      const searchWord = `${val}${word}`;
+  const populateDp = (subStr) => {
+    if (subStr.length === 0)
+      return true;
 
-      // startsWith is a boolean seeing if s starts with the current searchWord.
-      const startsWith = s.indexOf(searchWord) === 0;
+    if (subStr in dp)
+      return dp[subStr];
 
-      // If searchWord and s are the same, we are done and we return true.
-      if (searchWord === s) return true;
+    let has
+    wordDict.forEach(word => {
+      if (subStr.indexOf(word) === 0) {
+        const slicedStr = subStr.slice(word.length, subStr.length);
 
-      // If startsWith is true and also the searchWord has yet to be processed, set to memo
-      // and push to queue.
-      else if (!memo.has(searchWord) && startsWith) {
-        memo.set(searchWord, true);
-        queue.push(searchWord);
+        const result = populateDp(slicedStr);
+
+        if (result && !dp[subStr])
+          dp[subStr] = true;
       }
-    }
+    });
+
+    return !!dp[subStr]
   }
 
-  return false;
+  populateDp(s);
+  return !!dp[s];
 };
+
 
 
 
