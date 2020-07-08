@@ -39,76 +39,76 @@ You may assume that there are no duplicate edges in the input prerequisites.
  * @return {number[]}
  */
 var findOrder = function(numCourses, prerequisites) {
-  if (!numCourses)
-    return [];
-
-  if (prerequisites[0] && !Array.isArray(prerequisites[0]))
-    prerequisites = [prerequisites];
-
-  // Create a graph.
-  const graph = new Map();
-  prerequisites.forEach(tuple => {
-    const course = tuple[0];
-    const prereq = tuple[1];
-    if (graph.has(prereq))
-      graph.get(prereq).push(course);
-    else
-      graph.set(prereq, [course]);
-  });
-  // Create entries in the graph for courses that don't have pre-reqs.
-  for (let i = 0; i < numCourses; ++i) {
-    if (!graph.has(i))
-      graph.set(i, []);
+  if (!prerequisites || !prerequisites.length) {
+    const sol = [];
+    for (let i = 0; i < numCourses; ++i)
+      sol.push(i);
+    return sol;
   }
 
-  // doneCourses if the final set of visited courses.
-  const doneCourses = new Set();
-  // curVisiting keeps track of visited nodes during a dfs. Used to see if there is a cycle.
-  const curVisiting = new Set();
+  const graph = new Map();
+  prerequisites.forEach(prereq => {
+    const course = prereq[0];
+    const dest = prereq[1];
 
-  const orderedCourses = [];
+    const dests = graph.get(course);
+    if (dests)
+      dests.push(dest);
+    else
+      graph.set(course, [dest]);
+  });
+
+
+  const visited = new Set();
+  const visiting = new Set();
+  let order = [];
   let hasCycle = false;
 
   const dfs = (course) => {
-    // If we have visited this course on the current dfs, we have a cycle.
-    if (curVisiting.has(course)) {
+    if (visiting.has(course))
       hasCycle = true;
+
+    if (hasCycle)
       return;
+
+    visiting.add(course);
+
+    const dests = graph.get(course);
+    if (dests) {
+      dests.forEach(dest => {
+        if (!visited.has(dest))
+          dfs(dest);
+      });
     }
 
-    // If we have visited this coures before, return.
-    if (doneCourses.has(course)) return;
-
-    curVisiting.add(course);
-
-    // Loop through courses this course is a pre-req for.
-    graph.get(course).forEach(c =>  dfs(c));
-
-    doneCourses.add(course);
-
-    orderedCourses.push(course);
-
-    curVisiting.delete(course);
+    visited.add(course);
+    order.push(course);
+    visiting.delete(course);
   }
 
-  Array.from(graph.keys()).forEach(course => {
-    if (!doneCourses.has(course))
-      dfs(course);
-  });
+  for (let i = 0; i < numCourses; ++i) {
+    if (!visited.has(i))
+      dfs(i);
 
-  // If there is a cycle, return an empty array. Otherwise reverse.
-  return hasCycle ? [] : orderedCourses.reverse();
+    if (hasCycle)
+      return [];
+  }
+
+  return order;
 };
 
 /*
 Solution:
-Create graph to keep track of pre reqs. Each key-value pair represents a course
-and the classes it is a pre-req for.
+Create a graph and then topological sort.
 
-Then use topological sourt
+Keep track of visited courses so we don't traverse traveled paths.
+
+Keep track of visiting courses. If we reach a course that we are currently visiting,
+we have a cycle and it is not possible so we return false.
+
 */
 
-// console.log(findOrder(2, [1,0]));
-// console.log(findOrder(4, [[1,0],[2,0],[3,1],[3,2]]));
-// console.log(findOrder(1, []));
+console.log(findOrder(2, [1,0]));
+console.log(findOrder(4, [[1,0],[2,0],[3,1],[3,2]]));
+console.log(findOrder(1, []));
 console.log(findOrder(2,[[0,1],[1,0]]))

@@ -81,7 +81,6 @@ var canFinish = function(numCourses, prerequisites) {
   return true;
 };
 
-
 /*
 Solution:
 Create a graph and then topological sort.
