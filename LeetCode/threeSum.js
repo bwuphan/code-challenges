@@ -1,4 +1,6 @@
 /*
+https://leetcode.com/problems/3sum/
+
 Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
 
 Note:
@@ -20,54 +22,37 @@ A solution set is:
  * @return {number[][]}
  */
 var threeSum = function(nums) {
-  nums = nums.sort();
-  let results = [];
+  nums.sort((a, b) => a - b);
 
-  // Object to store values and their indexes.
-  let valueObj = nums.reduce((obj, num, i) => {
-    if (num in obj) {
-      obj[num].push(i);
-    }
-    else {
-      obj[num] = [i];
-    }
-    return obj;
-  }, {});
+  const solutions = [];
 
-  let forwardObj = {};
-  let backwardObj = {};
-  let solutionObj = {};
-  for (let i = 0; i < nums.length; ++i) {
-    for (let j = 1; j < nums.length; ++j) {
-      if (j !== i) {
-        const forwardStr = `${nums[i]},${nums[j]}`;
-        const backwardStr = `${nums[j]},${nums[i]}`;
-        if (!(forwardStr in forwardObj)) {
-          forwardObj[forwardStr] = true;
-          backwardObj[backwardStr] = true;
+  let firstNum = null;
+  for (let i = 0; i < nums.length - 2; ++i) {
+    if (firstNum !== nums[i]) {
+      console.log(firstNum);
+      firstNum = nums[i];
+      let lowIdx = i + 1;
+      let hiIdx = nums.length - 1;
+      while (lowIdx < hiIdx) {
+        const sum = firstNum + nums[lowIdx] + nums[hiIdx];
 
-          const numNeeded = 0 - (nums[i] + nums[j]);
-
-          if (numNeeded in valueObj) {
-            const idxArr = valueObj[numNeeded];
-            for (let k = 0; k < idxArr.length; ++k) {
-              const idx = idxArr[k];
-              if (idx !== i && idx !== j) {
-                const solution = [nums[i], nums[j], numNeeded].sort();
-                const solutionStr = JSON.stringify(solution);
-                if (!(solutionStr in solutionObj)) {
-                  results.push(solution);
-
-                  solutionObj[solutionStr] = true;
-                }
-              }
-            }
-          }
+        if (sum < 0 || (lowIdx > i + 1 && nums[lowIdx] === nums[lowIdx - 1])) {
+          lowIdx++;
+        }
+        else if (sum > 0 || (hiIdx < nums.length - 1 && nums[hiIdx] === nums[hiIdx + 1])) {
+          hiIdx--;
+        }
+        else {
+          solutions.push([firstNum, nums[lowIdx], nums[hiIdx]]);
+          lowIdx++;
+          hiIdx--;
         }
       }
     }
   }
-  return results;
+
+  return solutions;
 };
 
-console.log(threeSum([-1, 0, 1, 2, -1, -4]));
+console.log(threeSum(
+[-4,-2,-2,-2,0,1,2,2,2,3,3,4,4,6,6]));
