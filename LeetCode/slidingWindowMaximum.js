@@ -1,7 +1,10 @@
 /*
 https://leetcode.com/problems/sliding-window-maximum/
 
-Given an array nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position. Return the max sliding window.
+Given an array nums, there is a sliding window of size k which is moving from
+the very left of the array to the very right. You can only see the k numbers in
+the window. Each time the sliding window moves right by one position. Return
+the max sliding window.
 
 Example:
 
@@ -92,5 +95,59 @@ var maxSlidingWindow = function(nums, k) {
   return results;
 };
 
+
+// Solution 2 7/19
+var maxSlidingWindow = (nums, k) => {
+  const blockIndices = new Set([0]);
+
+  for (let i = 1; i < nums.length; ++i) {
+    if (i % k === 0)
+      blockIndices.add(i);
+  }
+
+  const leftToRight = [];
+  let max = null;
+  nums.forEach((num, i) => {
+    if (blockIndices.has(i) || num > max)
+      max = num;
+    leftToRight[i] = max;
+  });
+
+  max = null;
+  const rightToLeft = [];
+  for (let i = nums.length - 1; i >= 0; --i) {
+    const num = nums[i];
+    if (blockIndices.has(i + 1) || max === null || num > max)
+      max = num;
+    rightToLeft[i] = max;
+  }
+
+  const results = [];
+  for (let leftIdx = 0, rightIdx = k - 1; rightIdx < nums.length; ++leftIdx, ++rightIdx) {
+    results.push(Math.max(leftToRight[rightIdx], rightToLeft[leftIdx]));
+  }
+
+  return results;
+}
+
+/*
+Solution:
+
+We are going to section off each block of nums by k.
+1,3,-1 | -3,5,3 | 6,7
+
+Then, we create two arrays that store the max value from left to right and right to left.
+Whenever we pass the block index, we should create a new max value for that block.
+ 1, 3,-1 | -3, 5, 3 |  6, 7   OG
+ 1, 3, 3 | -3, 5, 5 |  6, 7   Left to right
+ 3, 3, 3 |  5, 5, 3 |  7, 7   Right to left
+
+We then loop through nums in these chunks with two pointers at each border.
+
+We want to get the maximum per block so going leftToRight we'd use the right pointer
+and rightToLeft, we'd use the left pointer.
+
+Get the max between these two pointers in their respective arrays.
+*/
 console.log(maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3));
 
