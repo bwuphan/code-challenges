@@ -45,3 +45,48 @@ var groupAnagrams = function(strs) {
 
   return results;
 };
+
+
+
+// Solution 2 with no sort.
+
+var groupAnagrams = (strs) => {
+  if (!strs || !strs.length)
+    return [];
+
+
+  const map = {};
+
+  strs.forEach(str => {
+    const occurArr = new Array(26);
+
+    for (let i = 0; i < str.length; ++i) {
+      const letter = str[i];
+      const idx = letter.charCodeAt(0) - 97;
+
+      occurArr[idx] ? occurArr[idx]++ : occurArr[idx] = 1;
+    }
+
+    const occurStr = occurArr.join(',');
+    map[occurStr] ? map[occurStr].push(str) : map[occurStr] = [str];
+  });
+
+  const results = [];
+  for (let key in map) {
+    results.push(map[key]);
+  }
+
+  return results;
+}
+
+/*
+Solution:
+
+Create a map where the key is an occurences string. example: abc would be 1,1,1,....,0
+and the value is an array of words that have the same occur string.
+
+At the end, make an array and push the values in.
+*/
+
+
+console.log(groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
