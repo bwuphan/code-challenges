@@ -46,99 +46,67 @@ const Queue = require('../Prototypes/Queue.js').Queue;
  * @return {string[][]}
  */
 var findLadders = function(beginWord, endWord, wordList) {
-    const wordSet = new Set(wordList);
-    wordSet.add(beginWord);
+  // Create a dictionary where the keys are possible words but with one letter starred and the keys are
+  // the words in the wordList that can match up with that word.
+  // ie   *ot': Set { 'hot', 'dot', 'lot' }
+  // This allows us to quickly access the words we can add to the queue.
+  const dict = {};
+  wordList.forEach(word => {
+    for (let i = 0; i < beginWord.length; ++i) {
+      const newWord = word.slice(0, i) + '*' + word.slice(i + 1, beginWord.length);
+      if (!dict[newWord])
+        dict[newWord] = new Set();
 
-    if (!wordSet.has(endWord)) return [];
+      dict[newWord].add(word);
+    }
+  });
 
-    const distanceMap = new Map();
-    const wordMap = new Map();
 
-    // 1. BFS construct distanceMap and wordMap from end to start
-    const queue = [];
-    const visited = new Set();
-
-    // Flag to check if we can reach start from end
-    let reached = false;
-
-    queue.push(endWord);
-    visited.add(endWord);
-    let distance = 0;
-    distanceMap.set(endWord, distance);
-    while(queue.length !== 0) {
-        let size = queue.length;
-        distance++;
-        for(let i = 0; i < size; i++) {
-            const word = queue.shift();
-            for(let w of getNextWords(word, wordSet)) {
-                // push into wordMap from start to end
-                // we need to push here before visited check
-                if (!wordMap.has(w)) wordMap.set(w, []);
-                wordMap.get(w).push(word);
-
-                if (visited.has(w)) continue;
-                if (w === beginWord) reached = true;
-
-                // put into distance map
-                distanceMap.set(w, distance);
-
-                queue.push(w);
-                visited.add(w);
-            }
-        }
+  let queue = new Queue();
+  queue.enqueue({ word: beginWord, moves: 1, list: beginWord });
+  const results = [];
+  const visited = new Set(beginWord);
+  let minMoves = null;
+  while (!queue.isEmpty()) {
+    let item = queue.dequeue();
+    visited.add(item.word);
+    if (minMoves && item.moves > minMoves) {
+      break;
     }
 
-    // short circuit if can not reach
-    if (!reached) return [];
+    // If the current word is equal to the endWord, we have reached a solution. Return the number
+    // of moves it took to get there.
+    if (item.word === endWord) {
+      minMoves = item.moves;
+      results.push(item.list);
+    }
 
-    // 2. DFS find path where distance - 1
-    const result = [];
-    dfs(result, [beginWord], beginWord, endWord, wordMap, distanceMap);
+    // Otherwise, iterate through the wordList and see if the diff between two words is only 1.
+    const words = new Set();
+    for (let i = 0; i < beginWord.length; ++i) {
+      const key = item.word.slice(0, i) + '*' + item.word.slice(i + 1, beginWord.length);
+      const dictSet = dict[key];
 
-    return result;
+      if (dictSet)
+        dictSet.forEach(w => {
+          if (!visited.has(w)) {
+            queue.enqueue({ word: w, moves: item.moves + 1, list: item.list + ',' + w });
+          }
+        });
+    }
+  }
+
+  return results.map(sol => sol.split(','));
 };
 
-var dfs = function(result, tmpPath, word, endWord, wordMap, distanceMap) {
-    if (word === endWord) {
-        result.push([...tmpPath]);
-        return;
-    }
-
-    for (let nextWord of wordMap.get(word)) {
-        if (distanceMap.get(word) === distanceMap.get(nextWord) + 1) {
-            tmpPath.push(nextWord);
-            dfs(result, tmpPath, nextWord, endWord, wordMap, distanceMap);
-            tmpPath.pop();
-        }
-    }
-}
-
-var getNextWords = function(word, wordSet) {
-    const result = [];
-    for (let i = 0; i < word.length; i++) {
-        let currentCode = word.charCodeAt(i);
-        for (let c = 97; c <= 122; c++) {
-            if (c !== currentCode) {
-                const chars = word.split('');
-                chars[i] = String.fromCharCode(c);
-                let newWord = chars.join('');
-                if (wordSet.has(newWord)) {
-                    result.push(newWord);
-                }
-            }
-        }
-    }
-
-    return result;
-}
-// console.log(findLadders(beginWord = "hit",
-// endWord = "cog",
-// wordList = ["hot","dot","dog","lot","log","cog"]))
+console.log(findLadders(beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]))
 
 
-// console.log(findLadders(beginWord = "hit",
-// endWord = "cog",
-// wordList = ["hot","dot","dog","lot","log"]))
+console.log(findLadders(beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log"]))
 
 console.log(findLadders("qa",
 "sq",
