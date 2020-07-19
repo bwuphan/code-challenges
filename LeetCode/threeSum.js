@@ -29,7 +29,6 @@ var threeSum = function(nums) {
   let firstNum = null;
   for (let i = 0; i < nums.length - 2; ++i) {
     if (firstNum !== nums[i]) {
-      console.log(firstNum);
       firstNum = nums[i];
       let lowIdx = i + 1;
       let hiIdx = nums.length - 1;
@@ -53,6 +52,20 @@ var threeSum = function(nums) {
 
   return solutions;
 };
+
+/*
+Solution:
+Iterate from left to right for first number.
+
+Inside this loop, set left pointers and right pointers and move the pointers inward.
+If the sum is less than 0, we need to increment up the left pointer.
+If the sum is greater than 0, we need to decrement the right pointer.
+Else, we found a solution.
+
+Note: we need to make sure we don't make duplicates so check to see if there is
+a repeat of the firstNum or left pointers or right pointers. If we are on a repeat,
+increment the first num or move the left and right pointer.
+*/
 
 console.log(threeSum(
 [-4,-2,-2,-2,0,1,2,2,2,3,3,4,4,6,6]));
