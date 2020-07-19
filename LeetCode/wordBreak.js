@@ -75,34 +75,55 @@ var wordBreak = function(s, wordDict) {
   if (wordDict.length === 1) return s === wordDict[0];
 
   const dp = {};
+  const visited = new Set();
   const wordDictSet = new Set(wordDict);
 
   const populateDp = (subStr) => {
+    if (visited.has(subStr)) return;
     if (subStr.length === 0)
       return true;
 
     if (subStr in dp)
       return dp[subStr];
 
-    let has
-    wordDict.forEach(word => {
+    visited.add(subStr);
+
+    for (let i = 0; i < wordDict.length; ++i) {
+      const word = wordDict[i];
+      // If the word is found at the front, break it down.
       if (subStr.indexOf(word) === 0) {
         const slicedStr = subStr.slice(word.length, subStr.length);
 
         const result = populateDp(slicedStr);
 
-        if (result && !dp[subStr])
+        if (result) {
           dp[subStr] = true;
-      }
-    });
 
-    return !!dp[subStr]
+         return true;
+        }
+      }
+    }
+    return false;
   }
 
   populateDp(s);
+
   return !!dp[s];
 };
 
+/*
+Solution:
+
+Do bottom up dp.
+
+Loop through dictionary and see if that word exists at the front of the remaining word.
+
+If it does, break it down further and if the result of recursion is true, set subStr to
+true in dp object.
+
+At the end, see if original word is in dp.
+
+*/
 
 
 
