@@ -132,6 +132,79 @@ function alienOrder(words) {
 // };
 
 
+
+// 3rd attempt before interview 7/19.
+
+/**
+ * @param {string[]} words
+ * @return {string}
+ */
+var alienOrder = function(words) {
+  const graph = {}; // Create graph.
+  const remaining = new Set(); // Create a set of all the available letters.
+
+  // Create initial empty graph.
+  words.forEach(w => w.split('').forEach(letter => {
+    if (!(letter in graph)) {
+      remaining.add(letter);
+      graph[letter] = new Set();
+    }
+  }));
+
+  // Fill in graph.
+  words.reduce((prev, curr) => {
+    for (var i = 0; i < Math.min(prev.length, curr.length); i++) {
+      if (prev[i] !== curr[i]) {
+        graph[prev[i]].add(curr[i]);
+        break;
+      }
+    }
+    return curr;
+  });
+
+  let result = ''; // The resulting string in order.
+  const visiting = new Set(); // Create a set for current visiting to tell if there is a cycle.
+  const topoSort = (letter) => {
+    // If we have already visited this letter on this run, there is a cycle.
+    if (visiting.has(letter)) {
+      hasCycle = true;
+      return;
+    }
+
+    visiting.add(letter);
+
+    // Recurse through the destinations for this letter.
+    graph[letter].forEach(l => topoSort(l));
+
+    // Remove because now we have visited this letter.
+    visiting.delete(letter);
+
+    // Add check to avoid adding letter to result twice.
+    if (remaining.has(letter)) {
+      result = letter + result;
+      remaining.delete(letter);
+    }
+  }
+
+  let hasCycle = false;
+  remaining.forEach(remLetter => {
+    if (!hasCycle) {
+      if (remaining.has(remLetter))
+        topoSort(remLetter);
+    }
+  });
+
+  return hasCycle ? '' : result;
+};
+
+
+/*
+Solution:
+
+Create a graph and topo sort.
+*/
+
+
 var input = [
   "wrt",
   "wrf",
@@ -157,3 +230,6 @@ var input3 =
 console.log(alienOrder(input));
 console.log(alienOrder(input2));
 console.log(alienOrder(input3));
+console.log(alienOrder(["wrt","wrtkj"]))
+console.log(alienOrder(
+["abc","ab"]))
