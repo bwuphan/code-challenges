@@ -28,18 +28,20 @@ var lengthOfLIS = function(nums) {
   for (let i = 1; i < nums.length; ++i) {
     let curMax = 1;
     for (let j = 0; j < i; ++j) {
-      if (nums[i] > nums[j]) {
-        curMax = Math.max(curMax, dp[j]);
+      // If the right numbers is greater than the left one and the dp array at left is >= the curMax,
+      // Set the new curMax as the dp element + 1.
+      if (nums[i] > nums[j] && dp[j] >= curMax) {
+        curMax = dp[j] + 1;
       }
     }
-    dp[i] = curMax + 1;
+    dp[i] = curMax;
 
-    max = Math.max(max, dp[i]);
+    if (max < curMax)
+      max = curMax;
   }
 
   return nums.length ? max : 0;
 };
-
 
 /*
 Solution:
@@ -53,6 +55,8 @@ would be dp[j] + 1.
 Return the longest max we could find.
 */
 
-console.log(lengthOfLIS([10,9,2,5,3,7,101,18]) === 4);
+// console.log(lengthOfLIS([10,9,2,5,3,7,101,18]) === 4);
 
-console.log(lengthOfLIS([1,3,6,7,9,4,10,5,6]));
+console.log(lengthOfLIS([10,9,2,5,3,7,101]) === 4);
+
+// console.log(lengthOfLIS([1,3,6,7,9,4,10,5,6]));
