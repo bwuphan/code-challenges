@@ -44,18 +44,23 @@ Note: The length of path between two nodes is represented by the number of edges
  */
 var diameterOfBinaryTree = function(root) {
   if (!root || (!root.left && !root.right)) return 0;
-  let numNodes = 0;
+  let maxDiameter = 0;
 
   const dfs = function(node) {
     if (!node) return 0;
 
+    // The diameters of the left and right subtrees.
     const left = dfs(node.left);
     const right = dfs(node.right);
-    numNodes = Math.max(numNodes, left + right);
+
+    // The max diameter is whatever is greater, the maxDiameter or combination of left and right diameters.
+    maxDiameter = Math.max(maxDiameter, left + right);
+
+    // Value of this diameter is the left and right subtree diameters plus 1 for the current node.
     return Math.max(left, right) + 1;
   }
 
   dfs(root);
 
-  return numNodes;
+  return maxDiameter;
 };
