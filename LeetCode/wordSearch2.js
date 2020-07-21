@@ -195,23 +195,7 @@ var findWords = function(board, words) {
     }
   }
 
-<<<<<<< HEAD
   return Object.keys(solution);
-=======
-function copy2dArray(arr) {
-  return arr.map(arr => new Set(arr));
-}
-
-function removeFromWords(word, words) {
-  let idx = null;
-  for (let i = 0; i < words.length; ++i) {
-    if (word === words[i]) {
-      idx = i;
-      break;
-    }
-  }
-  words.splice(idx, 1);
->>>>>>> a76114f837804aee351674fd1cc6eec6f0522b10
 }
 
 const board = [
