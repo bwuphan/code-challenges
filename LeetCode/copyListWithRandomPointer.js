@@ -44,11 +44,13 @@ var copyRandomList = function(head) {
 
   let curNode = head;
 
+  // Create a map of nodes where the key is the original node and the value is a copy.
   while(curNode !== null) {
     listMap.set(curNode, Object.assign({}, curNode));
 
     curNode = curNode.next;
   }
+
 
   curNode = head;
   while(curNode !== null) {
@@ -60,3 +62,13 @@ var copyRandomList = function(head) {
   }
   return listMap.get(head);
 };
+
+
+/*
+Solution:
+
+Make a map where the key is the node and the value is a copy of that node.
+
+Loop through the linked list and create copy nodes out of the values of that map.
+
+*/
