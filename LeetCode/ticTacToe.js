@@ -58,6 +58,7 @@ Could you do better than O(n2) per move() operation?
  */
 var TicTacToe = function(n) {
   this.size = n;
+  // The totals for rows/cols.
   this.rows = [... new Array(n)].map(() => 0);
   this.cols = [... new Array(n)].map(() => 0);
 
