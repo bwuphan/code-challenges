@@ -64,6 +64,7 @@ class Trie {
   constructor() {
     // Init root to an empty node.
     this.root = new Node(null, false);
+    this.dict = new Set();
   }
 
   /**
@@ -72,6 +73,10 @@ class Trie {
    * @return {void}
    */
   insert(word) {
+    if (this.dict.has(word))
+      return;
+
+    this.dict.add(word);
     let curNode = this.root;
 
     for (let i = 0; i < word.length; ++i) {
@@ -161,6 +166,7 @@ class Trie {
  */
 var WordDictionary = function() {
   this.trie = new Trie();
+  this.cache = {};
 };
 
 /**
@@ -170,6 +176,7 @@ var WordDictionary = function() {
  */
 WordDictionary.prototype.addWord = function(word) {
   this.trie.insert(word);
+  this.cache = {};
 };
 
 /**
@@ -178,31 +185,47 @@ WordDictionary.prototype.addWord = function(word) {
  * @return {boolean}
  */
 WordDictionary.prototype.search = function(word) {
+  if (this.cache[word])
+    return this.cache[word];
+
+  if (this.trie.dict.has(word)) {
+    return true;
+  }
+
+  if (!word.includes('.')) {
+    return false;
+  }
+
+
   const childNodes = this.trie.root.children;
   const stack = new Stack();
   const visited = new Set();
 
   let hasMatch = false;
   const dfs = function(node, curWord) {
-    console.log('Node', node.letter, curWord);
     if (hasMatch || visited.has(node)) return;
 
-    visited.add(node);
     const curLetter = curWord[0];
+    if (curLetter !== '.' &&  curLetter !== node.letter) {
+      return;
+    }
+
+    visited.add(node);
 
     const newWord = curWord.slice(1, curWord.length);
-
-    console.log(' HERE', newWord, curLetter)
 
     if (!newWord.length && node.endOfWord && (curLetter === node.letter || curLetter === '.')) {
       hasMatch = true;
     }
-    else if (curLetter === '.') {
+    else if (!newWord.length) {
+      return;
+    }
+    else if (newWord[0] === '.') {
       node.children.forEach(node => {
         dfs(node, newWord);
       });
     }
-    else if (curLetter === node.letter && node.children.has(newWord[0])) {
+    else if ((curLetter === node.letter || curLetter === '.') && (node.children.has(newWord[0])) ) {
       dfs(node.getChild(newWord[0]), newWord);
     }
 
@@ -211,44 +234,8 @@ WordDictionary.prototype.search = function(word) {
 
 
   this.trie.root.children.forEach(node => dfs(node, word));
-  // console.log(hasMatch)
-  // const visited = new Set();
 
-  // if (word[0] === '.')
-  // stack.push({ nodes: childNodes, word });
-
-  // while (!stack.isEmpty()) {
-  //   const item = stack.pop();
-  //   const nodes = item.nodes;
-  //   const word = item.word;
-  //   if (!item.word)
-  //     return true;
-
-  //   console.log(word);
-  //   const newWord = item.word.slice(1, item.word.length);
-  //   if (item.word === '.') {
-  //     const nodesToLoop = [];
-  //     nodes.forEach(node => {
-  //       if (node.children)
-  //         nodesToLoop.concat(node.children);
-  //     });
-
-
-  //     item.nodes.forEach(node => {
-  //       stack.push({ nodes: nodesToLoop, word: newWord });
-  //     });
-  //   }
-  //   else {
-  //     for (let i = 0; i < nodes.length; ++i) {
-  //       const node = nodes[i];
-  //       const child = node.getChild(word);
-  //       console.log('child', child);
-  //       if (child)
-  //         stack.push({ nodes: [node], word: newWord })
-  //     }
-  //   }
-  // }
-
+  this.cache[word] = hasMatch;
   return hasMatch
 };
 
@@ -262,11 +249,25 @@ WordDictionary.prototype.search = function(word) {
 // const test = new WordDictionary();
 
 const test = new WordDictionary();
-test.addWord("bad")
-test.addWord("dad")
-test.addWord("mad")
-// console.log(test.search("pad"))
-// console.log(test.search("bad"))
-// console.log(test.search(".ad"))
-console.log(test.search("b.."))
-// console.log(test.search("b.m"))
+// test.addWord("bad")
+// test.addWord("dad")
+// test.addWord("mad")
+// console.log(test.search("pad") === false)
+// console.log(test.search("bad") === true)
+// console.log(test.search(".ad") === true)
+// console.log(test.search("b..") === true)
+// console.log(test.search("b.m") === false)
+
+console.log(test.addWord('at'));
+console.log(test.addWord('and'));
+console.log(test.addWord('an'));
+console.log(test.addWord('add'));
+console.log(test.search('a'));
+console.log(test.search('.at'));
+console.log(test.addWord('bat'));
+console.log(test.search('.at'));
+console.log(test.search('an.'));
+console.log(test.search('a.d.'));
+console.log(test.search('b.'));
+console.log(test.search('a.d'));
+console.log(test.search('.'));
