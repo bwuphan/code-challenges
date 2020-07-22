@@ -170,6 +170,13 @@ var connectSticks = function(sticks) {
   return sum;
 };
 
+/*
+Solution:
+
+Create a min heap out of the sticks.
+
+To get the lowest sum, we need to add the two lowest sticks until there is only one more.
+*/
 
 console.log(connectSticks([2,4,3]));
 console.log(connectSticks([1,8,3,5]));
