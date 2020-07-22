@@ -58,7 +58,7 @@ var combinationSum = function(candidates, target) {
     // that is larger than the difference.
     // If there is no candidate larger than the diff, then we know there is no
     // solution currently.
-    while (diff < candidates[maxNumIdx])
+    while (candidates[maxNumIdx] > diff)
       maxNumIdx++;
 
     // This only loops if we found a maxNumIdx.
@@ -78,8 +78,24 @@ var combinationSum = function(candidates, target) {
     .map(sol => sol.split(','));
 };
 
+/*
+Solution:
 
+Use a set to prevent duplicates.
+
+We're going to sort the candidates from largest to smallest. This is so we can
+move on from an element when it's too big to be part of the solution.
+
+Then, we dfs.
+We determine the target we're shooting for: target - current sum.
+
+Increment the index while the element is greater than the diff. This gets rid
+of numbers for the solution that would be impossible.
+
+Then, we loop through the rest of the candidates and dfs.
+
+*/
 
 
 console.log(combinationSum(candidates = [2,3,6,7], target = 7));
-// console.log(combinationSum(candidates = [2,3,5], target = 8));
+console.log(combinationSum(candidates = [2,3,5], target = 8));
