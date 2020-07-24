@@ -61,6 +61,7 @@ var pacificAtlantic = function(matrix) {
     // If we can reach both, we're done.
     if (a && p) {
       done = true;
+      visited[row][col] = false;
       return true;
     }
 
@@ -83,14 +84,13 @@ var pacificAtlantic = function(matrix) {
     visited[row][col] = false;
   };
 
+  visited = matrix.map(row => new Array(matrix[0].length));
   for (let i = 0; i < matrix.length; ++i) {
     for (let j = 0; j < matrix[0].length; ++j) {
-      visited = matrix.map(row => new Array(matrix[0].length));
       done = false;
       a = false;
       p = false;
       dfs(i, j);
-
       if (done && a && p)
         results.push([i, j]);
     }
