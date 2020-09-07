@@ -68,3 +68,61 @@ Explanation:
 The customer is not a winner as the first 2 fruits form group 1, all three fruits would form group 2,
 but can't because it would contain all fruits of group 1.
 */
+
+
+function isCustomerWinner(codeList, shoppingCart) {
+  if (!codeList || !codeList.length)
+    return 0;
+
+  let codeIdx = 0, cartIdx = 0;
+
+
+  while (cartIdx < shoppingCart.length) {
+    const curCode = codeList[codeIdx];
+    if (curCode[0] === shoppingCart[cartIdx]) {
+      let curCodeIdx = 0;
+      let curCartIdx = cartIdx;
+      let match = true;
+      while (curCodeIdx < curCode.length && match) {
+        if (curCode[curCodeIdx] !== 'anything' && curCode[curCodeIdx] !== shoppingCart[curCartIdx]) {
+          match = false;
+        }
+        else {
+          curCodeIdx++;
+          curCartIdx++;
+        }
+      }
+
+      if (match) {
+        codeIdx++;
+        cartIdx = cartIdx + curCode.length;
+      }
+      else {
+        cartIdx++;
+      }
+    }
+    else {
+      cartIdx++;
+    }
+  }
+
+  console.log(codeIdx, cartIdx);
+  return codeIdx >= codeList.length;
+}
+
+function test (one, two) {
+  console.log(one, two, one === two);
+}
+
+
+test(isCustomerWinner([['apple', 'apple'], ['banana', 'anything', 'banana']], ['orange', 'apple', 'apple', 'banana', 'orange', 'banana']), true)
+test(isCustomerWinner([['apple', 'apple'], ['banana', 'anything', 'banana']], ['banana', 'orange', 'banana', 'apple', 'apple']), false)
+test(isCustomerWinner([['apple', 'apple'], ['banana', 'anything', 'banana']], ['apple', 'banana', 'apple', 'banana', 'orange', 'banana']), false)
+// test(isCustomerWinner([['apple', 'banana','apple', 'banana', 'coconut']], ['apple', 'banana', 'apple', 'banana', 'apple', 'banana']), true)
+// test(isCustomerWinner([['apple', 'orange'], ['orange', 'banana', 'orange']], ['apple', 'orange', 'banana', 'orange', 'orange', 'banana', 'orange', 'grape']), true)
+// test(isCustomerWinner([['apple', 'apple'], ['banana', 'anything', 'banana']], ['apple', 'apple', 'banana', 'banana']), true)
+// test(isCustomerWinner([['apple', 'apple'], ['apple', 'anything', 'banana']], ['apple', 'apple', 'banana', 'banana']), true)
+// test(isCustomerWinner([['apple', 'apple'], ['apple', 'anything', 'banana']], ['apple', 'apple', 'apple', 'apple', 'banana']), true)
+// test(isCustomerWinner([['apple', 'apple'], ['apple', 'banana']], ['apple', 'apple', 'apple', 'banana']), true)
+// test(isCustomerWinner([["anything", "apple" ], ["banana", "anything", "banana"]], ["orange", "grapes", "apple", "orange", "orange", "banana", "apple", "banana", "banana"]), true)
+// test(isCustomerWinner([['anything']], ['apple', 'apple', 'apple', 'banana']), true)
