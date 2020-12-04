@@ -24,7 +24,7 @@ output = 4
 
 */
 
-
+const Queue = require('../Prototypes/Queue.js').Queue;
 // Add any extra import statements you may need here
 
 
@@ -39,7 +39,26 @@ function TreeNode(val) {
 
 function visibleNodes(root) {
   // Write your code here
+  const queue = new Queue();
+  queue.enqueue({ node: root, depth: 0 });
+  let maxLevel = -1;
+  let results = 0;
+  while (!queue.isEmpty()) {
+    const item = queue.dequeue();
+    const node = item.node;
+    if (!node)
+      continue;
 
+    if (item.depth > maxLevel) {
+      results++;
+      maxLevel = item.depth;
+    }
+
+    queue.enqueue({ node: node.left, depth: item.depth + 1 });
+    queue.enqueue({ node: node.right, depth: item.depth + 1 });
+  }
+
+  return results;
 }
 
 
