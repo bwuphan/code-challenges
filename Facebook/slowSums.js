@@ -39,7 +39,19 @@ Add 9 + 1 for a penalty of 10. The penalties sum to 26.
 
 function getTotalTime(arr) {
   // Write your code here
-
+  arr = arr.sort((a, b) => a - b);
+  let penalty = 0;
+  for (let i = arr.length - 1; i >= 0; --i) {
+    const num1 = arr[i];
+    const num2 = arr[i - 1];
+    if (num2 !== undefined) {
+      const sum = num1 + num2;
+      arr[i - 1] = sum;
+      penalty += sum;
+      arr.pop();
+    }
+  }
+  return penalty;
 }
 
 
