@@ -31,10 +31,40 @@ time that FB has >= $200 of total revenue.
 
 function getMilestoneDays(revenues, milestones) {
   // Write your code here
+  let mIdx = 0;
+  const results = [];
+  milestones = milestones
+    .map((milestone, i) => {
+      return { milestone, i };
+    })
+    .sort((a, b) => a.milestone - b.milestone);
 
+  revenues.reduce((sum, rev, i) => {
+    sum += rev;
+
+    while (mIdx < milestones.length && sum >= milestones[mIdx].milestone) {
+      milestones[mIdx].result = i + 1;
+      mIdx++;
+    }
+
+    return sum;
+  }, 0);
+
+  if (mIdx < milestones.length) {
+    for (; mIdx < milestones.length; ++mIdx) {
+      milestones[mIdx].result = -1;
+    }
+  }
+
+  return milestones
+    .sort((a, b) => a.i - b.i)
+    .map(milestone => milestone.result);
 }
 
 
+
+console.log(getMilestoneDays(revenues = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+milestones = [100, 200, 500]))
 
 
 
