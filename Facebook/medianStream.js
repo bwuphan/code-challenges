@@ -39,7 +39,38 @@ The median of [1] is 1, the median of [1, 2] is (1 + 2) / 2 = 1.5 (which should 
 
 function findMedian(arr) {
   // Write your code here
+  const getMedianOfArray = (array) => {
+    if (array.length % 2 === 0)
+      return Math.floor((array[array.length / 2 - 1] + array[array.length / 2]) / 2);
+    else
+      return Math.floor(array[Math.floor(array.length / 2)]);
+  }
 
+  const sortedArr = [];
+  const results = [];
+  arr.forEach(num => {
+    if (!sortedArr.length) {
+      sortedArr.push(num);
+    }
+    else {
+      let spliced = false;
+      for (let i = 0; i < sortedArr.length; ++i) {
+        const curNum = sortedArr[i];
+        // If the number to insert is less than the number at current idx, then we know this is the spot.
+        if (num <= curNum) {
+          spliced = true;
+          sortedArr.splice(i, 0, num);
+          break;
+        }
+      }
+
+      if (!spliced) sortedArr.push(num);
+    }
+
+    results.push(getMedianOfArray(sortedArr));
+  });
+
+  return results;
 }
 
 
