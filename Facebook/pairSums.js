@@ -36,9 +36,51 @@ There's one valid pair 1+5, and three different valid pairs 3+3 (the 3rd and 4th
 // Add any helper functions you may need here
 
 
+function combination(n, r) {
+  function factorial(n) {
+    if (n <= 1)
+      return 1;
+
+    return n * factorial(n - 1);
+  }
+  return factorial(n) / (factorial(r) * factorial(n - r));
+}
+
 function numberOfWays(arr, k) {
   // Write your code here
+  const occurMap = new Map();
+  arr = arr.sort((a, b) => b - a);
+  for (let i = 0; i < arr.length; ++i) {
+    const num = arr[i];
 
+    const occurences = occurMap.has(num) ? occurMap.get(num) : [i, i];
+    let j = i;
+    while (j < arr.length && arr[j] === arr[i]) {
+      occurences[1] = j;
+      j++;
+    }
+    i = j - 1;
+    occurMap.set(num, occurences);
+  }
+
+  let results = 0;
+  for (let i = 0; i < arr.length; ++i) {
+    const num = arr[i];
+    const diff = k - num;
+
+    if (num > k || !occurMap.has(diff)) continue;
+
+    const occurences = occurMap.get(diff);
+    if (i >= occurences[0] && i <= occurences[1]) {
+      const minOccurence = Math.max(i, occurences[0]);
+      const numOccurences = occurences[1] - minOccurence;
+      results += numOccurences;
+    }
+    else if (occurences[0] === occurences[1] && i < occurences[0])
+      results++;
+  }
+
+  return results;
 }
 
 
