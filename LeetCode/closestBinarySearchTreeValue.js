@@ -35,5 +35,28 @@ Output: 4
  * @return {number}
  */
 var closestValue = function(root, target) {
+  if (!root)
+    return null;
 
+  let result = root.val;
+
+  const dfs = (node) => {
+    if (!node)
+      return;
+
+    const val = node.val;
+    if (Math.abs(target - node.val) < Math.abs(target - result))
+      result = val;
+
+    if (target === val)
+      return;
+    else if (target < val)
+      dfs(node.left)
+    else
+      dfs(node.right);
+  }
+
+  dfs(root);
+
+  return result;
 };
