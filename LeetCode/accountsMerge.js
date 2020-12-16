@@ -36,5 +36,51 @@ The length of accounts[i][j] will be in the range [1, 30].
  * @return {string[][]}
  */
 var accountsMerge = function(accounts) {
+  // Create object where the keys are emails and the values are the names.
+  const emailNames = {};
+  // Create a graph.
+  const graph = {};
 
+  accounts.forEach((account, i) => {
+    const name = account[0];
+
+    for (let i = 1; i < account.length; ++i) {
+      const email = account[i];
+      if (!(email in graph)) graph[email] = new Set();
+
+      emailNames[email] = name;
+      if (i === 1) continue;
+
+      const previousEmail = account[i - 1];
+      graph[previousEmail].add(email);
+      graph[email].add(previousEmail);
+    }
+  });
+
+
+  const visited = new Set();
+  const results = [];
+  for (let email in emailNames) {
+    const list = [];
+
+    function dfs(email) {
+      if (visited.has(email))
+        return;
+
+      list.push(email);
+      visited.add(email);
+      graph[email].forEach(e => dfs(e));
+    }
+
+    dfs(email, list);
+    if (list.length) {
+      list.sort();
+      results.push([emailNames[email]].concat(list));
+    }
+  }
+
+  return results;
 };
+
+
+console.log(accountsMerge([["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnybravo@mail.com"], ["John", "johnsmith@mail.com", "john_newyork@mail.com"], ["Mary", "mary@mail.com"]]))
