@@ -86,5 +86,45 @@ mat[i] is sorted in a non-decreasing way.
  * @return {number}
  */
 var leftMostColumnWithOne = function(binaryMatrix) {
+  const dimensions = binaryMatrix.dimensions();
+  let row = 0;
+  let col = dimensions[1] - 1;
 
+  let hasSolution = false;
+
+  while (row < dimensions[0]) {
+    if (col >= 0) {
+      let val = binaryMatrix.get(row, col);
+      while (val > 0) {
+        if (!hasSolution && val === 1)
+          hasSolution = true;
+
+        val = binaryMatrix.get(row, col - 1);
+        if (val > 0)
+          col--;
+      }
+    }
+    row++;
+  }
+  return hasSolution ? col : -1;
 };
+
+
+/*
+Solution:
+Start at right most column on first row.
+Move from right to left to find the 1 that preceds a 0.
+Once found, move down a row and repeat same thing.
+Eventually, reach bottom and the col is the lowest 1.
+
+0, 0, 1
+0, 0, 0
+0, 1, 1
+
+First overall loop will have row, col be 0, 2 respectively
+GO down and find that 1, 2 is not a 1.
+Move down and find that 2, 2 is a 1.
+Move to the left and find another 1. 2, 1
+Move left again and find that it is 0.
+So 1 is the final answer
+*/
