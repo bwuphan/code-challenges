@@ -41,6 +41,7 @@ var accountsMerge = function(accounts) {
   // Create a graph.
   const graph = {};
 
+  // Populate the graph and emailNames.
   accounts.forEach((account, i) => {
     const name = account[0];
 
@@ -49,23 +50,26 @@ var accountsMerge = function(accounts) {
       if (!(email in graph)) graph[email] = new Set();
 
       emailNames[email] = name;
+
+      // If it's the first email, continue.
       if (i === 1) continue;
 
+      // If not, create edges.
       const previousEmail = account[i - 1];
       graph[previousEmail].add(email);
       graph[email].add(previousEmail);
     }
   });
 
-
   const visited = new Set();
   const results = [];
+
+  // Loop through all emails.
   for (let email in emailNames) {
     const list = [];
 
     function dfs(email) {
-      if (visited.has(email))
-        return;
+      if (visited.has(email)) return;
 
       list.push(email);
       visited.add(email);
@@ -73,6 +77,8 @@ var accountsMerge = function(accounts) {
     }
 
     dfs(email, list);
+
+    // Sort each result.
     if (list.length) {
       list.sort();
       results.push([emailNames[email]].concat(list));
