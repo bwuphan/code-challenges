@@ -41,10 +41,11 @@ var subarraySum = function(nums, k) {
 
     if (sum in sumMap) sumMap[sum]++;
     else sumMap[sum] = 1;
-
+    console.log(sumMap)
   });
 
   return count;
 };
 
 console.log(subarraySum([1,1,1], 2));
+console.log(subarraySum([1,2,3], 3))
