@@ -45,10 +45,33 @@ The number of nodes in the tree will be in the range [0, 104].
  *     this.right = (right===undefined ? null : right)
  * }
  */
+const Queue = require('../Prototypes/Queue').Queue
+const arrayToTree = require('../Util/arrayToTree').arrayToTree
 /**
  * @param {TreeNode} root
  * @return {number[]}
  */
 var largestValues = function(root) {
+  const queue = new Queue()
+  queue.enqueue({ depth: 0, node: root })
+  const solution = []
 
+  while (!queue.isEmpty()) {
+    const item = queue.dequeue()
+    const node = item.node
+    const depth = item.depth
+    console.log(node, depth)
+    if (typeof solution[depth] === 'undefined' || node.val > solution[depth])
+      solution[depth] = node.val
+
+    if (node.left) queue.enqueue({ node: node.left, depth: depth + 1 })
+    if (node.right) queue.enqueue({ node: node.right, depth: depth + 1 })
+  }
+
+  return solution
 };
+
+const root = arrayToTree([1,3,2,5,3,null,9])
+
+console.log(largestValues(root))
+
