@@ -45,41 +45,50 @@ s[i] is one of  '(' , ')' and lowercase English letters.
  * @return {string}
  */
 var minRemoveToMakeValid = function(s) {
-  let openingCount = 0;
+  let openParenIdx = [];
 
   let i = 0;
-  let newS = '';
+  let correctedS = '';
   while (i < s.length) {
-    const letter = s[i];
-    if (letter === '(') {
-      openingCount++;
+    const char = s[i];
+    // Add open paren.
+    if (char === '(') {
+      openParenIdx.push(correctedS.length);
     }
-    else if (letter === ')') {
-      if (openingCount > 0) {
-        openingCount--;
+    else if (char === ')') {
+      // If there is an available open paren, pop it out.
+      if (openParenIdx.length > 0) {
+        openParenIdx.pop();
       }
+      // If there is no open parens preceeding, it would be invalid to include this char.
       else {
         ++i;
         continue;
       }
     }
-    newS += letter;
+    correctedS += char;
     i++;
   }
 
-  i = 0;
-  while (openingCount && i < newS.length) {
-    if (newS[i] === '(' && openingCount) {
-      newS = `${newS.slice(0, i)}${newS.slice(i + 1, newS.length)}`;
-      openingCount--;
-    }
-    else
-      i++;
+  while (openParenIdx.length) {
+    const outIdx = openParenIdx.pop();
+    correctedS = `${correctedS.slice(0, outIdx)}${correctedS.slice(outIdx + 1, correctedS.length)}`;
   }
-  return newS;
+  return correctedS;
 };
+
+/*
+Solution:
+
+Create a new string where a left paren is only added to that string when there is an appropriate left preceeding.
+Keep track of remaining open parens.
+
+For remaining open parens, slice these out of the new corrected string.
+
+*/
 
 console.log(minRemoveToMakeValid("lee(t(c)o)de)"))
 console.log(minRemoveToMakeValid("a)b(c)d"))
 console.log(minRemoveToMakeValid("))(("))
 console.log(minRemoveToMakeValid("(a(b(c)d)"))
+console.log(minRemoveToMakeValid("())()((("))
