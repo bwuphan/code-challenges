@@ -47,5 +47,31 @@ The number of nodes in the tree is in the range [2, 5000].
  * @return {number}
  */
 var maxAncestorDiff = function(root) {
+  if (!root)
+    return null;
 
+  let biggestDiff = null;
+
+  const dfs = (node, curMax, curMin) => {
+    if (!node)
+      return 0;
+
+    const maxChild = Math.max(Math.abs(curMax - node.val), Math.abs(curMin - node.val));
+
+    if (biggestDiff === null || maxChild > biggestDiff) {
+      biggestDiff = maxChild;
+    }
+
+    curMax = Math.max(node.val, curMax);
+    curMin = Math.min(node.val, curMin);
+
+    dfs(node.left, curMax, curMin);
+    dfs(node.right, curMax, curMin);
+
+    return;
+  }
+
+  dfs(root, root.val, root.val);
+
+  return biggestDiff;
 };
