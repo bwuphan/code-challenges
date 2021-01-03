@@ -44,7 +44,12 @@ n == nums1.length == nums2.length
  * @return {SparseVector}
  */
 var SparseVector = function(nums) {
+  this.nonZeros = {}
+  this.length = nums.length
 
+  nums.forEach((n, i) => {
+    if (n !== 0) this.nonZeros[i] = n
+  })
 };
 
 // Return the dotProduct of two sparse vectors
@@ -53,10 +58,28 @@ var SparseVector = function(nums) {
  * @return {number}
  */
 SparseVector.prototype.dotProduct = function(vec) {
+  const vec1 = this.nonZeros
+  const vec2 = vec.nonZeros
 
+  let sum = 0
+  for (let i = 0; i < this.length; ++i) {
+    const num1 = i in vec1 ? vec1[i] : 0
+    const num2 = i in vec2 ? vec2[i] : 0
+
+    sum += num1 * num2
+  }
+
+  return sum
 };
 
 // Your SparseVector object will be instantiated and called as such:
 // let v1 = new SparseVector(nums1);
 // let v2 = new SparseVector(nums2);
 // let ans = v1.dotProduct(v2);
+
+const nums1 = [1,0,0,2,3], nums2 = [0,3,0,4,0]
+
+let v1 = new SparseVector(nums1);
+let v2 = new SparseVector(nums2);
+let ans = v1.dotProduct(v2);
+console.log(ans)
