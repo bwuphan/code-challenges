@@ -34,5 +34,41 @@ Note:
  * @return {number[][]}
  */
 var intervalIntersection = function(A, B) {
+  // Start indices for A, B at 0
+  let idxA = 0;
+  let idxB = 0;
 
+  const sol = [];
+  let a, b;
+
+  // Loop through while we are not at the end for both A and B
+  while (idxA < A.length && idxB < B.length) {
+    // Only set a, b if they are defined
+    if (A[idxA]) a = A[idxA]
+    if (B[idxB]) b = B[idxB]
+
+    // Move index B if the second element of B is less than first element of A.
+    if (b[1] < a[0]) {
+      idxB++;
+      continue;
+    }
+
+    if (b[0] <= a[1])
+      sol.push([Math.max(a[0], b[0]), Math.min(a[1], b[1])]);
+
+    if (a[1] <= b[1]) idxA++
+    else idxB++;
+  }
+
+  return sol;
 };
+
+/*
+Solution:
+Loop through arrays A and B and check if there is an overlap between the elements.
+There is an overlap when the first element of B is less than or equal to the second element of A.
+
+*/
+
+// console.log(intervalIntersection(A = [[0,2],[5,10],[13,23],[24,25]], B = [[1,5],[8,12],[15,24],[25,26]]))
+console.log(intervalIntersection([[10,12],[18,19]], [[1,6],[8,11],[13,17],[19,20]]))
