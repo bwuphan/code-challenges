@@ -38,6 +38,9 @@ The target node is a node in the tree.
  *     this.left = this.right = null;
  * }
  */
+
+var Queue = require('../Prototypes/Queue').Queue
+var arrayToTree = require('../Util/arrayToTree').arrayToTree
 /**
  * @param {TreeNode} root
  * @param {TreeNode} target
@@ -50,6 +53,7 @@ var distanceK = function(root, target, K) {
 
     node.parent = parent || null;
 
+    if (node.val === target) target = node;
 
     dfs(node.left, node);
     dfs(node.right, node);
@@ -57,42 +61,43 @@ var distanceK = function(root, target, K) {
 
   dfs(root, null);
 
-  let queue = [{ node: target, distance: 0, history: {} }];
-  let item = null;
-  let results = [];
-  let node = null;
-  while (queue.length > 0) {
-    item = queue.shift();
-    node = item.node;
+  const queue = new Queue();
+  queue.enqueue({ node: target, distance: 0 });
+  const results = [];
+  const visited = new Set();
 
-    if (item.distance === K) {
-      // console.log(item);
-      results.push(item.node.val);
-    }
+  while (!queue.isEmpty()) {
+    const item = queue.dequeue();
+    const node = item.node;
+    visited.add(node);
+
+    if (item.distance === K) results.push(item.node.val);
+
     if (item.distance <= K) {
-      if (node.left && !(node.left.val in item.history)) {
+      if (node.left && !visited.has(node.left))
+        queue.enqueue({ node: node.left, distance: item.distance + 1 });
 
-        queue.push({
-          node: node.left,
-          distance: item.distance + 1,
-          history: Object.assign({ [node.val]: true }, item.history)
-        });
-      }
-      if (node.right && !(node.right.val in item.history)) {
-        queue.push({
-          node: node.right,
-          distance: item.distance + 1,
-          history: Object.assign({ [node.val]: true }, item.history)
-        });
-      }
-      if (node.parent && !(node.parent.val in item.history)) {
-        queue.push({
-          node: node.parent,
-          distance: item.distance + 1,
-          history: Object.assign({ [node.val]: true }, item.history)
-        });
-      }
+      if (node.right && !visited.has(node.right))
+        queue.enqueue({ node: node.right, distance: item.distance + 1 });
+
+      if (node.parent && !visited.has(node.parent))
+        queue.enqueue({ node: node.parent, distance: item.distance + 1 });
     }
   }
+
   return results;
 };
+
+/*
+Solution:
+DFS first to annotate each node with info about its parent.
+
+BFS after to get the results of nodes which are K distance away.
+Think of the tree as like a graph instead of a tree and the parent is just
+another node to traverse.
+Keep track of visited using a set.
+
+*/
+const testTree = arrayToTree([3,5,1,6,2,0,8,null,null,7,4])
+
+console.log(distanceK(testTree, 5, 2))
