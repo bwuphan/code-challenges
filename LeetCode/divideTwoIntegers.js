@@ -49,5 +49,39 @@ divisor != 0
  * @return {number}
  */
 var divide = function(dividend, divisor) {
+  // Check if final answer should be a negative or positive number.
+  const hasNegative = (dividend < 0 && divisor >= 0) || (dividend >=0 && divisor < 0);
 
+  // Take care of some edge cases
+  if (dividend < 0) dividend = -dividend;
+  if (divisor < 0) divisor = -divisor;
+  if (dividend === divisor) return hasNegative ? -1 : 1;
+  if (divisor === 1) return hasNegative ? -dividend : dividend;
+
+  // Create an array of exponents.
+  const exponents = [divisor];
+  let num = divisor;
+  while (num < Number.MAX_SAFE_INTEGER && num < dividend) {
+    num *= 2
+    exponents.push(num);
+  }
+
+  let answer = 0;
+  let remainder = dividend
+  while (remainder > divisor) {
+    for (let i = 0; i < exponents.length; ++i) {
+      if (exponents[i + 1] > remainder) {
+        answer = answer + Math.pow(2, i);
+        remainder -= exponents[i];
+        break;
+      }
+    }
+  }
+
+  return hasNegative ? -answer : answer;
 };
+
+console.log(divide(dividend = 10, divisor = 3))
+console.log(divide(93706, 157))
+console.log(divide(-93706, 157))
+console.log(divide(7, -3))
