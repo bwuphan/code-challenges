@@ -81,6 +81,8 @@ var divide = function(dividend, divisor) {
   return hasNegative ? -answer : answer;
 };
 
+// For solution, check leetcode article.
+
 console.log(divide(dividend = 10, divisor = 3))
 console.log(divide(93706, 157))
 console.log(divide(-93706, 157))
