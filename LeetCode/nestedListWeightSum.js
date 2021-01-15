@@ -75,5 +75,25 @@ The maximum depth of any integer is less than or equal to 50.
  * @return {number}
  */
 var depthSum = function(nestedList) {
+  const getNestedValue = (array, depth) => {
+    total = 0;
+    for (let el of array) {
+      if (Number.isInteger(el)) {
+        total += el * depth
+      }
+      else {
+        total += getNestedValue(el, depth + 1);
+      }
+    };
+    return total;
+  }
 
+  return getNestedValue(nestedList, 1);
 };
+
+
+console.log(depthSum([[1,1],2,[1,1]]))
+
+console.log(depthSum([1,[4,[6]]]))
+
+console.log(depthSum([1]))
