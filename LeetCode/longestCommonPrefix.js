@@ -30,42 +30,35 @@ strs[i] consists of only lower-case English letters.
  * @return {string}
  */
 var longestCommonPrefix = function(strs) {
-  if (!strs || !strs.length)
-    return '';
-  if (strs.length === 1)
-    return strs[0];
+  // Base cases.
+  if (!strs || !strs.length) return '';
+  if (strs.length === 1) return strs[0];
+  if (!strs[0].length) return '';
 
-  let longest = '';
+  // Loop through characters in strs[0]. We can just pick any str since they all have to have
+  // matches (all or nothing)
+  for (let i = 0; i < strs[0].length; ++i) {
+    const char = strs[0][i];
 
-  for (let i = 0; i < Math.min(strs[0].length, strs[1].length); ++i) {
-    if (strs[0][i] === strs[1][i])
-      longest += strs[0][i];
-    else
-      break;
-  }
-
-  if (!longest)
-    return '';
-
-  if (strs.length === 2)
-    return longest;
-
-  for (let i = 2; i < strs.length; ++i) {
-    const str = strs[i];
-
-    let newLongest = '';
-    for (let j = 0; j < Math.min(str.length, longest.length); ++j) {
-      if (str[j] === longest[j])
-        newLongest += str[j]
+    // Loop throough other strings in list
+    for (let j = 0; j < strs.length; ++j) {
+      const str = strs[j];
+      // If we found a non match, return this substr
+      if (char !== str[i]) return strs[0].substring(0, i) || '';
     }
-
-    longest = newLongest;
   }
 
-  return longest
+  // If we made it to the end that means strs[0] fully matches all other strings.
+  return strs[0];
 };
 
+/*
+Vertically scan all words one character by one to see if there is a match.
 
-console.log(longestCommonPrefix(["flower","flow","flight"]))
+*/
 
-console.log(longestCommonPrefix(["dog","racecar","car"]))
+// console.log(longestCommonPrefix(["flower","flow","flight"]))
+
+// console.log(longestCommonPrefix(["dog","racecar","car"]))
+
+console.log(longestCommonPrefix(["",""]))
