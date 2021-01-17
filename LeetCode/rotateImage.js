@@ -41,7 +41,35 @@ matrix[i].length == n
  * @return {void} Do not return anything, modify matrix in-place instead.
  */
 var rotate = function(matrix) {
+  const n = matrix.length
+  for (let i = 0; i < Math.floor(n / 2); ++i) {
+    const subMatrixLength = 2 - i - 1;
+    console.log('I', i, subMatrixLength);
+    for (let j = 0; j < subMatrixLength; j++) {
+      console.log('first', matrix[i][j])
+      let temp = matrix[j][subMatrixLength];
+      console.log('1 temp', temp)
+      matrix[j][subMatrixLength] = matrix[i][j];
+      let sol = temp;
+      temp = matrix[subMatrixLength][subMatrixLength - j]
+      console.log('2 temp', temp)
+      matrix[subMatrixLength][subMatrixLength - j] = sol;
+      sol = temp;
+      temp = matrix[subMatrixLength - j][i];
+      console.log('3 temp', temp);
+      matrix[subMatrixLength - j][i] = sol;
+      // matrix[subMatrixLength][subMatrixLength - j] = temp;
+      sol = temp;
+      temp = matrix[i][i + j];
+      console.log('4 temp', temp);
+      matrix[i][i + j] = sol;
 
+    }
+
+
+  }
+  return matrix
 };
 
-console.log(rotate([[1,2,3],[4,5,6],[7,8,9]]))
+// console.log(rotate([[1,2,3],[4,5,6],[7,8,9]]))
+console.log(rotate([[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]))
