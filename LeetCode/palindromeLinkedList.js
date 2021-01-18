@@ -36,47 +36,53 @@ const arrayToLinkedList = require('../Util/arrayToLinkedList').arrayToLinkedList
 var isPalindrome = function(head) {
   if (!head) return true;
 
+  // Get length of list
   let cur = head;
   let length = 0;
-
   while (cur !== null) {
     length++;
     cur = cur.next;
   }
 
+  // If the list has only one node, it's a palindrome
   if (length === 1) return true;
 
-  let secondHalf = null;
-  let firstEnd = null;
+  // Next, find the first node of the second half of the palindrome.
+  let secondHalf = null; // The start of the second end of the palindrome
   cur = head;
-  let i = 0;
-
   const endOfFirst = length % 2 === 0 ? Math.floor(length / 2) : Math.ceil(length / 2);
-
   for (let i = 0; i <= endOfFirst; ++i) {
-    firstEnd = secondHalf;
     secondHalf = cur;
     cur = cur.next;
   }
 
+  // Reverse the second half.
   let newSecondHalfHead = reverseList(secondHalf);
 
+  // Compare the two linked lists
   let cur1 = head;
   let cur2 = newSecondHalfHead;
-
   let isPalindrome = true;
   while (cur1 && cur2) {
-    if (cur1.val !== cur2.val)
-      return false;
-
+    // If value is not the same, not a palindrome
+    if (cur1.val !== cur2.val) isPalindrome = false;
     cur1 = cur1.next;
     cur2 = cur2.next;
   }
 
-
+  // Reverse list back to original state
   reverseList(newSecondHalfHead);
   return isPalindrome;
 };
+
+/*
+Solution:
+Get length of linked list
+Use length to determine where the start of the second half of the word is
+Reverse the second half of the linked list
+Compare node by node the first half of the linked list and the reversed second half
+Reverse the second half back to its original state.
+*/
 
 function reverseList(head) {
   let prev = null;
