@@ -29,7 +29,21 @@ All the numbers of nums are unique.
  * @return {number[][]}
  */
 var subsets = function(nums) {
+  if (!nums || !nums.length)
+    return [];
 
+  const results = [];
+
+  nums.forEach(num => {
+    results.forEach(result => {
+      results.push([...result, num])
+    });
+    results.push([num]);
+  });
+
+  results.push([]);
+
+  return results;
 };
 
 console.log(subsets([1,2,3]))
