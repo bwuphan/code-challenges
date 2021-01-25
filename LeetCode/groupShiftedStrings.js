@@ -26,7 +26,46 @@ Output:
  * @return {string[][]}
  */
 var groupStrings = function(strings) {
+  if (!strings || !strings.length) return [];
 
+  const map = {};
+
+  // Method for adding strings/patterns to the map
+  const addToMap = (pattern, string) => {
+    if (!(pattern in map)) map[pattern] = [string];
+    else map[pattern].push(string);
+  }
+
+  strings.forEach(str => {
+    if (!str) {
+      addToMap('', str);
+      return;
+    }
+    if (str.length === 1) {
+      addToMap('1', str);
+      return;
+    }
+
+    let shifts = '';
+
+    // We're going to loop through characters in the string and get the gaps
+    // between their letters and then add it to the map.
+    for (let i = 1; i < str.length; ++i) {
+      const prev = str.charCodeAt(i - 1);
+      const cur = str.charCodeAt(i);
+      // We do this logic to get around the wrap around. This way, az, ba
+      // are both treated as 25.
+      shifts += `${(26 + cur - prev) % 26},`
+      const gap = (26 + cur - prev) % 26
+    }
+
+    addToMap(shifts, str);
+  });
+
+  const results = [];
+  for (const pattern in map) results.push(map[pattern]);
+
+  return results;
 };
 
 console.log(groupStrings(["abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"]))
