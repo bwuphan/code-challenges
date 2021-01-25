@@ -46,4 +46,15 @@ var subsets = function(nums) {
   return results;
 };
 
+
+/*
+Solution:
+Start with an empty array.
+Iterate through nums.
+At each num, we append the current num to the result of the results.
+ie, if results so far are [[1]], then we append 2 to the end so it's [[1], [1,2]]
+Then add an array with just curNum to the results
+
+*/
+
 console.log(subsets([1,2,3]))
