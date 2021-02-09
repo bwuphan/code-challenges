@@ -39,37 +39,37 @@ var searchMatrix = function(matrix, target) {
      smaller than the num, we decrement the row. If the target is greater, we increment the col.
      We do this until we reach the target or go out of bounds.
   */
-  if (!matrix[0] || !matrix[0][0]) return false;
-  let left = 0;
-  let right = matrix.length * matrix[0].length - 1;
 
-  while (left <= right) {
-    const mid = Math.floor((left + right) / 2);
+  let row = matrix.length - 1;
+  let col = 0;
 
-    const midVal = matrix[getRow(mid, matrix)][getCol(mid, matrix)];
+  while (row >= 0 && row < matrix.length && matrix[row][col] !== undefined) {
+    const num = matrix[row][col];
 
-    if (midVal === target) return true;
-
-    if (target < midVal)
-      right = mid - 1;
-    else
-      left = mid + 1;
+    if (target === num)
+      return true;
+    else if (target < num) {
+      row--;
+    }
+    else {
+      col++;
+    }
   }
 
   return false;
 };
 
-// const matrix = [
-//   [1,   3,  5,  7],
-//   [10, 11, 16, 20],
-//   [23, 30, 34, 50]
-// ]
-const matrix = [[1]]
+const matrix = [
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+]
+// const matrix = [[1,4],[2,5]]
 
-// console.log(searchMatrix(matrix, 5));
+console.log(searchMatrix(matrix, 5));
 
-// console.log(searchMatrix(matrix, 20));
+console.log(searchMatrix(matrix, 20));
 
 console.log(searchMatrix(matrix, 2))
-console.log(getRow(10, matrix))
-console.log(getCol(4, matrix))
+// console.log(getRow(10, matrix))
+// console.log(getCol(4, matrix))
