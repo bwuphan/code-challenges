@@ -44,6 +44,7 @@ const trap = (height) => {
 
   let result = 0;
   while (left < right) {
+    // Examine the lower of the heights.
     if (height[left] < height[right]) {
       if (height[left] > leftMax) leftMax = height[left];
       else result += leftMax - height[left];
