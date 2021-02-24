@@ -51,5 +51,41 @@ Output: 1
  * @return {Node}
  */
 var lowestCommonAncestor = function(p, q) {
+  if (!p && !q) return null;
+  if (!p) return q;
+  if (!q) return p;
 
+  let pDepth = getDepth(p);
+  let qDepth = getDepth(q);
+
+  while (pDepth || qDepth) {
+    if (pDepth > qDepth) {
+      p = p.parent;
+      pDepth--;
+    }
+    else {
+      q = q.parent;
+      qDepth--;
+    }
+
+    if (p === q) return p;
+  }
 };
+
+function getDepth(node) {
+  let depth = 0;
+
+  while (node.parent) {
+    depth++;
+    node = node.parent;
+  }
+
+  return depth;
+}
+
+/*
+Solution:
+Get the depth of p and q.
+Go up one level and decrement depth until p and q are at the same level.
+If p === q, that is the common ancestor.
+*/
