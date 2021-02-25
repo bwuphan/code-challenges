@@ -60,5 +60,34 @@ Constraints:
  * @return {Node}
  */
 var insert = function(head, insertVal) {
+  if (!head) {
+    const newNode = new Node(insertVal, null);
+    newNode.next = newNode;
+    return newNode;
+  }
+  if (!head.next) {
+    const newNode = new Node(insertVal, head);
+    head.next = newNode;
+    return head;
+  }
 
+  let prev = null;
+  let cur = head;
+  let numCycles = 0;
+  while (numCycles === 0) {
+    prev = cur;
+    cur = cur.next;
+    if ((insertVal >= prev.val && insertVal <= cur.val) || (cur.val < prev.val && (insertVal <= cur.val || insertVal >= prev.val))) {
+      const newNode = new Node(insertVal, cur);
+      prev.next = newNode;
+      return head;
+    }
+    if (cur === head) {
+      const newNode = new Node(insertVal, cur);
+      if (!prev) prev = cur;
+      prev.next = newNode;
+      return head;
+      numCycles++;
+    }
+  }
 };
