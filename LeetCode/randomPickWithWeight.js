@@ -60,14 +60,60 @@ and so on.
  * @param {number[]} w
  */
 var Solution = function(w) {
+  /*
+  Create an array that has the sums in increasing order.
+  Example: [1,4,1]
+  this.sums = [1,5,6]
+  this.sum = 6
+  */
+  if (w) {
+    let sum = 0;
+    this.sums = w.map((weight, i) => {
+      sum += weight;
+      return sum;
+    });
 
+    this.sum = sum;
+  }
+  else {
+    this.sums = [];
+    this.sum = 0;
+  }
 };
 
 /**
  * @return {number}
  */
 Solution.prototype.pickIndex = function() {
+  // Randomize a number.
+  const randomNum = this.sum * Math.random();
 
+  // Binary search through the array.
+  let low = 0;
+  let high = this.sums.length - 1;
+  let midIdx = null;
+  while (low < high) {
+    midIdx = Math.floor((low + high) / 2);
+    // If we found the target.
+    // Target would be found if the random num is in between the midpoint and the number before it.
+    // Or if the midpoint is at the first index.
+    if (randomNum <= this.sums[midIdx] && (midIdx === 0 || randomNum > this.sums[midIdx - 1]))
+      return midIdx;
+
+    // If randomNum is higher than the midpoint, increase high.
+    // Otherwise, lower the low.
+    if (randomNum < this.sums[midIdx])
+      high = midIdx - 1;
+    else
+      low = midIdx + 1;
+
+    // If high is the same as low, we found the target.
+    if (high === low)
+      return high;
+  }
+
+  // Return midpoint in case it hasn't been returned.
+  return midIdx
 };
 
 /**
@@ -75,3 +121,9 @@ Solution.prototype.pickIndex = function() {
  * var obj = new Solution(w)
  * var param_1 = obj.pickIndex()
  */
+
+
+const test = new Solution([1,3,1]);
+console.log(test.pickIndex())
+console.log(test.pickIndex())
+console.log(test.pickIndex())
