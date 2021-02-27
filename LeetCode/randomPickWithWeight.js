@@ -123,6 +123,18 @@ Solution.prototype.pickIndex = function() {
  */
 
 
+/*
+Time
+O(N)
+O(LogN)
+
+Space
+O(N)
+O(1)
+
+*/
+
+
 const test = new Solution([1,3,1]);
 console.log(test.pickIndex())
 console.log(test.pickIndex())
