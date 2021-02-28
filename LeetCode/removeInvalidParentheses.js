@@ -54,6 +54,40 @@ var removeInvalidParentheses = function(s) {
     }
   }
 
+  const solutions = new Set();
 
+  function recurse(string, i, leftCount, rightCount, leftRemovalCount, rightRemovalCount) {
+    if (i >= s.length) {
+      if (leftCount === rightCount && !solutions.has(string))
+        solutions.add(string);
+      return;
+    }
+
+    const char = s[i];
+
+    i++;
+    if (char === ')') {
+      if (rightRemovalCount) {
+        recurse(string, i, leftCount, rightCount, leftRemovalCount, rightRemovalCount - 1);
+      }
+      if (leftCount > rightCount) {
+        recurse(string + ')', i, leftCount, rightCount + 1, leftRemovalCount, rightRemovalCount);
+      }
+    }
+    else if (char === '(') {
+      if (leftRemovalCount) {
+        recurse(string, i, leftCount, rightCount, leftRemovalCount - 1, rightRemovalCount);
+      }
+
+      recurse(string + '(', i, leftCount + 1, rightCount, leftRemovalCount, rightRemovalCount);
+    }
+    else recurse(string + char, i, leftCount, rightCount, leftRemovalCount, rightRemovalCount);
+  }
+
+  recurse('', 0, 0, 0, leftRemovalCount, rightRemovalCount);
+  return Array.from(solutions);
 };
-console.log(removeInvalidParentheses("()())()"))
+// console.log(removeInvalidParentheses("()())()"))
+// console.log(removeInvalidParentheses('(a)())()'));
+// console.log(removeInvalidParentheses(')('))
+console.log(removeInvalidParentheses(')()('))
