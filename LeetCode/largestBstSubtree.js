@@ -36,6 +36,7 @@ The number of nodes in the tree is in the range [0, 104].
 -104 <= Node.val <= 104
 */
 
+
 /**
  * Definition for a binary tree node.
  * function TreeNode(val, left, right) {
@@ -49,5 +50,63 @@ The number of nodes in the tree is in the range [0, 104].
  * @return {number}
  */
 var largestBSTSubtree = function(root) {
+  if (!root)
+    return 0;
+  if (!root.left && !root.right)
+    return 1;
 
+  let longest = 0;
+
+  function recurse(node, low, high) {
+    if (!node) return 0;
+
+    if (!node.left && !node.right) {
+      if (!longest) longest = 1;
+
+      return 1;
+    }
+
+    let left = recurse(node.left, low, node.val);
+    let right = recurse(node.right, node.val, high);
+
+    console.log(node.val, left, right, low, high)
+    if (node.val === 2) {
+      return node.right
+    }
+    if ((node.left && node.val <= node.left.val)
+      || (node.right && node.val >= node.right.val)) {
+      return false;
+    }
+
+    if (left === false || right === false)
+      return false;
+
+    let sum = null;
+    if (typeof left === 'number' && typeof right === 'number') {
+      sum = left + right + 1;
+      if (sum > longest)
+        longest = sum;
+    }
+
+    if ((low !== null && node.left && node.left.val <= low)
+      || (right !== null && node.right && node.right.val >= high)) {
+      console.log(' FALSE HERE')
+      return false;
+    }
+    return sum;
+  }
+
+  recurse(root, null, null);
+  return longest;
 };
+
+
+const arrayToTree = require('../Util/arrayToTree').arrayToTree;
+
+const test = arrayToTree([4,2,7,2,3,5,null,2,null,null,null,null,null,1])
+
+// console.log(largestBSTSubtree(arrayToTree([10,5,15,1,8,null,7])));
+// console.log(largestBSTSubtree(test));
+// console.log(largestBSTSubtree(arrayToTree([1,2])))
+// console.log(largestBSTSubtree(arrayToTree([3,2,4,null,null,1])))
+console.log(largestBSTSubtree(arrayToTree([3,null,1,2,null,null,4,null,5])))
