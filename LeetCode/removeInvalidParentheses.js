@@ -26,29 +26,34 @@ Output: [""]
  * @return {string[]}
  */
 var removeInvalidParentheses = function(s) {
-  let closeRemovalNum = 0;
-  let unclosedOpens = 0;
+  // Get minimum removals for both left and right parens.
+
+  // First, go forwards and find out how many right parens we have to remove.
+  let rightRemovalCount = 0;
+  let unclosedLeftCount = 0;
   for (let i = 0; i < s.length; ++i) {
     const char = s[i];
     if (char === '(')
-      unclosedOpens++;
+      unclosedLeftCount++;
     else if (char === ')') {
-      if (unclosedOpens > 0) unclosedOpens--;
-      else closeRemovalNum++;
+      if (unclosedLeftCount > 0) unclosedLeftCount--;
+      else rightRemovalCount++;
     }
   }
 
-  let openRemoveNum = 0;
-  let unopenCloses = 0;
+  // Then, go backwards and figure out how many left parens we need to remove.
+  let leftRemovalCount = 0;
+  let unclosedRightCount = 0;
   for (let i = s.length - 1; i >= 0; --i) {
     const char = s[i];
     if (char === ')')
-      unopenCloses++;
+      unclosedRightCount++;
     else if (char === '(') {
-      if (unopenCloses) unopenCloses--;
-      else openRemoveNum++;
+      if (unclosedRightCount) unclosedRightCount--;
+      else leftRemovalCount++;
     }
   }
-  console.log(closeRemovalNum, openRemoveNum)
+
+
 };
 console.log(removeInvalidParentheses("()())()"))
