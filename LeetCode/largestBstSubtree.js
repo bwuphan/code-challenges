@@ -57,46 +57,42 @@ var largestBSTSubtree = function(root) {
 
   let longest = 0;
 
-  function recurse(node, low, high) {
-    if (!node) return 0;
+  function recurse(node) {
+    if (!node) return null;
 
-    if (!node.left && !node.right) {
-      if (!longest) longest = 1;
+    const left = recurse(node.left);
+    const right = recurse(node.right);
 
-      return 1;
+    const result = new Array(3); // Return array [low, high, sum of nodes]
+
+    // Check if valid BST.
+    // If so, calculate sum.
+    if ((!left || node.val > left[1]) && (!right || node.val < right[0])) {
+      const leftNum = left ? left[2] : 0;
+      const rightNum = right ? right[2] : 0;
+      result[2] = leftNum + rightNum + 1;
+      if (result[2] > longest)
+        longest = result[2];
     }
 
-    let left = recurse(node.left, low, node.val);
-    let right = recurse(node.right, node.val, high);
+    // Get the min.
+    result[0] = Math.min(
+      left ? left[0] : Number.MAX_SAFE_INTEGER,
+      right ? right[0] : Number.MAX_SAFE_INTEGER,
+      node.val
+    );
 
-    console.log(node.val, left, right, low, high)
-    if (node.val === 2) {
-      return node.right
-    }
-    if ((node.left && node.val <= node.left.val)
-      || (node.right && node.val >= node.right.val)) {
-      return false;
-    }
+    // Get the max.
+    result[1] = Math.max(
+      left ? left[1] : Number.MIN_SAFE_INTEGER,
+      right ? right[1] : Number.MIN_SAFE_INTEGER,
+      node.val
+    );
 
-    if (left === false || right === false)
-      return false;
-
-    let sum = null;
-    if (typeof left === 'number' && typeof right === 'number') {
-      sum = left + right + 1;
-      if (sum > longest)
-        longest = sum;
-    }
-
-    if ((low !== null && node.left && node.left.val <= low)
-      || (right !== null && node.right && node.right.val >= high)) {
-      console.log(' FALSE HERE')
-      return false;
-    }
-    return sum;
+    return result
   }
 
-  recurse(root, null, null);
+  recurse(root);
   return longest;
 };
 
@@ -105,8 +101,9 @@ const arrayToTree = require('../Util/arrayToTree').arrayToTree;
 
 const test = arrayToTree([4,2,7,2,3,5,null,2,null,null,null,null,null,1])
 
-// console.log(largestBSTSubtree(arrayToTree([10,5,15,1,8,null,7])));
-// console.log(largestBSTSubtree(test));
-// console.log(largestBSTSubtree(arrayToTree([1,2])))
-// console.log(largestBSTSubtree(arrayToTree([3,2,4,null,null,1])))
+console.log(largestBSTSubtree(arrayToTree([10,5,15,1,8,null,7])));
+console.log(largestBSTSubtree(test));
+console.log(largestBSTSubtree(arrayToTree([1,2])))
+console.log(largestBSTSubtree(arrayToTree([3,2,4,null,null,1])))
 console.log(largestBSTSubtree(arrayToTree([3,null,1,2,null,null,4,null,5])))
+console.log(largestBSTSubtree(arrayToTree([4,1,6,null,null,5,null,2])))
