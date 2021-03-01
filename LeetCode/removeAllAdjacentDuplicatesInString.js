@@ -32,5 +32,26 @@ S consists only of English lowercase letters.
  * @return {string}
  */
 var removeDuplicates = function(S) {
+  const stack = '';
 
+  for (let i = 0; i < S.length; ++i) {
+    const char = S[i];
+
+    if (peekTop(stack) === char) {
+      stack.pop();
+    }
+    else
+      stack.push(char);
+  }
+
+  return stack.join('');
 };
+
+function peekTop(stack) {
+  return stack[stack.length - 1];
+}
+
+console.log(removeDuplicates("abbaca"))
+console.log(removeDuplicates("aba"))
+console.log(removeDuplicates("aaabbb"))
+console.log(removeDuplicates("aaaaaaaaa"))
