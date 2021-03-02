@@ -46,5 +46,33 @@ s only contains lower case English letters.
  * @return {string}
  */
 var removeDuplicates = function(s, k) {
+  if (!s) return '';
 
+  const stack = [];
+  for (let i = 0; i < s.length; ++i) {
+    const char = s[i];
+
+    const peeked = stack[stack.length - 1];
+    if (peeked) {
+      if (peeked[0] === char && peeked[1] + 1 >= k)
+        stack.pop();
+      else if (peeked[0] === char)
+        peeked[1]++;
+      else
+        stack.push([char, 1]);
+    }
+    else
+      stack.push([char, 1]);
+  }
+
+  let result = '';
+  stack.forEach(tuple => {
+    for (let i = 0; i < tuple[1]; ++i)
+      result += tuple[0];
+  });
+
+  return result;
 };
+
+console.log(removeDuplicates(s = "deeedbbcccbdaa", k = 3))
+console.log(removeDuplicates(s = "pbbcggttciiippooaais", k = 2))
