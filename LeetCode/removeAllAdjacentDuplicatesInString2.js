@@ -54,17 +54,17 @@ var removeDuplicates = function(s, k) {
 
     const peeked = stack[stack.length - 1];
     if (peeked) {
-      if (peeked[0] === char && peeked[1] + 1 >= k)
-        stack.pop();
-      else if (peeked[0] === char)
-        peeked[1]++;
-      else
-        stack.push([char, 1]);
+      // If we find enough duplicates, pop.
+      if (peeked[0] === char && peeked[1] + 1 >= k) stack.pop();
+      // Else if the char matches the last char, increment count.
+      else if (peeked[0] === char) peeked[1]++;
+      // Else, push to stack.
+      else stack.push([char, 1]);
     }
-    else
-      stack.push([char, 1]);
+    else stack.push([char, 1]);
   }
 
+  // Build string.
   let result = '';
   stack.forEach(tuple => {
     for (let i = 0; i < tuple[1]; ++i)
