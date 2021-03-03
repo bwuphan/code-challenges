@@ -18,5 +18,25 @@ temperature will be an integer in the range [30, 100].
  * @return {number[]}
  */
 var dailyTemperatures = function(T) {
+  const stack = [];
+  const result = T.map(() => 0);
 
+  T.forEach((temp, i) => {
+    let peeked = stack[stack.length - 1];
+
+    if (peeked && temp > peeked[0]) {
+      while (peeked && temp > peeked[0]) {
+        result[peeked[1]] = i - peeked[1];
+        stack.pop();
+        peeked = stack[stack.length - 1];
+      }
+      stack.push([temp, i]);
+    }
+    else stack.push([temp, i]);
+  });
+
+
+  return result;
 };
+
+console.log(dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
