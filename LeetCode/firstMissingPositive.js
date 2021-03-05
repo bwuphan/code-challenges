@@ -33,7 +33,15 @@ Follow up: Could you implement an algorithm that runs in O(n) time and uses cons
  * @return {number}
  */
 var firstMissingPositive = function(nums) {
+  const set = new Set(nums);
 
+  for (let i = 1; i <= nums.length; ++i) {
+    if (!set.has(i))
+      return i;
+  }
+
+  return nums.length + 1;
 };
 
+console.log(firstMissingPositive([1,2,0]));
 console.log(firstMissingPositive([3,4,-1,1]))
