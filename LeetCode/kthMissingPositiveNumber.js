@@ -35,5 +35,23 @@ arr[i] < arr[j] for 1 <= i < j <= arr.length
  * @return {number}
  */
 var findKthPositive = function(arr, k) {
+  let curInt = 1;
+  let idx = 0;
+  while (k >= 0) {
+    const num = arr[idx];
 
+    if (curInt === num)
+      idx++;
+    else {
+      k--;
+      if (k <= 0) return curInt;
+    }
+
+    curInt++;
+  }
 };
+
+
+
+
+console.log(findKthPositive([2,3,4,7,11], 5));
