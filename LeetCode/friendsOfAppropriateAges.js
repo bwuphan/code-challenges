@@ -44,7 +44,33 @@ Notes:
  * @return {number}
  */
 var numFriendRequests = function(ages) {
-  let result =
+  let result = 0;
+  const fullAges = new Array(121);
+
+  ages.forEach(age => {
+    if (!fullAges[age]) fullAges[age] = 1;
+    else fullAges[age]++;
+  });
+
+  for (let ageA = 0; ageA < fullAges.length; ++ageA) {
+    const countA = fullAges[ageA];
+
+    if (countA) {
+      for (let ageB = 0; ageB < fullAges.length; ++ageB) {
+        const countB = fullAges[ageB];
+        if (!countB) continue;
+
+        if (ageB <= (0.5 * ageA + 7)) continue;
+        if (ageB > ageA) continue;
+        if (ageB > 100 && ageA < 100) continue;
+
+        result += (countB * countA);
+        if (ageA === ageB) result -= countA;
+      }
+    }
+  }
+
+  return result;
 };
 
 console.log(numFriendRequests([16,16]))
