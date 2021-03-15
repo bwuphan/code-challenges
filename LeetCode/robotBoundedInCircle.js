@@ -44,5 +44,38 @@ instructions[i] is 'G', 'L' or, 'R'.
  * @return {boolean}
  */
 var isRobotBounded = function(instructions) {
+  const directions = {
+    n: ['w', 'e'],
+    e: ['n', 's'],
+    s: ['e', 'w'],
+    w: ['s', 'n']
+  }
+  const coordinates = [0, 0];
+  let direction = 'n';
 
+  for (let i = 0; i < instructions.length; ++i) {
+    const instruction = instructions[i];
+    if (instruction === 'G') {
+      if (direction === 'n')
+        coordinates[0]--;
+      else if (direction === 'e')
+        coordinates[1]++;
+      else if (direction === 's')
+        coordinates[0]++;
+      else if (direction === 'w')
+        coordinates[1]--;
+    }
+    else if (instruction === 'L')
+      direction = directions[direction][1];
+    else if (instruction === 'R')
+      direction = directions[direction][0];
+  }
+
+  return direction !== 'n' || JSON.stringify(coordinates) === '[0,0]';
 };
+
+console.log(isRobotBounded("GGLLGG"))
+
+console.log(isRobotBounded('GG'))
+
+console.log(isRobotBounded('GL'))
