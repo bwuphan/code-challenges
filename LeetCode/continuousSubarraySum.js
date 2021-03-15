@@ -39,12 +39,13 @@ var checkSubarraySum = function(nums, k) {
     sums.push(cumulativeSum);
   });
 
-
-  for (let i = 0; i < nums.length; ++i) {
-    for (let j = i + 1; j < nums.length; ++j) {
-      /* The subArrSum is the cumulative sum at the current j el - the cum sum at the i el and then
+  console.log(sums)
+  for (let start = 0; start < nums.length; ++start) {
+    for (let end = start + 1; end < nums.length; ++end) {
+      /* The subArrSum is the cumulative sum at the current end el - the cum sum at the i el and then
          adding the num at index i.*/
-      const subArrSum = sums[j] - sums[i] + nums[i];
+      const subArrSum = sums[end] - sums[start] + nums[start];
+      console.log(sums[end], sums[start], nums[start], subArrSum)
       if (subArrSum === 0 || subArrSum % k === 0) {
         return true;
       }
@@ -56,7 +57,7 @@ var checkSubarraySum = function(nums, k) {
 
 
 
+// console.log(checkSubarraySum([23, 2, 4, 6, 7], 6))
 console.log(checkSubarraySum([23, 2, 4, 6, 7], 6))
-console.log(checkSubarraySum([23, 2, 6, 4, 7], 6))
-console.log(checkSubarraySum([23,2,6,4,7], 0))
-console.log(checkSubarraySum([0,0], 0))
+// console.log(checkSubarraySum([23,2,6,4,7], 0))
+// console.log(checkSubarraySum([0,0], 0))
