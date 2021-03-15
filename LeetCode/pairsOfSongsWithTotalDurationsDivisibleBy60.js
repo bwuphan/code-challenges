@@ -33,7 +33,32 @@ Constraints:
  * @return {number}
  */
 var numPairsDivisibleBy60 = function(time) {
+  const remainders = new Array(60);
 
+  time.forEach(t => {
+    const remainder = t % 60;
+    if (!remainders[remainder]) remainders[remainder] = 1;
+    else remainders[remainder]++;
+  });
+
+  let count = 0;
+  remainders.forEach((remainder, i) => {
+    if (remainder) {
+      if (i === 30 || i === 0)
+        count += ((remainder * (remainder - 1)) / 2);
+      else {
+        const match = 60 - i;
+        if (remainders[match]) {
+          count += (remainder * remainders[match]);
+          remainders[match] = 0;
+        }
+      }
+
+      remainders[i] = 0;
+    }
+  });
+
+  return count;
 };
 
 console.log(numPairsDivisibleBy60([30,20,150,100,40]))
