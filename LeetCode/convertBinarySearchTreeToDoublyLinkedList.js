@@ -44,7 +44,6 @@ while the dashed line means the predecessor relationship.
  */
 var treeToDoublyList = function(root) {
   if (!root) return null;
-  let vals = [];
 
   // First is going to be the first node in the list.
   // Last will keep changing to the last recorded node until we finally find the real last node.
