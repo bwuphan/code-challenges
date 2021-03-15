@@ -21,18 +21,18 @@ var dailyTemperatures = function(T) {
   const stack = [];
   const result = T.map(() => 0);
 
-  T.forEach((temp, i) => {
-    let peeked = stack[stack.length - 1];
+  T.forEach((curTemp, i) => {
+    let peekedIdx = stack[stack.length - 1];
+    let peekedTemp = T[peekedIdx]
 
-    if (peeked && temp > peeked[0]) {
-      while (peeked && temp > peeked[0]) {
-        result[peeked[1]] = i - peeked[1];
-        stack.pop();
-        peeked = stack[stack.length - 1];
-      }
-      stack.push([temp, i]);
+    while (peekedIdx !== undefined && curTemp > peekedTemp) {
+      result[peekedIdx] = i - peekedIdx;
+      stack.pop();
+      peekedIdx = stack[stack.length - 1];
+      peekedTemp = T[peekedIdx];
     }
-    else stack.push([temp, i]);
+
+    stack.push(i);
   });
 
 
