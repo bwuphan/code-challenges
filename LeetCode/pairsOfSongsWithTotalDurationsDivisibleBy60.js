@@ -61,6 +61,20 @@ var numPairsDivisibleBy60 = function(time) {
   return count;
 };
 
+/*
+Solution:
+
+Create remainders array with length of 60.
+Fill out remainders array where index is the times % 60 and the values are the number of times
+those values occur.
+
+Becomes two sum problem.
+Special case for remainder of 30 or 0 since those pair with themselves. (Combination formula)
+Otherwise match up with matching pair
+
+Time: O(N)
+Space: O(1)
+*/
 console.log(numPairsDivisibleBy60([30,20,150,100,40]))
 console.log(numPairsDivisibleBy60([60, 60, 60]))
 console.log(numPairsDivisibleBy60([15,63,451,213,37,209,343,319]))
