@@ -54,5 +54,31 @@ It is guaranteed that all elements in verticalCuts are distinct.
  * @return {number}
  */
 var maxArea = function(h, w, horizontalCuts, verticalCuts) {
+  horizontalCuts.push(0);
+  horizontalCuts.push(h);
+  horizontalCuts.sort((a, b) => a - b);
 
+  verticalCuts.push(0);
+  verticalCuts.push(w);
+  verticalCuts.sort((a, b) => a - b);
+
+  let maxH = 0;
+  for (let i = 1; i < horizontalCuts.length; ++i) {
+    const gap = horizontalCuts[i] - horizontalCuts[i - 1];
+
+    if (gap > maxH) maxH = gap;
+  }
+
+  let maxV = 0;
+  for (let i = 1; i < verticalCuts.length; ++i) {
+    const gap = verticalCuts[i] - verticalCuts[i - 1];
+
+    if (gap > maxV) maxV = gap;
+  }
+
+  return (maxV * maxH)%(10**9 + 7);
 };
+
+console.log(maxArea(h = 5, w = 4, horizontalCuts = [1,2,4], verticalCuts = [1,3]))
+
+console.log(maxArea(h = 5, w = 4, horizontalCuts = [3,1], verticalCuts = [1]))
