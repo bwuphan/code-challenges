@@ -47,8 +47,38 @@ asteroids[i] != 0
  * @return {number[]}
  */
 var asteroidCollision = function(asteroids) {
+  const stack = [];
 
+  function peek() {
+    return stack[stack.length - 1];
+  }
+
+  for (let i = asteroids.length - 1; i >= 0; --i) {
+    let asteroid = asteroids[i];
+
+    let dontPush = false; // Let's you know whether to push asteroid to stack
+    while (stack.length && peek() < 0 && asteroid > 0) {
+      // If asteroid is larger than last in the stack, pop last on stack
+      if (asteroid > Math.abs(peek())) {
+        stack.pop();
+        continue;
+      }
+      else {
+        // If they are even, pop the last on the stack
+        if (Math.abs(peek()) === asteroid) stack.pop();
+
+        // Dont push if asteroid is smaller than last on stack
+        dontPush = true;
+        break;
+      }
+    }
+    if (!dontPush) stack.push(asteroid);
+  }
+
+  return stack.reverse();
 };
 
 console.log(asteroidCollision([5,10,-5]))
-
+console.log(asteroidCollision([8,-8]))
+console.log(asteroidCollision([10,2,-5]))
+console.log(asteroidCollision([-2,-1,1,2]))
