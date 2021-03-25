@@ -40,5 +40,32 @@ Constraints:
  * @return {number}
  */
 var maximumUnits = function(boxTypes, truckSize) {
+  boxTypes.sort((a, b) => b[1] - a[1]);
 
+  let numUnits = 0;
+
+  for (let i = 0; i < boxTypes.length; ++i) {
+    const numBoxes = boxTypes[i][0];
+    const unitsPerBox = boxTypes[i][1];
+
+    const minBoxes = Math.min(truckSize, numBoxes);
+
+    truckSize -= minBoxes;
+    numUnits += minBoxes * unitsPerBox;
+
+    if (truckSize <= 0) return numUnits;
+  }
+
+  return numUnits;
 };
+
+/*
+Solution:
+Sort boxes by putting highest units per box first. This lets us use the most efficient boxes first.
+Loop through boxes and put all the boxes possible in the truck at a time.
+If truckSize reaches 0, return numUnits.
+
+
+*/
+
+console.log(maximumUnits([[5,10],[2,5],[4,7],[3,9]], 10))
