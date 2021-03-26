@@ -43,15 +43,16 @@ isConnected[i][j] == isConnected[j][i]
  * @return {number}
  */
 var findCircleNum = function(isConnected) {
+  // Keep track of visited nodes
 	const visited = new Array(isConnected.length);
 
   function visit(index) {
     visited[index] = true;
     const connections = isConnected[index];
     for (let j = 0; j < isConnected.length; ++j) {
-      if (!visited[j] && connections[j]) {
+      // If we haven't visited this index and it's not a 0, visit
+      if (!visited[j] && connections[j]) 
         visit(j);
-      }
     }
   }
 
@@ -66,6 +67,12 @@ var findCircleNum = function(isConnected) {
   return numProvinces;
 };
 
+/*
+Solution:
+
+DFS through and visit all connections.
+
+*/
 console.log(findCircleNum([[1,1,0],[1,1,0],[0,0,1]]))
 
 console.log(findCircleNum([[1,0,0],[0,1,0],[0,0,1]]))
