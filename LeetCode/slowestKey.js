@@ -60,5 +60,20 @@ keysPressed contains only lowercase English letters.
  * @return {character}
  */
 var slowestKey = function(releaseTimes, keysPressed) {
+  const keys = new Array(26);
 
+  const solution = [null, null];
+  for (let i = 0; i < keysPressed.length; ++i) {
+    const lastTime = i - 1 >= 0 ? releaseTimes[i - 1] : 0;
+    const newTime = releaseTimes[i] - lastTime;
+
+    if (solution[1] === null || (newTime >= solution[1] && (newTime !== solution[1] || keysPressed[i] > solution[0]))) {
+      solution[0] = keysPressed[i];
+      solution[1] = newTime;
+    }
+  }
+  return solution[0]
 };
+
+console.log(slowestKey(releaseTimes = [9,29,49,50], keysPressed = "cbcd"))
+console.log(slowestKey(releaseTimes = [12,23,36,46,62], keysPressed = "spuda"))
