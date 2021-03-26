@@ -43,5 +43,29 @@ isConnected[i][j] == isConnected[j][i]
  * @return {number}
  */
 var findCircleNum = function(isConnected) {
-    
+	const visited = new Array(isConnected.length);
+
+  function visit(index) {
+    visited[index] = true;
+    const connections = isConnected[index];
+    for (let j = 0; j < isConnected.length; ++j) {
+      if (!visited[j] && connections[j]) {
+        visit(j);
+      }
+    }
+  }
+
+  numProvinces = 0;
+  for (let i = 0; i < isConnected.length; ++i) {
+    if (!visited[i]) {
+      visit(i);
+      numProvinces++;
+    }
+  }
+
+  return numProvinces;
 };
+
+console.log(findCircleNum([[1,1,0],[1,1,0],[0,0,1]]))
+
+console.log(findCircleNum([[1,0,0],[0,1,0],[0,0,1]]))
