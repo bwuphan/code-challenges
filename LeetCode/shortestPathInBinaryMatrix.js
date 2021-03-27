@@ -45,6 +45,38 @@ const Queue = require('../Prototypes/Queue').Queue;
  * @return {number}
  */
 var shortestPathBinaryMatrix = function(grid) {
+  if (!grid || grid[0][0] !== 0) return -1;
+
+  // Directions for 8 direction movement
+  const directions = [[-1,-1],[-1,0],[-1,1],[0,1],[1,1],[1,0],[1,-1],[0,-1]];
+
+  const queue = new Queue();
+  queue.enqueue([0, 0, 1]); // row, col, depth
+
+  // Create visited 2D array
+  const visited = [...Array(grid.length)].map(() => new Array(grid[0].length));
+
+  while (!queue.isEmpty()) {
+    const item = queue.dequeue();
+
+    // If we already visited, skip
+    if (visited[item[0]][item[1]]) continue;
+
+    // See if solution is found
+    if (grid[item[0]][item[1]] === 0 && item[0] === grid.length - 1 && item[1] === grid[0].length - 1)
+      return item[2];
+
+    visited[item[0]][item[1]] = true;
+
+    directions.forEach(direction => {
+      const row = item[0] + direction[0];
+      const col = item[1] + direction[1];
+      if (row >= 0 && row < grid.length && col >= 0 && col < grid[0].length && grid[row][col] === 0 && !visited[row][col])
+        queue.enqueue([row, col, item[2] + 1])
+    });
+  }
+
+  return -1;
 };
 
 /*
