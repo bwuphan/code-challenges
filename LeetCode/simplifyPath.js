@@ -55,9 +55,32 @@ path is a valid absolute Unix path.
  * @return {string}
  */
 var simplifyPath = function(path) {
+  const pathArr = path.split('/');
 
+  const stack = [];
+
+  pathArr.forEach(el => {
+    if (el !== '' && el !== '.') {
+      if (el === '..')
+        stack.pop();
+      else
+        stack.push(el);
+    }
+  });
+
+  return '/' + stack.join('/');
 };
 
+
+/*
+Solution:
+Split the path into an array.
+Use a stack.
+If char is a .., pop off the stack
+If char is an alphanumeric, push onto the stack.
+
+At the end, join the stack.
+*/
 console.log(simplifyPath("/home/"))
 console.log(simplifyPath("/../"))
 console.log(simplifyPath("/home//foo/"))
