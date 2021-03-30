@@ -46,31 +46,17 @@ Constraints:
  * @return {number[]}
  */
 var findBuildings = function(heights) {
-  const maxHeights = [];
-
-  for (let i = heights.length - 1; i > 0; --i) {
-    if (maxHeights.length) {
-      maxHeights.push(Math.max(heights[i], maxHeights[maxHeights.length - 1]));
-    }
-    else {
-      maxHeights.push(heights[i]);
-    }
-  }
-
+  let curMax = null;
   const results = [];
-  for (let i = 0; i < heights.length; ++i) {
-    if (maxHeights.length) {
-      if (heights[i] > maxHeights[maxHeights.length - 1]) {
-        results.push(i);
-      }
-      maxHeights.pop();
-    }
-    else {
+
+  for (let i = heights.length - 1; i >= 0; --i) {
+    if (curMax === null || heights[i] > curMax)
       results.push(i);
-    }
+
+    curMax = Math.max(curMax, heights[i]);
   }
 
-  return results;
+  return results.reverse();
 };
 
 console.log(findBuildings([4,2,3,1]));
