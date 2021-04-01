@@ -50,5 +50,29 @@ palindrome consists of only lowercase English letters.
  * @return {string}
  */
 var breakPalindrome = function(palindrome) {
-    
+  if (palindrome.length <= 1) return '';
+
+  const middleIdx = palindrome.length % 2 !== 0 ? Math.floor(palindrome.length / 2) : null;
+
+  let result = '';
+  let hasChanged = false;
+  for (let i = 0; i < palindrome.length; ++i) {
+    const char = palindrome[i];
+    if (!hasChanged && char !== 'a' && i !== middleIdx) {
+      result += 'a';
+      hasChanged = true;
+    }
+    else result += char;
+  }
+
+  if (!hasChanged) {
+    result = palindrome.slice(0, palindrome.length - 1) + 'b';
+  }
+
+  return result;
 };
+
+console.log(breakPalindrome("abccba"))
+console.log(breakPalindrome("a"))
+console.log(breakPalindrome("aa"))
+console.log(breakPalindrome("aba"))
