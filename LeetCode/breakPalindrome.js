@@ -57,8 +57,7 @@ var breakPalindrome = function(palindrome) {
   palindrome = palindrome.split('');
 
   for (let i = 0; i < palindrome.length; ++i) {
-    const char = palindrome[i];
-    if (char !== 'a' && i !== middleIdx) {
+    if (palindrome[i] !== 'a' && i !== middleIdx) {
       palindrome[i] = 'a';
       return palindrome.join('');
     }
@@ -67,6 +66,15 @@ var breakPalindrome = function(palindrome) {
   palindrome[palindrome.length - 1] = 'b';
   return palindrome.join('');
 };
+
+/*
+Solution:
+
+Change first letter that isn't an a and not in the middle to an a.
+
+If not possible, change last letter to a b
+
+*/
 
 console.log(breakPalindrome("abccba"))
 console.log(breakPalindrome("a"))
