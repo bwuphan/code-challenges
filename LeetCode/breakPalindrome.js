@@ -54,22 +54,18 @@ var breakPalindrome = function(palindrome) {
 
   const middleIdx = palindrome.length % 2 !== 0 ? Math.floor(palindrome.length / 2) : null;
 
-  let result = '';
-  let hasChanged = false;
+  palindrome = palindrome.split('');
+
   for (let i = 0; i < palindrome.length; ++i) {
     const char = palindrome[i];
-    if (!hasChanged && char !== 'a' && i !== middleIdx) {
-      result += 'a';
-      hasChanged = true;
+    if (char !== 'a' && i !== middleIdx) {
+      palindrome[i] = 'a';
+      return palindrome.join('');
     }
-    else result += char;
   }
 
-  if (!hasChanged) {
-    result = palindrome.slice(0, palindrome.length - 1) + 'b';
-  }
-
-  return result;
+  palindrome[palindrome.length - 1] = 'b';
+  return palindrome.join('');
 };
 
 console.log(breakPalindrome("abccba"))
