@@ -21,23 +21,22 @@ The string will only contain lowercase characters a-z. The maximum length of the
  * @return {boolean}
  */
 var isPalindrome = function(s) {
-  console.log(s);
-  let sArr = s.toLowerCase().split('').filter(char => char.match(/^[0-9a-z]+$/));
-
+  s = s.replace(/[^0-9a-z]/gi, '').toLowerCase();
+  
   let left, right = null;
 
-  if (sArr.length % 2 === 0) {
-    left = sArr.length / 2 - 1;
+  if (s.length % 2 === 0) {
+    left = s.length / 2 - 1;
     right = left + 1;
   }
   else {
-    left = Math.floor(sArr.length / 2) - 1;
+    left = Math.floor(s.length / 2) - 1;
     right = left + 2;
   }
 
   // If left is less than 0, we are done.
   while (left >= 0) {
-    if (sArr[left] !== sArr[right]) {
+    if (s.charAt(left) !== s.charAt(right)) {
       return false;
     }
 
@@ -48,36 +47,20 @@ var isPalindrome = function(s) {
   return true;
 };
 
-
 /**
  * @param {string} s
  * @return {boolean}
  */
 var validPalindrome = function(s) {
-  let sArr = s.toLowerCase().split('').filter(char => char.match(/^[0-9a-z]+$/));
-
-  // Set left and right pointers at ends.
   let left = 0;
   let right = s.length - 1;
 
-  // Go until both pointers meet.
-  while (left <= right) {
-    // If what is at the left pointer does not equal the right pointer.
-    if (sArr[left] !== sArr[right]) {
-      // shift the left pointer out.
-      let shift = sArr.slice(left, right + 1);
-      shift.shift();
-
-      // Shift the right pointer out.
-      let pop = sArr.slice(left, right + 1);
-      pop.pop();
-
-      // Call isPalindrome for shift and pop.
-      return (isPalindrome(shift.join('')) || isPalindrome(pop.join('')));
+  for (let i = 0; i < Math.floor(s.length / 2); ++i) {
+    if (s[i] !== s[s.length - i - 1]) {
+      const leftRemoved = s.slice(i + 1, s.length - i);
+      const rightRemoved = s.slice(i, s.length - i - 1);
+      return isPalindrome(leftRemoved) || isPalindrome(rightRemoved);
     }
-
-    left++;
-    right--;
   }
   return true;
 };
