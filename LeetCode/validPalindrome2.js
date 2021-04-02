@@ -54,6 +54,13 @@ var validPalindrome = function(s) {
 /*
 Solution:
 
+Set left pointer to left idx and right to last idx.
+
+Set a loop to floor of string length
+  If the left and right don't match,
+    Check if it's a palindrome if you remove the left char
+    Check if it's a palindrome if you remove the right char
+    Return an or condition with both
 */
 
 console.log(validPalindrome('aba'));
