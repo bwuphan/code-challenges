@@ -20,28 +20,14 @@ The string will only contain lowercase characters a-z. The maximum length of the
  * @param {string} s
  * @return {boolean}
  */
-var isPalindrome = function(s) {
-  s = s.replace(/[^0-9a-z]/gi, '').toLowerCase();
-  
-  let left, right = null;
-
-  if (s.length % 2 === 0) {
-    left = s.length / 2 - 1;
-    right = left + 1;
-  }
-  else {
-    left = Math.floor(s.length / 2) - 1;
-    right = left + 2;
-  }
-
+var isPalindrome = function(s, left, right) {
   // If left is less than 0, we are done.
-  while (left >= 0) {
-    if (s.charAt(left) !== s.charAt(right)) {
+  while (left <= right) {
+    if (s.charAt(left) !== s.charAt(right))
       return false;
-    }
 
-    left--;
-    right++;
+    left++;
+    right--;
   }
 
   return true;
@@ -57,14 +43,18 @@ var validPalindrome = function(s) {
 
   for (let i = 0; i < Math.floor(s.length / 2); ++i) {
     if (s[i] !== s[s.length - i - 1]) {
-      const leftRemoved = s.slice(i + 1, s.length - i);
-      const rightRemoved = s.slice(i, s.length - i - 1);
-      return isPalindrome(leftRemoved) || isPalindrome(rightRemoved);
+      const leftRemoved = isPalindrome(s, i + 1, s.length - i - 1, s.length / 2 % 2 === 0);
+      const rightRemoved = isPalindrome(s, i, s.length - i - 2, s.length / 2 % 2 === 0);
+      return leftRemoved || rightRemoved;
     }
   }
   return true;
 };
 
+/*
+Solution:
+
+*/
 
 console.log(validPalindrome('aba'));
 console.log(validPalindrome('abbbaca'));
