@@ -52,5 +52,29 @@ The integer n is in the range [0, 100].
  * @return {number}
  */
 var leastInterval = function(tasks, n) {
+  const occurrences = {};
+  const uniqueTasks = [];
+  let maxOccurrences = 0;
+  tasks.forEach(task => {
+    if (task in occurrences) {
+      occurrences[task]++;
+      if (occurrences[task] > maxOccurrences)
+        maxOccurrences = occurrences[task];
+    }
+    else {
+      occurrences[task] = 1;
+      uniqueTasks.push(task);
+    }
+  });
 
+  let numMostFrequent = 0;
+  for (let task in occurrences) {
+    if (occurrences[task] === maxOccurrences)
+      numMostFrequent++;
+  }
+  // console.log(maxOccurrences, numMostFrequent);
+
+  return Math.max(tasks.length, (n + 1) * (maxOccurrences - 1) + numMostFrequent);
 };
+
+console.log(leastInterval(tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2))
