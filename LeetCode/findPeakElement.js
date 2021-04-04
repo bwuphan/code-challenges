@@ -55,6 +55,11 @@ var findPeakElement = function(nums) {
 
 /*
 Solution:
+
+Use binary search to find a peak
+Get the midpoint.
+  If the midpoint is greater than what is directly to the right, go left
+  Else go the other way
 */
 // console.log(findPeakElement([1,2,3,1]))
 console.log(findPeakElement([1,2,1,3,5,6,4]))
