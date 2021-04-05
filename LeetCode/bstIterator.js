@@ -74,9 +74,67 @@ BSTIterator.prototype.hasNext = function() {
   return (this.curIndex + 1) < this.values.length;
 };
 
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ */
+var BSTIterator = function(root) {
+  this.stack = [];
+  this.addLeftMost(root);
+};
+
+BSTIterator.prototype.addLeftMost = function(node) {
+  const stack = this.stack;
+  while (node) {
+    stack.push(node);
+    node = node.left;
+  }
+}
+
+/**
+ * @return the next smallest number
+ * @return {number}
+ */
+BSTIterator.prototype.next = function() {
+  if (this.stack) {
+    const popped = this.stack.pop();
+
+    if (popped && popped.right) {
+      this.addLeftMost(popped.right);
+    }
+
+    return popped.val;
+  }
+  else return -1;
+};
+
+/**
+ * @return whether we have a next smallest number
+ * @return {boolean}
+ */
+BSTIterator.prototype.hasNext = function() {
+  return this.stack.length > 0;
+};
+
 /**
  * Your BSTIterator object will be instantiated and called as such:
  * var obj = new BSTIterator(root)
  * var param_1 = obj.next()
  * var param_2 = obj.hasNext()
  */
+
+const arrayToTree = require('../Util/arrayToTree').arrayToTree
+var obj = new BSTIterator(arrayToTree([7, 3, 15, null, null, 9, 20]))
+console.log(obj.next())
+// console.log(obj.hasNext())
+console.log(obj.next())
+console.log(obj.next())
+console.log(obj.next())
+console.log(obj.next())
