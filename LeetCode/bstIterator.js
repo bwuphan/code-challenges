@@ -123,6 +123,15 @@ BSTIterator.prototype.hasNext = function() {
   return this.stack.length > 0;
 };
 
+/*
+Solution:
+
+The alternate solution is to basically recurse a bit at a time instead of all at once
+
+T(1) -> T(Height of tree) per next
+S(height of tree)
+*/
+
 /**
  * Your BSTIterator object will be instantiated and called as such:
  * var obj = new BSTIterator(root)
