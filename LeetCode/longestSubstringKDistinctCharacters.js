@@ -21,34 +21,51 @@ Explanation: T is "aa" which its length is 2.
  * @return {number}
  */
 var lengthOfLongestSubstringKDistinct = function(s, k) {
-  if (k === 0) return 0;
+  const map = {};
+  let numDistinct = 0;
   let longest = 0;
-  for (let i = 0; i < s.length; ++i) {
-    let occurences = {};
-    let curStr = '';
-    let numUnique = 0;
-    for (let j = i; j < s.length; ++j) {
-      let curLetter = s[j];
-      if (curLetter in occurences) {
-        occurences[curLetter]++;
-      }
-      else {
-        numUnique++;
-        if (numUnique > k) {
-          break;
+  let l = 0; // left pointer
+  let r = 0; // right pointer
+
+  while (r < s.length) {
+    const right = s[r];
+    // If the right char is in map, we don't have to increase numDistinct
+    if (right in map)
+      map[right]++;
+    else {
+      map[right] = 1;
+      numDistinct++;
+
+      // Move left pointer until numDistinct is <= k
+      while (numDistinct > k) {
+        const left = s[l];
+
+        map[left]--;
+        if (map[left] <= 0) {
+          numDistinct--;
+          delete map[left];
         }
-        occurences[curLetter] = 0;
-      }
-      curStr += curLetter;
-      if (curStr.length > longest) {
-        longest = curStr.length;
+        l++;
       }
     }
+
+    if ((r - l + 1) > longest)
+      longest = r - l + 1;
+    r++;
   }
+
   return longest;
 };
 
-// console.log(lengthOfLongestSubstringKDistinct("eceba", 2));
-// console.log(lengthOfLongestSubstringKDistinct("aa", 1));
-// console.log(lengthOfLongestSubstringKDistinct("a", 0));
+console.log(lengthOfLongestSubstringKDistinct("eceba", 2));
+console.log(lengthOfLongestSubstringKDistinct("aa", 1));
+console.log(lengthOfLongestSubstringKDistinct("a", 0));
 console.log(lengthOfLongestSubstringKDistinct("aba", 1));
+
+/*
+Solution:
+
+Use sliding window.
+Keep a map of all the characters.
+If the number of distinct characters is ever greater than k, move the left pointer until valid.
+*/
