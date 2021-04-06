@@ -43,6 +43,26 @@ var solution = function(isBadVersion) {
      */
 
     return function(n) {
-      return
+      let start = 1;
+      let end = n;
+
+      while (start < end) {
+        const mid = Math.floor(start + (end-start) / 2);
+        const isBad = isBadVersion(mid);
+
+        if (isBad) {
+          end = mid;
+        }
+        else {
+          start = mid + 1;
+        }
+      }
+
+      return start;
     };
 };
+
+/*
+Solution:
+Binary search
+*/
