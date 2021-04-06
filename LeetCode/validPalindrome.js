@@ -22,22 +22,22 @@ Output: false
  * @return {boolean}
  */
 var isPalindrome = function(s) {
-  let sArr = s.toLowerCase().split('').filter(char => char.match(/^[0-9a-z]+$/));
-
+  s = s.replace(/[^0-9a-z]/gi, '').toLowerCase();
+  
   let left, right = null;
 
-  if (sArr.length % 2 === 0) {
-    left = sArr.length / 2 - 1;
+  if (s.length % 2 === 0) {
+    left = s.length / 2 - 1;
     right = left + 1;
   }
   else {
-    left = Math.floor(sArr.length / 2) - 1;
+    left = Math.floor(s.length / 2) - 1;
     right = left + 2;
   }
 
   // If left is less than 0, we are done.
   while (left >= 0) {
-    if (sArr[left] !== sArr[right]) {
+    if (s.charAt(left) !== s.charAt(right)) {
       return false;
     }
 
@@ -49,7 +49,7 @@ var isPalindrome = function(s) {
 };
 
 
-// console.log(isPalindrome("A man, a plan, a canal: Panama"));
-// console.log(isPalindrome("race a car"));
-// console.log(isPalindrome("racecar"));
+console.log(isPalindrome("A man, a plan, a canal: Panama"));
+console.log(isPalindrome("race a car"));
+console.log(isPalindrome("racecar"));
 console.log(isPalindrome("aa"));
