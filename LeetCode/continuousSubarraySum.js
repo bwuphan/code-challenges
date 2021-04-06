@@ -32,32 +32,56 @@ You may assume the sum of all the numbers is in the range of a signed 32-bit int
  * @return {boolean}
  */
 var checkSubarraySum = function(nums, k) {
-  let sums = [];
-  let cumulativeSum = 0;
-  nums.forEach(num => {
-    cumulativeSum += num;
-    sums.push(cumulativeSum);
-  });
+  const map = {
+    0: -1
+  };
 
-  console.log(sums)
-  for (let start = 0; start < nums.length; ++start) {
-    for (let end = start + 1; end < nums.length; ++end) {
-      /* The subArrSum is the cumulative sum at the current end el - the cum sum at the i el and then
-         adding the num at index i.*/
-      const subArrSum = sums[end] - sums[start] + nums[start];
-      console.log(sums[end], sums[start], nums[start], subArrSum)
-      if (subArrSum === 0 || subArrSum % k === 0) {
-        return true;
-      }
-    }
+  let sum = 0;
+  for (let i = 0; i < nums.length; ++i) {
+    const num = nums[i];
+    sum += num;
+
+    if (k !== 0)
+      sum = sum % k;
+
+    if (sum in map && i - map[sum] >= 2)
+      return true
+    else
+      map[sum] = i;
   }
 
   return false;
 };
 
+/*
+Here is my understanding. Let's focus on a specific input shown below. In a nutshell we are looking
+for subarray sum % k equal to 0.
 
+k=6
+[23, 2, 4, 6, 5]
+If we do accumulated sum, like the approach 2, along with sum[i] % k, we will have the following
+two arrays.
+
+accumulated; sum = [23, 25, 29, 35, 40]
+sum[i] % 6;  rem = [ 5,  1,  5,  5,  4]
+Notice that rem[0] == rem[2] == 5. The way to reason about why matching remainders mean that there
+is a subarray with multiple of 6 (k), is the following. If accumulated sum[0] % 6 == 5, that means
+that element (e.g. nums[0] is bringing in 5 remainder. And, since we have accumulated array, the
+effect of that remainder is 'carried forward' in the 'accumulated sum'.
+
+Down the line, e.g. with rem[2], when we find another 'accumulated sum' with remainder == 5, at
+that time if we remove/subtract effect of the nums[0] (which brought us remainder 5), we can get
+to remainder == 0. And, that is what we are looking for!
+
+Note that rem[3] is also 5. Since effect of nums[0] is getting carried forward. But based on the
+constraint of the problem, e.g. subarray length must be >= 2; that answer is not valid.
+
+*/
 
 // console.log(checkSubarraySum([23, 2, 4, 6, 7], 6))
-console.log(checkSubarraySum([23, 2, 4, 6, 7], 6))
-// console.log(checkSubarraySum([23,2,6,4,7], 0))
-// console.log(checkSubarraySum([0,0], 0))
+// console.log(checkSubarraySum([23, 2, 4, 6, 7], 6))
+console.log(checkSubarraySum([23,2,6,4,7], 0))
+console.log(checkSubarraySum([0,0], 0))
+console.log(checkSubarraySum([23,2,4,6,6], 7))
+console.log(checkSubarraySum([0], 1))
+console.log(0 % 1)
