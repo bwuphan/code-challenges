@@ -60,34 +60,33 @@ Constraints:
  * @return {Node}
  */
 var insert = function(head, insertVal) {
+  // First, see if there is no head. If no head, make a new one and put next as itself.
   if (!head) {
     const newNode = new Node(insertVal, null);
     newNode.next = newNode;
     return newNode;
   }
+  // If there is a head but nothing next, make the next the new node.
   if (!head.next) {
     const newNode = new Node(insertVal, head);
     head.next = newNode;
     return head;
   }
 
+  // Here, we're going to loop through and find a spot to create the new node in.
+  // Stop if we do a whole cycle.
   let prev = null;
   let cur = head;
-  let numCycles = 0;
-  while (numCycles === 0) {
+  do {
     prev = cur;
     cur = cur.next;
-    if ((insertVal >= prev.val && insertVal <= cur.val) || (cur.val < prev.val && (insertVal <= cur.val || insertVal >= prev.val))) {
+    // Conditions for if we found a spot to insert the new node.
+    if ((insertVal >= prev.val && insertVal <= cur.val) 
+      || (cur.val < prev.val && (insertVal <= cur.val || insertVal >= prev.val)) 
+      || cur === head) {
       const newNode = new Node(insertVal, cur);
       prev.next = newNode;
       return head;
     }
-    if (cur === head) {
-      const newNode = new Node(insertVal, cur);
-      if (!prev) prev = cur;
-      prev.next = newNode;
-      return head;
-      numCycles++;
-    }
-  }
+  } while (cur !== head)
 };
