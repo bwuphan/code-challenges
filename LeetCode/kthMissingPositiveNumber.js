@@ -29,6 +29,8 @@ Constraints:
 arr[i] < arr[j] for 1 <= i < j <= arr.length
 */
 
+
+// Linear solution
 /**
  * @param {number[]} arr
  * @param {number} k
@@ -52,6 +54,34 @@ var findKthPositive = function(arr, k) {
 };
 
 
+// Binary search solution
+var findKthPositive = function(arr, k) {
+  let left = 0;
+  let right = arr.length - 1;
+  let i = 0;
+  while (left <= right) {
+    const mid = Math.floor((right + left) / 2);
+
+    // If there are still missing integers to the right, go right
+    if ((arr[mid] - mid - 1) < k)
+      left = mid + 1;
+    // Else, go left
+    else
+      right = mid - 1;
+
+    i++
+    if (i > 100) return;
+  }
+  // console.log(left, right)
+  // at the end, right will be less than left by 1
+  // Get final number by adding k to arr[right]
+  // This could potentially overshoot the missing int
+  // So we need to subtract all the missing integers found to the left of arr[right]
+  rightIdx = right >= 0 ? right : 0 // If rightIdx is -1, we set rightIdx to 0 instead
+  return arr[rightIdx] + k - (arr[rightIdx] - right - 1);
+}
+
 
 
 console.log(findKthPositive([2,3,4,7,11], 5));
+console.log(findKthPositive([2], 1))
