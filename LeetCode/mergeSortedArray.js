@@ -36,7 +36,22 @@ nums2.length == n
  * @return {void} Do not return anything, modify nums1 in-place instead.
  */
 var merge = function(nums1, m, nums2, n) {
-  
+  let p1 = m - 1;
+  let p2 = n - 1;
+  let p3 = nums1.length - 1;
+
+  while (p3 >= 0) {
+    if (nums1[p1] >= nums2[p2] || nums2[p2] === undefined) {
+      nums1[p3] = nums1[p1--];
+    }
+    else {
+      nums1[p3] = nums2[p2--];
+    }
+    p3--;
+  }
+
+  return nums1
 };
 
 console.log(merge(nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3))
+console.log(merge([0],0,[1],1))
